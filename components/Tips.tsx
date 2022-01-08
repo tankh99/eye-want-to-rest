@@ -29,7 +29,7 @@ export default function Tips() {
     }, [])
 
     return (
-        <View style={tailwind("flex flex-col px-12")}>
+        <View style={tailwind("flex absolute bottom-12 flex-col px-12")}>
             <Text style={tailwind("text-white flex-wrap text-lg font-bold text-center")}>Tip: </Text>
             <Text style={tailwind("text-white flex-wrap text-center")}>{tip}</Text>
             
