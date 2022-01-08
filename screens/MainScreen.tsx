@@ -17,7 +17,7 @@ import { getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
 
 // const DEFAULT_INTERVAL = 60 * 20 // 20 mins
-const DEFAULT_TIME = new Date(0,0,0,0,0,3)
+const DEFAULT_TIME = new Date(0,0,0,0,20,0)
 const Stack = createNativeStackNavigator()
 
 export default function MainScreen({navigation}: any) {
@@ -55,10 +55,6 @@ export default function MainScreen({navigation}: any) {
 
     const playSound = async () => {
 
-        const { sound: dropletSound } = await Audio.Sound.createAsync(
-        require("../assets/droplet-sound.wav")
-        )
-        await dropletSound.playAsync()
     }
 
     const setupNotifications = async () => {
@@ -88,13 +84,23 @@ export default function MainScreen({navigation}: any) {
     }
 
     // All functions from different components come together here
-    const toggleEye = () => {
+    const toggleEye = async () => {
         const tempEyeOpen = !eyeOpen; // a bit confusing, but it's because we want to inverse inverse the boolean. This makes somewhat more sense
         setEyeOpen(!eyeOpen)
         setCompletedFully(false)
         setupNotifications()
         
-        if(!tempEyeOpen) playSound()
+        if(!tempEyeOpen) {
+            const { sound: dropletSound } = await Audio.Sound.createAsync(
+                require("../assets/droplet-sound.wav")
+            )
+            await dropletSound.playAsync()
+        } else {
+            const { sound: eyeOpen } = await Audio.Sound.createAsync(
+                require("../assets/eye-open.wav")
+            )
+            await eyeOpen.playAsync()
+        }
     }
 
     return (
