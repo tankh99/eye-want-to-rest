@@ -17,7 +17,7 @@ import { getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
 
 // const DEFAULT_INTERVAL = 60 * 20 // 20 mins
-const DEFAULT_TIME = new Date(0,0,0,0,20,0)
+const DEFAULT_TIME = new Date(0,0,0,0,0,5)
 const Stack = createNativeStackNavigator()
 
 export default function MainScreen({navigation}: any) {
@@ -30,6 +30,22 @@ export default function MainScreen({navigation}: any) {
 
         const [exercise, setExercise]: any = useState(exercises[getRandomInt(exercises.length)])
         
+
+        // const [eyeOpenSound, setEyeOpenSound]: any = useState(null)
+        // const [eyeCloseSound, setEyeCloseSound]: any = useState(null)
+
+        // useEffect(() => {
+        //     const loadSound = async () => {
+        //         const { sound: eyeOpenSound } = await Audio.Sound.createAsync(
+        //             require("../assets/eye-open.wav")
+        //         )
+
+        //         const { sound: dropletSound } = await Audio.Sound.createAsync(
+        //             require("../assets/droplet-sound.wav")
+        //         )
+        //     }
+        //     // loadSound()
+        // }, [])
         let eyeOpenRef = useRef(eyeOpen)
         eyeOpenRef.current = eyeOpen;
 
@@ -91,15 +107,18 @@ export default function MainScreen({navigation}: any) {
         setupNotifications()
         
         if(!tempEyeOpen) {
-            const { sound: dropletSound } = await Audio.Sound.createAsync(
+            
+
+            const { sound: eyeCloseSound } = await Audio.Sound.createAsync(
                 require("../assets/droplet-sound.wav")
             )
-            await dropletSound.playAsync()
+            eyeCloseSound.playAsync()
         } else {
-            const { sound: eyeOpen } = await Audio.Sound.createAsync(
+            const { sound: eyeOpenSound } = await Audio.Sound.createAsync(
                 require("../assets/eye-open.wav")
             )
-            await eyeOpen.playAsync()
+
+            eyeOpenSound.playAsync()
         }
     }
 
@@ -120,23 +139,41 @@ export default function MainScreen({navigation}: any) {
             setShowExercises={setShowExercises}/>
         : (
         <>
-        <Timer 
-        interval={DEFAULT_TIME}
-        setCompletedFully={setCompletedFully} 
-        eyeOpen={eyeOpenRef.current} 
-        setEyeOpen={setEyeOpen}
-        setExercise={setExercise}  />
-        <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/>
+            {eyeOpen ?
+                <>
+                    <Tips/>
+                </>
+                : completedFully ?
+                <View style={tailwind("absolute bottom-12")}>
+                    <Text style={tailwind("text-white text-2xl pb-4")}>It's time to relax your eyes</Text>
+                    <TouchableOpacity onPress={() => setShowExercises(true)} style={tailwind("p-2 border border-white")}>
+                        <Text style={tailwind("text-white text-center")}>
+                        Start Exercise
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                :
+                <View style={tailwind("absolute bottom-12 flex-row")}>
+                    <Text style={tailwind("text-white text-xl p-4 text-center flex-wrap")}>Click the closed eye above to start</Text>
+                </View>
+            }   
+
+            <Timer 
+            interval={DEFAULT_TIME}
+            setCompletedFully={setCompletedFully} 
+            eyeOpen={eyeOpenRef.current} 
+            setEyeOpen={setEyeOpen}
+            setExercise={setExercise}  />
+            <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/>
         </>
         )
         }
         {/* Bottom Aligned */}
-        <View style={tailwind("absolute bottom-12")}>
+        {/* <View style={tailwind("absolute bottom-12")}>
         {
         eyeOpen 
         ? 
         <View>
-            <Tips/>
         </View>
             : !showExercises ?
             completedFully ?
@@ -154,7 +191,7 @@ export default function MainScreen({navigation}: any) {
             </View>
             : <></>
             }
-        </View>
+        </View> */}
         <StatusBar style="light" />
         </View>
     </SafeAreaView>
