@@ -143,9 +143,9 @@ export default function MainScreen({navigation}: any) {
                     </TouchableOpacity>
                 </View>
             : 
-            <>
-                <Text style={tailwind("text-white text-2xl pb-4")}>Click the closed eye above to start</Text>
-            </>
+            <View style={tailwind("flex-row")}>
+                <Text style={tailwind("text-white text-xl p-4 text-center flex-wrap")}>Click the closed eye above to start</Text>
+            </View>
             : <></>
             }
         </View>

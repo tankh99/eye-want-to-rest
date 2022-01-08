@@ -89,10 +89,6 @@ export default function Timer({interval, eyeOpen, setEyeOpen, setExercise, setCo
         setTimeLeft(timeLeft)
     }
 
-    const stopTimer = () => {
-
-    }
-
     return (
         <View style={tailwind("absolute flex top-12")}>
             <View style={tailwind("flex flex-row")}>
