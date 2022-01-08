@@ -17,7 +17,7 @@ import { getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
 
 // const DEFAULT_INTERVAL = 60 * 20 // 20 mins
-const DEFAULT_TIME = new Date(0,0,0,0,20,0)
+const DEFAULT_TIME = new Date(0,0,0,0,0,3)
 const Stack = createNativeStackNavigator()
 
 export default function MainScreen({navigation}: any) {

@@ -71,6 +71,11 @@ export default function Timer({interval, eyeOpen, setEyeOpen, setExercise, setCo
         seconds = seconds % 60
         if (minutes <= 0 && seconds <= 0){
             setEyeOpen(false) // Since this should always only run when the eye timer runs out
+
+            const { sound: dropletSound } = await Audio.Sound.createAsync(
+                require("../assets/droplet-sound.wav")
+            )
+            await dropletSound.playAsync()
             setTimeout(async() => { // play bell sound after delay
 
                 const { sound: bellSound } = await Audio.Sound.createAsync(
