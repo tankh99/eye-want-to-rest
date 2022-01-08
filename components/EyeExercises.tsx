@@ -7,13 +7,15 @@ import { exercises } from '../constants/exercises'
 
 interface P {
     exercise: any,
+    setExercise: any,
     setShowExercises: any
     setCompletedFully: any
 }
 
-export default function EyeExercises({exercise, setShowExercises, setCompletedFully}: P) {
+export default function EyeExercises({exercise, setExercise, setShowExercises, setCompletedFully}: P) {
 
-    console.log(exercise.images)
+
+    
     if(!exercise ) return null;
     return (
         <View style={tailwind("flex mx-8 flex-col ")}>
@@ -33,17 +35,16 @@ export default function EyeExercises({exercise, setShowExercises, setCompletedFu
                 </View>
             ))}
             </View>
-            {/* <LinearGradient
-                colors={["rgba(0,4,80,1)", "rgba(60,0,84,1)"]}> */}
                 <TouchableOpacity onPress={() => {
                     setShowExercises(false)
                     setCompletedFully(false)
+                    const randomInt = getRandomInt(exercises.length)
+                    setExercise(exercises[randomInt])
                 }} style={tailwind("p-2 border border-white")}>
                     <Text style={tailwind("text-white text-center")}>
                     Done
                     </Text>
                 </TouchableOpacity>
-            {/* </LinearGradient> */}
         </View>
     )
 }

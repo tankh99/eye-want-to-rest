@@ -33,6 +33,11 @@ export default function MainScreen({navigation}: any) {
         let eyeOpenRef = useRef(eyeOpen)
         eyeOpenRef.current = eyeOpen;
 
+        const getRandomExercise = () => {
+            const randomExercise = exercises[getRandomInt(exercises.length)]
+            setExercise(randomExercise)
+        }
+
 
         // const [exerciseCount, setExerciseCount] = useState(0)
         // useEffect(() => {
@@ -84,25 +89,13 @@ export default function MainScreen({navigation}: any) {
 
     // All functions from different components come together here
     const toggleEye = () => {
+        const tempEyeOpen = !eyeOpen; // a bit confusing, but it's because we want to inverse inverse the boolean. This makes somewhat more sense
         setEyeOpen(!eyeOpen)
         setCompletedFully(false)
         setupNotifications()
-        console.log(`eyeopnref: ${eyeOpenRef.current}`)
-        if(eyeOpenRef.current) playSound()
+        
+        if(!tempEyeOpen) playSound()
     }
-
-    const timesUp = () => {
-        setShowExercises(true)
-    }
-
-    const handleFinishTask = () => {
-        setCompletedFully(true)
-    }
-
-    const toggle = () => {
-        setShowExercises(!showExercises)
-    }
-
 
     return (
         <>
@@ -112,12 +105,11 @@ export default function MainScreen({navigation}: any) {
         <SafeAreaView style={tailwind("flex-1")}>
 
         <View style={tailwind("flex-1 items-center justify-center")}>
-        {/* {showExercises && 
-        <EyeExercises setShowExercises={setShowExercises}/>
-        } */}
+        
         {showExercises 
         ? <EyeExercises 
             exercise={exercise}
+            setExercise={setExercise}
             setCompletedFully={setCompletedFully}
             setShowExercises={setShowExercises}/>
         : (
