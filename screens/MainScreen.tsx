@@ -15,9 +15,11 @@ import {LinearGradient} from 'expo-linear-gradient'
 import { getRandomInt } from '../util/utils'
 import { getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
+import Slider from '../components/animations/Slider'
+import Eye from '../components/Eye'
 
 // const DEFAULT_INTERVAL = 60 * 20 // 20 mins
-const DEFAULT_TIME = new Date(0,0,0,0,0,5)
+const DEFAULT_TIME = new Date(0,0,0,0,20,0)
 const Stack = createNativeStackNavigator()
 
 export default function MainScreen({navigation}: any) {
@@ -49,12 +51,6 @@ export default function MainScreen({navigation}: any) {
         let eyeOpenRef = useRef(eyeOpen)
         eyeOpenRef.current = eyeOpen;
 
-        const getRandomExercise = () => {
-            const randomExercise = exercises[getRandomInt(exercises.length)]
-            setExercise(randomExercise)
-        }
-
-
         // const [exerciseCount, setExerciseCount] = useState(0)
         // useEffect(() => {
         //     console.log(exerciseCount)
@@ -67,11 +63,6 @@ export default function MainScreen({navigation}: any) {
         //     }
         //     setExercise(exercises[exerciseCount])
         // }, [showExercises])
-        
-
-    const playSound = async () => {
-
-    }
 
     const setupNotifications = async () => {
         const notifs = await Notifications.getAllScheduledNotificationsAsync()
@@ -130,8 +121,12 @@ export default function MainScreen({navigation}: any) {
         <SafeAreaView style={tailwind("flex-1")}>
 
         <View style={tailwind("flex-1 items-center justify-center")}>
-        
-        {showExercises 
+            <View>
+                <Eye/>
+                {/* <EyeButton toggleEye={toggleEye} eyeOpen={eyeOpen}/> */}
+                {/* <Slider/> */}
+            </View>
+        {/* {showExercises 
         ? <EyeExercises 
             exercise={exercise}
             setExercise={setExercise}
@@ -167,31 +162,7 @@ export default function MainScreen({navigation}: any) {
             <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/>
         </>
         )
-        }
-        {/* Bottom Aligned */}
-        {/* <View style={tailwind("absolute bottom-12")}>
-        {
-        eyeOpen 
-        ? 
-        <View>
-        </View>
-            : !showExercises ?
-            completedFully ?
-                <View>
-                    <Text style={tailwind("text-white text-2xl pb-4")}>It's time to relax your eyes</Text>
-                    <TouchableOpacity onPress={() => setShowExercises(true)} style={tailwind("p-2 border border-white")}>
-                        <Text style={tailwind("text-white text-center")}>
-                        Start Exercise
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            : 
-            <View style={tailwind("flex-row")}>
-                <Text style={tailwind("text-white text-xl p-4 text-center flex-wrap")}>Click the closed eye above to start</Text>
-            </View>
-            : <></>
-            }
-        </View> */}
+        } */}
         <StatusBar style="light" />
         </View>
     </SafeAreaView>

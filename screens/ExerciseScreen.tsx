@@ -4,6 +4,7 @@ import {SafeAreaView } from 'react-native-safe-area-context'
 import tailwind from 'tailwind-rn'
 import {LinearGradient} from 'expo-linear-gradient'
 
+// Not currently used
 export default function ExerciseScreen({navigation}: any) {
     
     return (
