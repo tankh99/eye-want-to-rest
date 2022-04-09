@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {createNativeStackNavigator} from "@react-navigation/native-stack"
-import {View, Text, TouchableOpacity} from 'react-native'
+import {View, Text, TouchableOpacity, Button} from 'react-native'
 import {StatusBar} from 'expo-status-bar'
 import tailwind from 'tailwind-rn'
 import { cancelAllNotifications, scheduleNotification } from '../util/notifications';
@@ -17,8 +17,7 @@ import { getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
 
 // const DEFAULT_INTERVAL = 60 * 20 // 20 mins
-const DEFAULT_TIME = new Date(0,0,0,0,0,5)
-const Stack = createNativeStackNavigator()
+const DEFAULT_TIME = new Date(0,0,0,0,0,5) // 5 seconds
 
 export default function MainScreen({navigation}: any) {
 
@@ -122,13 +121,14 @@ export default function MainScreen({navigation}: any) {
         }
     }
 
+    
+
     return (
         <>
         <LinearGradient
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
             style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
         <SafeAreaView style={tailwind("flex-1")}>
-
         <View style={tailwind("flex-1 items-center justify-center")}>
         
         {showExercises 
@@ -164,6 +164,7 @@ export default function MainScreen({navigation}: any) {
             eyeOpen={eyeOpenRef.current} 
             setEyeOpen={setEyeOpen}
             setExercise={setExercise}  />
+            
             <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/>
         </>
         )

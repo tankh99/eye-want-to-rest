@@ -1,4 +1,3 @@
-import { getAllScheduledNotificationsAsync } from 'expo-notifications';
 import { StatusBar } from 'expo-status-bar';
 import { Button, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import tailwind from 'tailwind-rn';
@@ -12,10 +11,33 @@ import {NavigationContainer} from '@react-navigation/native'
 import MainNavigator from './MainNavigator';
 
 
-
 export default function App() {
 
+  useEffect(() => {
+    
+    const askForPermissions = async () => {
+      const settings = await Notifications.getPermissionsAsync()
+      console.log(settings)
+      if(settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL) return console.log("Granted")
+      const status: Notifications.NotificationPermissionsStatus = await Notifications.requestPermissionsAsync({
+        ios: {
+          allowAlert: true,
+          allowBadge: true,
+          allowSound: true,
+          allowCriticalAlerts: true,
+          allowProvisional: true
+        }
+      })
 
+      alert("HE")
+      if(status.granted){
+        console.log("yay")
+      } else {
+        console.log("boo")
+      }
+      
+    }
+    askForPermissions()
     // Allows notification to show up in foreground
     Notifications.setNotificationHandler({
       handleNotification: async() => ({
@@ -24,6 +46,9 @@ export default function App() {
           shouldSetBadge: true,
       })
     })
+  }, [])
+
+  
 
   return (
     <SafeAreaProvider>

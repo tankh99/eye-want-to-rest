@@ -69,22 +69,26 @@ export default function Timer({interval, eyeOpen, setEyeOpen, setExercise, setCo
         let seconds = differenceInSeconds(tick, targetTime)
         let minutes = seconds / 60
         seconds = seconds % 60
-        if (minutes <= 0 && seconds <= 0){
-            setEyeOpen(false) // Since this should always only run when the eye timer runs out
-            setCompletedFully(true)
-            const { sound: dropletSound } = await Audio.Sound.createAsync(
-                require("../assets/droplet-sound.wav")
-            )
-            await dropletSound.playAsync()
-            setTimeout(async() => { // play bell sound after delay
-
-                const { sound: bellSound } = await Audio.Sound.createAsync(
-                    require("../assets/cowbell.wav")
+        try{
+            if (minutes <= 0 && seconds <= 0){
+                setEyeOpen(false) // Since this should always only run when the eye timer runs out
+                setCompletedFully(true)
+                const { sound: dropletSound } = await Audio.Sound.createAsync(
+                    require("../assets/droplet-sound.wav")
                 )
-                await bellSound.playAsync()
-            }, 250)
-            setExercise(exercises[getRandomInt(exercises.length)])
-            return clearTimer()
+                await dropletSound.playAsync()
+                setTimeout(async() => { // play bell sound after delay
+
+                    const { sound: bellSound } = await Audio.Sound.createAsync(
+                        require("../assets/cowbell.wav")
+                    )
+                    await bellSound.playAsync()
+                }, 250)
+                setExercise(exercises[getRandomInt(exercises.length)])
+                return clearTimer()
+            }
+        } catch (ex) {
+            console.error(ex.toString())
         }
         const timeLeft = new Date() // If you use this, will count up. But we want to count DOWN
         

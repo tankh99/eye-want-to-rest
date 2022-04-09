@@ -5,7 +5,8 @@ export async function scheduleNotification(title: string, body: string, seconds:
     const id = await Notifications.scheduleNotificationAsync({
         content: {
             title: title,
-            body: body
+            body: body,
+            sound: "cowbell.wav"
         }, 
         trigger: {
             seconds,
