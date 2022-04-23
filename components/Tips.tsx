@@ -6,11 +6,13 @@ import { getRandomInt } from '../util/utils'
 export default function Tips() {
 
     const tips = [
+        "Palm your eyes after every eye exercise",
         "Follow the 20-20-20 rule",
         "Eat more green leafy vegetables, salmon or tuna, eggs, nuts, and oranges",
         "Cover your eyes with your palms if your eyes feel dry",
-        "Visit the eye doctor annually",
-        "Avoid looking at dark and light colours to prevent eye strain"
+        "Visit the local optometrist annually",
+        "Avoid looking at dark and light colours to prevent eye strain",
+        
     ]
 
     const [tip, setTip] = useState("")
