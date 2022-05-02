@@ -24,6 +24,10 @@
     "production": {}
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "credentials/eye-want-to-rest-f2f1a5169df6.json"
+      }
+    }
   }
 }

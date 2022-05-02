@@ -4,7 +4,7 @@
     "slug": "eye-want-to-rest",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app-logo.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -30,12 +30,15 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "notification": {
+      "icon": "assets/open-eye-white.png"
+    },
     "plugins": [
       [
         "expo-notifications",
         {
           "sounds": [
-            "./assets/cowbell.wav"
+            "assets/cowbell.wav"
           ]
         }
       ]

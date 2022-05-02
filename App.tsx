@@ -9,6 +9,7 @@ import {LinearGradient} from 'expo-linear-gradient'
 import {SafeAreaProvider} from 'react-native-safe-area-context'
 import {NavigationContainer} from '@react-navigation/native'
 import MainNavigator from './MainNavigator';
+import {Audio} from 'expo-av'
 
 
 export default function App() {
@@ -17,7 +18,7 @@ export default function App() {
     
     const askForPermissions = async () => {
       const settings = await Notifications.getPermissionsAsync()
-      console.log(settings)
+      // console.log(settings)
       if(settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL) return console.log("Granted")
       const status: Notifications.NotificationPermissionsStatus = await Notifications.requestPermissionsAsync({
         ios: {
@@ -29,35 +30,49 @@ export default function App() {
         }
       })
 
-      alert("HE")
-      if(status.granted){
-        console.log("yay")
-      } else {
-        console.log("boo")
-      }
-      
+      // if(status.granted){
+      //   console.log("yay")
+      // } else {
+      //   console.log("boo")
+      // }
     }
-    askForPermissions()
-    // Allows notification to show up in foreground
-    Notifications.setNotificationHandler({
-      handleNotification: async() => ({
-          shouldShowAlert: true,
-          shouldPlaySound: true,
-          shouldSetBadge: true,
+
+    // Sets up notification handler config and audio config
+    const setupDefaults =  async () => {
+
+      // Allows notification to show up in foreground
+      Notifications.setNotificationHandler({
+        handleNotification: async() => ({
+            shouldShowAlert: true,
+            shouldPlaySound: true,
+            shouldSetBadge: true,
+        })
       })
-    })
+
+      // Audio.requestPermissionsAsync();
+      await Audio.setAudioModeAsync({
+        staysActiveInBackground: true,
+        interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+        shouldDuckAndroid: true,
+        playThroughEarpieceAndroid: false,
+        allowsRecordingIOS: false, // THIS REDUCES VOLUME OF ALL SOUNDS if SET TO TRUE!!
+        interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+        playsInSilentModeIOS: true,
+      })
+    }
+
+    askForPermissions()
+    setupDefaults()
+
   }, [])
 
   
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-      <LinearGradient
-            colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
-            style={tailwind("flex-1 absolute top-0 ")}/>
-          <MainNavigator/>
-      </NavigationContainer>
+        <NavigationContainer>
+            <MainNavigator/>
+        </NavigationContainer>
     </SafeAreaProvider>
   );
 }

@@ -15,62 +15,42 @@ import {LinearGradient} from 'expo-linear-gradient'
 import { getRandomInt } from '../util/utils'
 import { getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
+import { Ionicons } from '@expo/vector-icons';
+import { dropDatabase, insertHistory, updateDatabase } from '../util/sqlite'
+import { sub } from 'date-fns'
 
-// const DEFAULT_INTERVAL = 60 * 20 // 20 mins
-const DEFAULT_TIME = new Date(0,0,0,0,0,5) // 5 seconds
+const DEFAULT_SESSION_DURATION = new Date(0,0,0,0,0,5) // 5 seconds
 
 export default function MainScreen({navigation}: any) {
 
-        const [eyeOpen, setEyeOpen] = useState(false)
-        const [notificationId, setNotificationId] = useState("")
-        const [startTime, setStartTime]: any = useState(null)
-        const [showExercises, setShowExercises] = useState(false)
-        const [completedFully, setCompletedFully] = useState(false)
+    const [eyeOpen, setEyeOpen] = useState(false)
+    const [notificationId, setNotificationId] = useState("")
+    const [startTime, setStartTime]: any = useState(null)
+    const [showExercises, setShowExercises] = useState(false)
+    const [completedFully, setCompletedFully] = useState(false)
 
-        const [exercise, setExercise]: any = useState(exercises[getRandomInt(exercises.length)])
-        
+    const [exercise, setExercise]: any = useState(exercises[0])
 
-        // const [eyeOpenSound, setEyeOpenSound]: any = useState(null)
-        // const [eyeCloseSound, setEyeCloseSound]: any = useState(null)
+    // const [eyeOpenSound, setEyeOpenSound]: any = useState(null)
+    // const [eyeCloseSound, setEyeCloseSound]: any = useState(null)
 
-        // useEffect(() => {
-        //     const loadSound = async () => {
-        //         const { sound: eyeOpenSound } = await Audio.Sound.createAsync(
-        //             require("../assets/eye-open.wav")
-        //         )
+    // useEffect(() => {
 
-        //         const { sound: dropletSound } = await Audio.Sound.createAsync(
-        //             require("../assets/droplet-sound.wav")
-        //         )
-        //     }
-        //     // loadSound()
-        // }, [])
-        let eyeOpenRef = useRef(eyeOpen)
-        eyeOpenRef.current = eyeOpen;
+        // const loadSounds = async () => {
 
-        const getRandomExercise = () => {
-            const randomExercise = exercises[getRandomInt(exercises.length)]
-            setExercise(randomExercise)
-        }
+            // const sound = new Audio.Sound()
+            // await sound.loadAsync(require("../assets/eye-open.wav"))
+            // await sound.playAsync()   
 
+        //     setEyeOpenSound(eyeOpenSound)
+        //     setEyeCloseSound(eyeCloseSound)
+        // }
+        // loadSounds()
+    // }, [])
 
-        // const [exerciseCount, setExerciseCount] = useState(0)
-        // useEffect(() => {
-        //     console.log(exerciseCount)
-            
-        //     if(exerciseCount + 1 <= exercises.length - 1){
-        //         console.log("hello?")
-        //         setExerciseCount(exerciseCount + 1)
-        //     } else {
-        //         setExerciseCount(0)
-        //     }
-        //     setExercise(exercises[exerciseCount])
-        // }, [showExercises])
-        
-
-    const playSound = async () => {
-
-    }
+    let eyeOpenRef = useRef(eyeOpen)
+    eyeOpenRef.current = eyeOpen;
+    
 
     const setupNotifications = async () => {
         const notifs = await Notifications.getAllScheduledNotificationsAsync()
@@ -88,7 +68,7 @@ export default function MainScreen({navigation}: any) {
             const id = await scheduleNotification(
                 "Break Time", 
                 "It's time to rest your eyes", 
-                getTotalSeconds(DEFAULT_TIME), 
+                getTotalSeconds(DEFAULT_SESSION_DURATION), 
                 false
             )
             setNotificationId(id)
@@ -104,20 +84,27 @@ export default function MainScreen({navigation}: any) {
         setEyeOpen(!eyeOpen)
         setCompletedFully(false)
         setupNotifications()
-        
-        if(!tempEyeOpen) {
-            
+        setStartTime(new Date())
+        // dropDatabase()
+        // updateDatabase()
 
+
+        if(!tempEyeOpen) {
             const { sound: eyeCloseSound } = await Audio.Sound.createAsync(
-                require("../assets/droplet-sound.wav")
+                require("../assets/droplet-sound.wav"),
+                // {shouldPlay: true}
             )
             eyeCloseSound.playAsync()
         } else {
-            const { sound: eyeOpenSound } = await Audio.Sound.createAsync(
-                require("../assets/eye-open.wav")
-            )
-
-            eyeOpenSound.playAsync()
+            try{
+                const { sound: eyeOpenSound } = await Audio.Sound.createAsync(
+                    require("../assets/eye-open.wav"),
+                    // {shouldPlay: true}
+                )
+                eyeOpenSound.playAsync()
+            } catch (ex) {
+                console.error("error", ex)
+            }
         }
     }
 
@@ -129,8 +116,15 @@ export default function MainScreen({navigation}: any) {
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
             style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
         <SafeAreaView style={tailwind("flex-1")}>
-        <View style={tailwind("flex-1 items-center justify-center")}>
         
+        <View style={tailwind("flex-1 items-center justify-center")}>
+            {/* Top-right stats icon */}
+            <TouchableOpacity
+                style={tailwind("absolute top-2 right-6")}
+                onPress={() => navigation.navigate("Stats")}>
+                <Ionicons name="stats-chart" style={tailwind("")} size={24} color="white" />
+            </TouchableOpacity>
+
         {showExercises 
         ? <EyeExercises 
             exercise={exercise}
@@ -159,11 +153,12 @@ export default function MainScreen({navigation}: any) {
             }   
 
             <Timer 
-            interval={DEFAULT_TIME}
-            setCompletedFully={setCompletedFully} 
-            eyeOpen={eyeOpenRef.current} 
-            setEyeOpen={setEyeOpen}
-            setExercise={setExercise}  />
+                startTime={startTime}
+                sessionDuration={DEFAULT_SESSION_DURATION}
+                setCompletedFully={setCompletedFully} 
+                eyeOpen={eyeOpenRef.current} 
+                setEyeOpen={setEyeOpen}
+                setExercise={setExercise}  />
             
             <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/>
         </>
