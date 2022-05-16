@@ -3,7 +3,6 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack"
 import MainScreen from './screens/MainScreen'
 import ExerciseScreen from './screens/ExerciseScreen'
 import { View } from 'react-native'
-import {LinearGradient} from 'expo-linear-gradient'
 import tailwind from 'tailwind-rn'
 import { Ionicons } from '@expo/vector-icons';
 import StatsScreen from './screens/StatsScreen';

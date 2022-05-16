@@ -25,7 +25,7 @@ export async function openDatabase(){
             tx.executeSql(`CREATE TABLE IF NOT EXISTS history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT, 
                 startDate DATETIME,
-                endDate DATETIME NULL
+                duration INTEGER
                 );`, [], (tx, rows) => {
                     // Success callback
                 }, (tx, err) => {

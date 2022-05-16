@@ -11,7 +11,7 @@ export default function Tips() {
         "Eat more green leafy vegetables, salmon or tuna, eggs, nuts, and oranges",
         "Cover your eyes with your palms if your eyes feel dry",
         "Visit the local optometrist annually",
-        "Avoid looking at dark and light colours to prevent eye strain",
+        "Avoid looking at bright colours to prevent eye strain",
         
     ]
 
@@ -31,7 +31,7 @@ export default function Tips() {
     }, [])
 
     return (
-        <View style={tailwind("flex absolute bottom-12 flex-col px-12")}>
+        <View style={tailwind("flex flex-col px-12")}>
             <Text style={tailwind("text-white flex-wrap text-lg font-bold text-center")}>Tip: </Text>
             <Text style={tailwind("text-white flex-wrap text-center")}>{tip}</Text>
             

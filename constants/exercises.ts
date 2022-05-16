@@ -57,22 +57,6 @@ export const exercises = [
         reference: "https://youtu.be/RoIYAoAalmI"
     },
     {
-        name: "Bates' Method: Palming",
-        description: `
-            Complete relaxation for your eyes
-        `,
-        images: [require(`${ASSET_PATH}/palm-eyes.png`)],
-        steps: [
-            "Cover your eyes with your palms such that you're able to still open your eyes and look around.",
-            "Ensure that your eyes can see no light",
-            "Allow yourself to relax for at least a minute or more",
-            "When ready, close your eyes and then open up your palms. Turn towards darkness, then slowly open up your eyes",
-        ],
-        approximateDuration: 60,
-        importance: 4,
-        reference: "https://youtu.be/oI2qmqhcr_4"
-    },
-    {
         name: "Massage your Eyes",
         description: `
             Best for people with dry eyes
@@ -86,10 +70,45 @@ export const exercises = [
             "Ensure to massage the corners of your eyes",
             "Repeat for your other eye"
         ],
-        approximateDuration: 300,
-        importance: 4,
+        approximateDuration: 120,
+        importance: 3,
         reference: "https://youtu.be/bGJqucoHmjs"
     },
+    // ADVANCED
+    // {
+    //     name: "Bates' Method: Palming",
+    //     description: `
+    //         Complete relaxation for your eyes
+    //     `,
+    //     images: [require(`${ASSET_PATH}/palm-eyes.png`)],
+    //     steps: [
+    //         "Cover your eyes with your palms such that you're able to still open your eyes and look around.",
+    //         "Ensure that your eyes can see no light",
+    //         "Allow yourself to relax for at least a minute or more",
+    //         "When ready, close your eyes and then open up your palms. Turn towards darkness, then slowly open up your eyes",
+    //     ],
+    //     approximateDuration: 60,
+    //     importance: 4,
+    //     reference: "https://youtu.be/oI2qmqhcr_4"
+    // },
+    // {
+    //     name: "Massage your Eyes",
+    //     description: `
+    //         Best for people with dry eyes
+    //     `,
+    //     images: [require(`${ASSET_PATH}/massage-eyes.png`)],
+    //     credit: "https://www.wikihow.com/Exercise-Your-Eyes",
+    //     steps: [
+    //         "Wash your hands with soap first",
+    //         "Close your eyes and push down the top eyelid lightly using a finger. Ensure to push downward from the left of your eyelid to the right of the eyelid",
+    //         "Repeat for the bottom eyelid. Look upwards and massage from the bottom-up.",
+    //         "Ensure to massage the corners of your eyes",
+    //         "Repeat for your other eye"
+    //     ],
+    //     approximateDuration: 300,
+    //     importance: 4,
+    //     reference: "https://youtu.be/bGJqucoHmjs"
+    // },
     {
         name: "Figure Eight",
         description: `

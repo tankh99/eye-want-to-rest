@@ -10,6 +10,8 @@ npm-debug.*
 *.orig.*
 web-build/
 credentials/*
+.env
+.env.local
 
 # package managers
 package-lock.json

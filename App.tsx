@@ -10,7 +10,14 @@ import {SafeAreaProvider} from 'react-native-safe-area-context'
 import {NavigationContainer} from '@react-navigation/native'
 import MainNavigator from './MainNavigator';
 import {Audio} from 'expo-av'
+import * as Sentry from 'sentry-expo'
 
+Sentry.init({
+  dsn: "https://4dbc82d3aff846c2a4f48a2bd8dd0d94@o1229881.ingest.sentry.io/6376215",
+  enableInExpoDevelopment: true,
+  // TODO: Set debug to false in production mode
+  debug: true // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+});
 
 export default function App() {
 
@@ -52,11 +59,11 @@ export default function App() {
       // Audio.requestPermissionsAsync();
       await Audio.setAudioModeAsync({
         staysActiveInBackground: true,
-        interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+        // interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
         shouldDuckAndroid: true,
         playThroughEarpieceAndroid: false,
         allowsRecordingIOS: false, // THIS REDUCES VOLUME OF ALL SOUNDS if SET TO TRUE!!
-        interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+        // interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
         playsInSilentModeIOS: true,
       })
     }

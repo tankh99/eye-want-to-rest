@@ -16,8 +16,6 @@ import { getRandomInt } from '../util/utils'
 import { getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
 import { Ionicons } from '@expo/vector-icons';
-import { dropDatabase, insertHistory, updateDatabase } from '../util/sqlite'
-import { sub } from 'date-fns'
 
 const DEFAULT_SESSION_DURATION = new Date(0,0,0,0,0,5) // 5 seconds
 
@@ -115,16 +113,33 @@ export default function MainScreen({navigation}: any) {
         <LinearGradient
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
             style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
-        <SafeAreaView style={tailwind("flex-1")}>
+        <SafeAreaView style={tailwind("flex-1 pb-2 pt-4")}>
         
-        <View style={tailwind("flex-1 items-center justify-center")}>
+        <View style={tailwind("flex-1 items-center justify-between flex-col")}>
             {/* Top-right stats icon */}
-            <TouchableOpacity
-                style={tailwind("absolute top-2 right-6")}
-                onPress={() => navigation.navigate("Stats")}>
-                <Ionicons name="stats-chart" style={tailwind("")} size={24} color="white" />
-            </TouchableOpacity>
+            <View style={tailwind("w-full px-6 flex self-start items-center flex-row")}>
 
+                {/* Placeholder Icon used to center text */}
+                <Ionicons name="arrow-back" size={28} style={tailwind("")} color="transparent"  />
+
+                <Timer 
+                    style={tailwind("flex-1 text-center")}
+                    startTime={startTime}
+                    sessionDuration={DEFAULT_SESSION_DURATION}
+                    setCompletedFully={setCompletedFully} 
+                    eyeOpen={eyeOpenRef.current} 
+                    setEyeOpen={setEyeOpen}
+                    setExercise={setExercise}  />
+                
+                <TouchableOpacity
+                    style={tailwind("flex")}
+                    onPress={() => navigation.navigate("Stats")}>
+                    <Ionicons name="stats-chart" style={tailwind("")} size={28} color="white" />
+                </TouchableOpacity>
+
+            </View>
+
+            <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/>
         {showExercises 
         ? <EyeExercises 
             exercise={exercise}
@@ -132,13 +147,13 @@ export default function MainScreen({navigation}: any) {
             setCompletedFully={setCompletedFully}
             setShowExercises={setShowExercises}/>
         : (
-        <>
+        <View style={tailwind("")}>
             {eyeOpen ?
                 <>
                     <Tips/>
                 </>
                 : completedFully ?
-                <View style={tailwind("absolute bottom-12")}>
+                <View style={tailwind("")}>
                     <Text style={tailwind("text-white text-2xl pb-4")}>It's time to relax your eyes</Text>
                     <TouchableOpacity onPress={() => setShowExercises(true)} style={tailwind("p-2 border border-white")}>
                         <Text style={tailwind("text-white text-center")}>
@@ -147,21 +162,12 @@ export default function MainScreen({navigation}: any) {
                     </TouchableOpacity>
                 </View>
                 :
-                <View style={tailwind("absolute bottom-12 flex-row")}>
-                    <Text style={tailwind("text-white text-xl p-4 text-center flex-wrap")}>Click the closed eye above to start</Text>
+                <View style={tailwind("flex-row")}>
+                    <Text style={tailwind("text-white text-xl p-4 text-center flex-wrap")}>Press the closed eye above to start</Text>
                 </View>
             }   
-
-            <Timer 
-                startTime={startTime}
-                sessionDuration={DEFAULT_SESSION_DURATION}
-                setCompletedFully={setCompletedFully} 
-                eyeOpen={eyeOpenRef.current} 
-                setEyeOpen={setEyeOpen}
-                setExercise={setExercise}  />
             
-            <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/>
-        </>
+        </View>
         )
         }
         {/* Bottom Aligned */}

@@ -1,0 +1,184 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App/> 1`] = `
+Array [
+  <ViewManagerAdapter_ExpoLinearGradient
+    proxiedProperties={
+      Object {
+        "colors": Array [
+          4278321197,
+          4283760980,
+        ],
+        "endPoint": undefined,
+        "locations": undefined,
+        "startPoint": undefined,
+      }
+    }
+    style={
+      Object {
+        "flexBasis": "0%",
+        "flexGrow": 1,
+        "flexShrink": 1,
+        "height": "100%",
+        "position": "absolute",
+        "top": 0,
+        "width": "100%",
+      }
+    }
+  />,
+  <RNCSafeAreaView
+    style={
+      Object {
+        "flexBasis": "0%",
+        "flexGrow": 1,
+        "flexShrink": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexBasis": "0%",
+          "flexGrow": 1,
+          "flexShrink": 1,
+          "justifyContent": "center",
+        }
+      }
+    >
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "opacity": 1,
+            "position": "absolute",
+            "right": 24,
+            "top": 8,
+          }
+        }
+      >
+        <Text />
+      </View>
+      <View
+        style={
+          Object {
+            "bottom": 48,
+            "flexDirection": "row",
+            "position": "absolute",
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "rgba(255, 255, 255, 1)",
+              "flexWrap": "wrap",
+              "fontSize": 20,
+              "lineHeight": 28,
+              "paddingBottom": 16,
+              "paddingLeft": 16,
+              "paddingRight": 16,
+              "paddingTop": 16,
+              "textAlign": "center",
+            }
+          }
+        >
+          Click the closed eye above to start
+        </Text>
+      </View>
+      <View
+        style={
+          Object {
+            "display": "flex",
+            "position": "absolute",
+            "top": 48,
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "display": "flex",
+              "flexDirection": "row",
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "color": "rgba(255, 255, 255, 1)",
+                "fontSize": 36,
+                "lineHeight": 40,
+              }
+            }
+          >
+            20
+          </Text>
+          <Text
+            style={
+              Object {
+                "color": "rgba(255, 255, 255, 1)",
+                "fontSize": 36,
+                "lineHeight": 40,
+              }
+            }
+          >
+            :
+          </Text>
+          <Text
+            style={
+              Object {
+                "color": "rgba(255, 255, 255, 1)",
+                "fontSize": 36,
+                "lineHeight": 40,
+              }
+            }
+          >
+            00
+          </Text>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "position": "absolute",
+          }
+        }
+      >
+        <View
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+        >
+          <Image
+            resizeMode="contain"
+            source={1}
+            style={
+              Object {
+                "width": 300,
+              }
+            }
+          />
+        </View>
+      </View>
+    </View>
+  </RNCSafeAreaView>,
+]
+`;

@@ -16,14 +16,15 @@ interface P {
     setEyeOpen: any,
     setExercise: any,
     setCompletedFully: any,
-    startTime: Date
+    startTime: Date,
+    style?: any
 }
 
 const DEFAULT_TIME = new Date(0,0,0,0,20,0)
 const DEFAULT_DURATION = 60 * 20 // 20 minutes
 
 
-export default function Timer({startTime, sessionDuration, eyeOpen, setEyeOpen, setExercise, setCompletedFully}: P) {
+export default function Timer({startTime, sessionDuration, eyeOpen, setEyeOpen, setExercise, setCompletedFully, style}: P) {
 
     const [timeLeft, setTimeLeft] = useState(sessionDuration)
     const [timerID, setTimerID]: any = useState(null)
@@ -46,7 +47,7 @@ export default function Timer({startTime, sessionDuration, eyeOpen, setEyeOpen, 
             }, 200)
             setTimerID(id)
         } else {
-            console.log("Timer interval already exists")
+            // console.log("Timer interval already exists")
             clearTimer()
         }
     }, [eyeOpen])
@@ -66,7 +67,7 @@ export default function Timer({startTime, sessionDuration, eyeOpen, setEyeOpen, 
     }
 
     const clearTimer = () => {
-        console.log(`clearing timer id: ${timerIDRef.current}`)
+        // console.log(`clearing timer id: ${timerIDRef.current}`)
         clearInterval(timerIDRef.current)
         setTimerID(null)
         setTimeLeft(sessionDuration)
@@ -94,10 +95,11 @@ export default function Timer({startTime, sessionDuration, eyeOpen, setEyeOpen, 
                 setEyeOpen(false) // Since this should always only run when the eye timer runs out
                 setCompletedFully(true)
 
-                const { sound: dropletSound } = await Audio.Sound.createAsync(
-                    require("../assets/droplet-sound.wav")
-                )
-                dropletSound.playAsync()
+                // const { sound: dropletSound } = await Audio.Sound.createAsync(
+                //     require("../assets/droplet-sound.wav")
+                // )
+                // dropletSound.playAsync()
+                
                 setTimeout(async() => { // play bell sound after delay
                     const { sound: bellSound } = await Audio.Sound.createAsync(
                         require("../assets/cowbell.wav")
@@ -106,8 +108,8 @@ export default function Timer({startTime, sessionDuration, eyeOpen, setEyeOpen, 
                 }, 200)
                 setExercise(exercises[getRandomInt(exercises.length)])
 
-                // insertHistory(new Date(), sessionDuration.getSeconds())
-                insertHistory(new Date(), 1500)
+                insertHistory(new Date(), getTotalSeconds(sessionDuration))
+                // insertHistory(new Date(), )
                 return clearTimer()
             }
         } catch (ex: any) {
@@ -121,8 +123,8 @@ export default function Timer({startTime, sessionDuration, eyeOpen, setEyeOpen, 
     }
 
     return (
-        <View style={tailwind("absolute flex top-12")}>
-            <View style={tailwind("flex flex-row")}>
+        <View style={style}>
+            <View style={tailwind("flex flex-row justify-center")}>
                 <Text style={tailwind("text-4xl text-white")}>{minutes(timeLeft)}</Text>
                 <Text style={tailwind("text-4xl text-white")}>:</Text>
                 <Text style={tailwind("text-4xl text-white")}>{seconds(timeLeft)}</Text>

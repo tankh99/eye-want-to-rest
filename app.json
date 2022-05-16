@@ -1,17 +1,30 @@
 {
+  "displayName": "Eye Want to Rest",
   "expo": {
-    "name": "eye-want-to-rest",
+    "name": "Eye Want to Rest",
     "slug": "eye-want-to-rest",
-    "version": "1.0.0",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/app-logo.png",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/splash-screen.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#0A022F"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "tan-khang-hou",
+            "project": "eye-want-to-rest",
+            "authToken": "bef6ebc8036d4ce7a4d9f362f9e50d519bdf89426d93470e84de628d4f960a19"
+          }
+        }
+      ]
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,8 +34,10 @@
       "bundleIdentifier": "com.khanghou.eyewanttorest"
     },
     "android": {
+      "versionCode": 10,
+      "icon": "./assets/app-logo.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/app-logo.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.khanghou.eyewanttorest"
@@ -34,6 +49,7 @@
       "icon": "assets/open-eye-white.png"
     },
     "plugins": [
+      "sentry-expo",
       [
         "expo-notifications",
         {
