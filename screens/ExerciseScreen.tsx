@@ -1,12 +1,77 @@
-import React from 'react'
-import { View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Linking, TouchableOpacity, Text, View, Image, Dimensions, ScrollView, Touchable } from 'react-native'
 import {SafeAreaView } from 'react-native-safe-area-context'
 import tailwind from 'tailwind-rn'
 import {LinearGradient} from 'expo-linear-gradient'
+import * as WebBrowser from 'expo-web-browser';
+import * as VideoThumbnails from 'expo-video-thumbnails';
+import { exercises } from '../constants/exercises'
 
+const screenWidth = Dimensions.get("window").width
+
+const widthBreakpoint = 768
 // Not currently used
-export default function ExerciseScreen({navigation}: any) {
+export default function ExerciseScreen({route, navigation}: any) {
+    const {exercise} = route.params
+    const [exerciseIdx, setExerciseIdx] = useState(0)
+    // const exercise = exercises[exerciseIdx]
+    const {width, height} = Image.resolveAssetSource(exercise.images[0])
     
+    const [thumbnail, setThumbnail] = useState("")
+
+    const [imageHeight, setImageHeight] = useState(height)
+    const [imageWidth, setImageWidth] = useState(width)
+    useEffect(() => {
+        console.log("width", width, "height", height)
+        // console.log("width", Image.resolveAssetSource(exercise.images[0]).width)
+        // console.log("height", Image.resolveAssetSource(exercise.images[0]).height)
+
+        // 600 is an arbitrary breakpoint
+        const newWidth = screenWidth > widthBreakpoint ? widthBreakpoint : screenWidth - 24
+        const percDecrease = newWidth / width;
+        const newHeight = Math.floor(height * percDecrease)
+        setImageWidth(newWidth)
+        setImageHeight(newHeight)
+        console.log("new width", newWidth, "new height", newHeight);
+    }, [])
+
+
+    const getThumbnail = async (videoLink: string) => {
+        console.log("getitng thumbnail for link:", videoLink)
+        
+        const {uri } = await VideoThumbnails.getThumbnailAsync(decodeURI(videoLink), {
+            time: 3000
+        })
+        console.log("uri", uri)
+        // setThumbnail(uri)
+    }
+
+    const openBrowser = async (link: string) => {
+        // Close previous browsers before moving on
+        try {
+            await WebBrowser.dismissBrowser()
+            console.info("Browser session dismissed")
+        } catch (ex){
+            console.log("Brower session doesn't already exist", ex)
+
+        }
+
+        try {
+            console.log("Opening link", link)
+            await WebBrowser.openBrowserAsync(link)
+        } catch (ex) {
+            console.error("Error opening browser", ex)
+        }
+    }
+
+    const cycleExercise = () => {
+        if (exerciseIdx + 1 >= exercises.length){
+            setExerciseIdx(0)
+        } else {
+            setExerciseIdx(exerciseIdx + 1)
+        }
+    }
+
     return (
         <>
             <LinearGradient
@@ -48,6 +113,36 @@ export default function ExerciseScreen({navigation}: any) {
                         ))}
                         
                         </View>
+
+
+                        <TouchableOpacity
+                            style={tailwind("mb-6 self-start")}
+                            onPress={async () => {
+                                openBrowser(exercise.reference)
+                            }}>
+                            <Text style={tailwind("text-white underline")}>
+                                Reference
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={tailwind("p-2 border border-white w-full ")}
+                        onPress={() => {
+                            navigation.navigate("Main", {
+                                exerciseDone: true // true: To tell MainScreen not to show "Start Exercise button"
+                            })
+                        }} >
+                            <Text style={tailwind("text-white text-center")}>
+                            Done
+                            </Text>
+                        </TouchableOpacity>
+
+                        {/* <TouchableOpacity onPress={() => {
+                            cycleExercise()
+                        }} style={tailwind("p-2 border border-white w-full ")}>
+                            <Text style={tailwind("text-white text-center")}>
+                            Cycle
+                            </Text>
+                        </TouchableOpacity> */}
+                </ScrollView>
             </SafeAreaView>
         </>
     )

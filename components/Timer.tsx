@@ -2,7 +2,7 @@ import { add, sub } from 'date-fns'
 import { differenceInMinutes } from 'date-fns/esm'
 import differenceInSeconds from 'date-fns/esm/fp/differenceInSeconds/index.js'
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Platform } from 'react-native'
 import tailwind from 'tailwind-rn'
 import { getEmptyDate, getTotalSeconds, minutes, seconds } from '../util/time'
 import {Audio} from 'expo-av'
@@ -15,16 +15,18 @@ interface P {
     eyeOpen: boolean,
     setEyeOpen: any,
     setExercise: any,
-    setCompletedFully: any,
+    setCompletedFully?: any,
+    setShowExercises: any, // deprecated
     startTime: Date,
-    style?: any
+    style?: any,
+    navigation: any
 }
 
-const DEFAULT_TIME = new Date(0,0,0,0,20,0)
-const DEFAULT_DURATION = 60 * 20 // 20 minutes
+// const DEFAULT_TIME = new Date(0,0,0,0,20,0)
+// const DEFAULT_DURATION = 60 * 20 // 20 minutes
+const DEFAULT_FONT_SIZE = Platform.isPad ? 120: 80
 
-
-export default function Timer({startTime, sessionDuration, eyeOpen, setEyeOpen, setExercise, setCompletedFully, style}: P) {
+export default function Timer({startTime, navigation, sessionDuration, eyeOpen, setEyeOpen, setExercise, setCompletedFully, setShowExercises, style}: P) {
 
     const [timeLeft, setTimeLeft] = useState(sessionDuration)
     const [timerID, setTimerID]: any = useState(null)
@@ -93,12 +95,6 @@ export default function Timer({startTime, sessionDuration, eyeOpen, setEyeOpen, 
                 minutes = 0;
                 seconds = 0;
                 setEyeOpen(false) // Since this should always only run when the eye timer runs out
-                setCompletedFully(true)
-
-                // const { sound: dropletSound } = await Audio.Sound.createAsync(
-                //     require("../assets/droplet-sound.wav")
-                // )
-                // dropletSound.playAsync()
                 
                 setTimeout(async() => { // play bell sound after delay
                     const { sound: bellSound } = await Audio.Sound.createAsync(
@@ -109,7 +105,7 @@ export default function Timer({startTime, sessionDuration, eyeOpen, setEyeOpen, 
                 setExercise(exercises[getRandomInt(exercises.length)])
 
                 insertHistory(new Date(), getTotalSeconds(sessionDuration))
-                // insertHistory(new Date(), )
+                setCompletedFully(true)
                 return clearTimer()
             }
         } catch (ex: any) {
@@ -125,9 +121,9 @@ export default function Timer({startTime, sessionDuration, eyeOpen, setEyeOpen, 
     return (
         <View style={style}>
             <View style={tailwind("flex flex-row justify-center")}>
-                <Text style={tailwind("text-4xl text-white")}>{minutes(timeLeft)}</Text>
-                <Text style={tailwind("text-4xl text-white")}>:</Text>
-                <Text style={tailwind("text-4xl text-white")}>{seconds(timeLeft)}</Text>
+                <Text style={[tailwind("text-white"), {fontSize: DEFAULT_FONT_SIZE}]}>{minutes(timeLeft)}</Text>
+                <Text style={[tailwind("text-white"), {fontSize: DEFAULT_FONT_SIZE}]}>:</Text>
+                <Text style={[tailwind("text-white"), {fontSize: DEFAULT_FONT_SIZE}]}>{seconds(timeLeft)}</Text>
             </View>
         </View>
     )

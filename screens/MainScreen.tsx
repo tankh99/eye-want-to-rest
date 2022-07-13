@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {createNativeStackNavigator} from "@react-navigation/native-stack"
-import {View, Text, TouchableOpacity, Button} from 'react-native'
+import {View, Text, Image, TouchableOpacity, Button} from 'react-native'
 import {StatusBar} from 'expo-status-bar'
 import tailwind from 'tailwind-rn'
 import { cancelAllNotifications, scheduleNotification } from '../util/notifications';
@@ -16,16 +16,19 @@ import { getRandomInt } from '../util/utils'
 import { getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
 import { Ionicons } from '@expo/vector-icons';
+import { getDefaultIconSize} from '../constants/globals'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
-const DEFAULT_SESSION_DURATION = new Date(0,0,0,0,0,5) // 5 seconds
+const DEFAULT_SESSION_DURATION = new Date(0,0,0,0,20,0) // 5 seconds
 
-export default function MainScreen({navigation}: any) {
+export default function MainScreen({navigation, route}: any) {
 
     const [eyeOpen, setEyeOpen] = useState(false)
     const [notificationId, setNotificationId] = useState("")
     const [startTime, setStartTime]: any = useState(null)
     const [showExercises, setShowExercises] = useState(false)
     const [completedFully, setCompletedFully] = useState(false)
+    
 
     const [exercise, setExercise]: any = useState(exercises[0])
 
@@ -48,6 +51,14 @@ export default function MainScreen({navigation}: any) {
 
     let eyeOpenRef = useRef(eyeOpen)
     eyeOpenRef.current = eyeOpen;
+
+    useEffect(() => {
+        
+        if(route.params && route.params.exerciseDone){ // Remove the "Start Execise" button
+            setCompletedFully(false)
+        }
+
+    }, [route.params])
     
 
     const setupNotifications = async () => {
@@ -113,63 +124,79 @@ export default function MainScreen({navigation}: any) {
         <LinearGradient
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
             style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
-        <SafeAreaView style={tailwind("flex-1 pb-2 pt-4")}>
+        <SafeAreaView style={tailwind("flex-1 pb-8 pt-4")}>
         
-        <View style={tailwind("flex-1 items-center justify-between flex-col")}>
+        <View style={[tailwind("flex-1 flex items-center justify-between")]}>
             {/* Top-right stats icon */}
-            <View style={tailwind("w-full px-6 flex self-start items-center flex-row")}>
+            <View style={tailwind("w-full px-6 flex items-center justify-center flex-row z-10")}>
 
                 {/* Placeholder Icon used to center text */}
-                <Ionicons name="arrow-back" size={28} style={tailwind("")} color="transparent"  />
+                {/* <Ionicons name="arrow-back" size={DEFAULT_ICON_SIZE} style={tailwind("")} color="transparent"  /> */}
 
-                <Timer 
-                    style={tailwind("flex-1 text-center")}
-                    startTime={startTime}
-                    sessionDuration={DEFAULT_SESSION_DURATION}
-                    setCompletedFully={setCompletedFully} 
-                    eyeOpen={eyeOpenRef.current} 
-                    setEyeOpen={setEyeOpen}
-                    setExercise={setExercise}  />
+                {/*  */}
+                <View style={tailwind("flex-1")}></View>
                 
-                <TouchableOpacity
-                    style={tailwind("flex")}
-                    onPress={() => navigation.navigate("Stats")}>
-                    <Ionicons name="stats-chart" style={tailwind("")} size={28} color="white" />
-                </TouchableOpacity>
-
-            </View>
-
-            <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/>
-        {showExercises 
-        ? <EyeExercises 
-            exercise={exercise}
-            setExercise={setExercise}
-            setCompletedFully={setCompletedFully}
-            setShowExercises={setShowExercises}/>
-        : (
-        <View style={tailwind("")}>
-            {eyeOpen ?
-                <>
-                    <Tips/>
-                </>
-                : completedFully ?
-                <View style={tailwind("")}>
-                    <Text style={tailwind("text-white text-2xl pb-4")}>It's time to relax your eyes</Text>
-                    <TouchableOpacity onPress={() => setShowExercises(true)} style={tailwind("p-2 border border-white")}>
-                        <Text style={tailwind("text-white text-center")}>
-                        Start Exercise
-                        </Text>
+                <View style={tailwind("flex flex-row items-center")}>
+                    <TouchableOpacity
+                        style={tailwind("flex mr-4")}
+                        onPress={() => navigation.navigate("Bestiary")}>
+                        <Ionicons name="book" style={[tailwind("")]} size={getDefaultIconSize()} color="white" />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={tailwind("flex")}
+                        onPress={() => navigation.navigate("Stats")}>
+                        <Ionicons name="stats-chart" style={[tailwind("")]} size={getDefaultIconSize()} color="white" />
                     </TouchableOpacity>
                 </View>
-                :
-                <View style={tailwind("flex-row")}>
-                    <Text style={tailwind("text-white text-xl p-4 text-center flex-wrap")}>Press the closed eye above to start</Text>
+            </View>
+
+            <View style={tailwind("absolute top-0 left-0 right-0 bottom-0 flex-1 items-center justify-center z-0")}>
+
+                <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/>
+                <Timer 
+                    style={tailwind("")}
+                    startTime={startTime}
+                    sessionDuration={DEFAULT_SESSION_DURATION}
+                    setShowExercises={setShowExercises} 
+                    setCompletedFully={setCompletedFully}
+                    eyeOpen={eyeOpenRef.current} 
+                    setEyeOpen={setEyeOpen}
+                    navigation={navigation}
+                    setExercise={setExercise}  />
+            </View>
+            {/* {showExercises 
+            && <EyeExercises 
+                exercise={exercise}
+                setExercise={setExercise}
+                setCompletedFully={setCompletedFully}
+                setShowExercises={setShowExercises}/>
+            } */}
+
+            {/* Eye Button */}
+            <View style={tailwind("flex w-full px-6 items-center max-w-screen-md")}>
+                {/* <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/> */}
+                <View style={tailwind("w-full flex items-center")}>
+                {completedFully ?
+                    <View style={[tailwind("w-full"), {}]}>
+                        {/* <Text style={tailwind("text-white text-2xl pb-4")}>It's time to relax your eyes</Text> */}
+                        
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate("Exercises", {
+                                exercise: exercises[getRandomInt(exercises.length)]
+                            })
+                        }} style={tailwind("p-2 w-full flex border border-white")}>
+                            <Text style={tailwind("text-white w-full text-center text-lg")}>
+                            Start Exercise
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    : eyeOpen ? 
+                        <Tips/>
+                    : <Text style={tailwind("text-white text-center text-xl")}>Press the closed eye to start</Text>
+                }
                 </View>
-            }   
-            
-        </View>
-        )
-        }
+            </View>
+
         {/* Bottom Aligned */}
         {/* <View style={tailwind("absolute bottom-12")}>
         {

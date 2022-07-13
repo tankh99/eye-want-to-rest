@@ -1,9 +1,18 @@
 
 const ASSET_PATH = "../assets/exercises"
-// importance (0-5)
 
+export interface Exercise {
+    name: string,
+    description: string,
+    images: any[],
+    steps: string[],
+    approximateDuration: number,
+    frequency: number,
+    reference: string,
+    credit?: string
+}
 
-export const exercises = [
+export const exercises: Exercise[] = [
 
     {
         name: "20-20-20",
@@ -13,29 +22,30 @@ export const exercises = [
         images: [require(`${ASSET_PATH}/20-20-20.jpeg`)],
         steps: [
             "Focus on something 20 feet away (6m). Try looking out the window for a far away tree or building",
-            "Focus on the object for 20 seconds",
-            "Afterwards, palm your eyes to relax them"
+            "Focus on the object for 20 seconds"
         ],
-        approximateDuration: 60,
-        importance: 5,
-        credit: `Photo by <a href="https://unsplash.com/@dylanferreira?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Dylan Ferreira</a> on <a href="https://unsplash.com/s/photos/guy-looking-out-window?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>`,
+        approximateDuration: 20,
+        frequency: 5,
+        credit: `https://unsplash.com/@dylanferreira?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText`,
         reference: "https://youtu.be/_7hwZv36JMU"
     },
     {
-        name: "Pencil Pushup",
+        name: "Pencil Pushups",
         description: `
             Alternate your focus on an object near and an object far
         `,
-        images: [require(`${ASSET_PATH}/focus-change-near.png`), require(`${ASSET_PATH}/focus-change-far.png`)],
-        credit: "via https://www.wikihow.com/Exercise-Your-Eyes",
+        images: [require(`${ASSET_PATH}/pencil-pushup.jpeg`)],
+        credit: "https://healthandbeautytipsz.blogspot.com/2014/10/how-to-improve-your-vision-naturally.html",
         steps: [
-            "Hold a pencil or your pointer finger close to your eye and focus on it.",
-            "Slowly move your finger away from your face while maintaining focus.",
-            "Look away for a moment and focus something in the distance",
+            "Hold a pencil or your pointer finger at arms' length away and focus on a target point. The point you are focusing on should be detailed",
+            "Slowly move the object closer to your eyes until it starts becoming blurry.",
+            "Stop just a few cm away from your face. Try to focus such that it doesn't look blurry.",
+            "After a few seconds, look far away to relax your eyes",
+            "Return your focus back to the object, then slowly move it away from your eyes as you maintain focus throughout",
             "Repeat three times"
         ],
         approximateDuration: 60,
-        importance: 4,
+        frequency: 4,
         reference: "https://youtu.be/BuvMrCAt6TU"
     },
     {
@@ -43,17 +53,17 @@ export const exercises = [
         description: `
             Cover your eyes with your palms
         `,
-        images: [require(`${ASSET_PATH}/palm-eyes.png`)],
-        credit: "https://www.wikihow.com/Exercise-Your-Eyes",
+        images: [require(`${ASSET_PATH}/eye-palm.jpeg`)],
+        credit: "https://www.carechef.in/five-ways-to-sharpen-eyesight/",
         steps: [
 
             "Rub your hands together",
             "Cover your eyes with your palms lightly.",
             "Feel the heat of your palms, but avoid applying pressure",
-            "Take deep breaths slowly and evenly while thinking of a calm scene"
+            "Repeat until your eyes feel relaxed"
         ],
         approximateDuration: 30,
-        importance: 4,
+        frequency: 4,
         reference: "https://youtu.be/RoIYAoAalmI"
     },
     {
@@ -64,14 +74,13 @@ export const exercises = [
         images: [require(`${ASSET_PATH}/massage-eyes.png`)],
         credit: "https://www.wikihow.com/Exercise-Your-Eyes",
         steps: [
-            "Wash your hands with soap first",
-            "Close your eyes and push down the top eyelid lightly using a finger. Ensure to push downward from the left of your eyelid to the right of the eyelid",
+            "Close your eyes and push down the top eyelid lightly using a finger. Push downward from the left of your eyelid to the right of the eyelid",
             "Repeat for the bottom eyelid. Look upwards and massage from the bottom-up.",
             "Ensure to massage the corners of your eyes",
-            "Repeat for your other eye"
+            "Repeat for the other eye"
         ],
-        approximateDuration: 120,
-        importance: 3,
+        approximateDuration: 180,
+        frequency: 3,
         reference: "https://youtu.be/bGJqucoHmjs"
     },
     // ADVANCED
@@ -88,26 +97,8 @@ export const exercises = [
     //         "When ready, close your eyes and then open up your palms. Turn towards darkness, then slowly open up your eyes",
     //     ],
     //     approximateDuration: 60,
-    //     importance: 4,
+    //     frequency: 4,
     //     reference: "https://youtu.be/oI2qmqhcr_4"
-    // },
-    // {
-    //     name: "Massage your Eyes",
-    //     description: `
-    //         Best for people with dry eyes
-    //     `,
-    //     images: [require(`${ASSET_PATH}/massage-eyes.png`)],
-    //     credit: "https://www.wikihow.com/Exercise-Your-Eyes",
-    //     steps: [
-    //         "Wash your hands with soap first",
-    //         "Close your eyes and push down the top eyelid lightly using a finger. Ensure to push downward from the left of your eyelid to the right of the eyelid",
-    //         "Repeat for the bottom eyelid. Look upwards and massage from the bottom-up.",
-    //         "Ensure to massage the corners of your eyes",
-    //         "Repeat for your other eye"
-    //     ],
-    //     approximateDuration: 300,
-    //     importance: 4,
-    //     reference: "https://youtu.be/bGJqucoHmjs"
     // },
     {
         name: "Figure Eight",
@@ -115,15 +106,15 @@ export const exercises = [
             Make an imaginary figure eight with your eyes
         `,
         images: [require(`${ASSET_PATH}/figure-eight.png`)],
-        credit: "https://www.wikihow.com/Exercise-Your-Eyes",
         steps: [
-            "Imagine a giant figure eight on the floor or on the roof. It should be about 3 metres in front of you",
-            "Trace the figure eight with your eyes",
-            "Trace 10 times, then switch directions"
+            "Trace an imaginary giant figure eight on an open surface. It should be about 3 metres in front of you",
+            "Trace the figure eight with your eyes and focus at objects that are at the edge of your vision. Do not move your head as you do so",
+            "Trace 10 times, then switch directions",
         ],
         approximateDuration: 60,
-        importance: 2,
-        exercise: "https://youtu.be/IZr22jXakeo"
+        frequency: 2,
+        reference: "https://youtu.be/mqXR8O2VJLo?t=183",
+        credit: "https://www.wikihow.com/Exercise-Your-Eyes"
     },
     {
         name: "Directional Eyes",
@@ -138,8 +129,8 @@ export const exercises = [
             "Repeat the above step, but up and down 3 times",
             "Repeat the above step, but diagonally 3 times"
         ],
-        approximateDuration: 60,
-        importance: 2,
+        approximateDuration: 30,
+        frequency: 4,
         reference: "https://youtu.be/mqXR8O2VJLo"
 
     }
@@ -149,7 +140,7 @@ let weightedExercises: any = []
 export function getWeightedExercises(){
     if(!weightedExercises){
         for(let exercise of exercises){
-            for(let i = 0; i < exercise.importance; i++){
+            for(let i = 0; i < exercise.frequency; i++){
                 weightedExercises.push(exercise)
             }
         }

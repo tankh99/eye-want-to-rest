@@ -17,6 +17,11 @@ credentials/*
 package-lock.json
 yarn-lock
 yarn-error.log
+yarn.lock
 
 # macOS
 .DS_Store
+__snapshots__
+.expo-shared
+.vscode
+.expo

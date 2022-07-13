@@ -1,5 +1,5 @@
 
-import {View, Text} from 'react-native'
+import {View, Text, Button, TouchableOpacity} from 'react-native'
 import tailwind from 'tailwind-rn'
 import {LinearGradient} from 'expo-linear-gradient'
 import { useEffect, useState } from 'react'
@@ -11,7 +11,7 @@ import { Table, Row, Rows } from 'react-native-table-component-2';
 import { Card } from 'react-native-ui-lib'
 import { intervalToDuration, isThisWeek, isYesterday } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons';
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { getDefaultIconSize} from '../constants/globals'
 
 export default function StatsScreen({navigation}: any) {
 
@@ -97,8 +97,8 @@ export default function StatsScreen({navigation}: any) {
         const yesterdayDuration = intervalToDuration({start:0, end: secondsYesterday * 1000})
         groupedHistory.yesterdayDuration = yesterdayDuration
         
-        const weekDuration = intervalToDuration({start:0, end: secondsThisWeek * 1000})
-        groupedHistory.weekDuration = weekDuration;
+        const weeklyDuration = intervalToDuration({start:0, end: secondsThisWeek * 1000})
+        groupedHistory.weeklyDuration = weeklyDuration;
         return groupedHistory
 
 
@@ -112,18 +112,20 @@ export default function StatsScreen({navigation}: any) {
             <SafeAreaView>
                 <View style={tailwind("flex items-center justify-between flex-row px-4")}>
                     <TouchableOpacity 
-                        style={tailwind("flex ")} 
-                        onPress={() => navigation.navigate("Main")}>
-                        <Ionicons name="arrow-back" size={28} color="white"  />
+                        style={tailwind("")} 
+                        onPress={() => {
+                            navigation.goBack()
+                        }}>
+                        <Ionicons name="arrow-back" size={getDefaultIconSize()} color="white"  />
                     </TouchableOpacity>
                     <Text style={tailwind("text-white text-center text-4xl my-8 flex justify-center")}>Progress</Text>
                     
-                    <Ionicons name="arrow-back" size={28} style={tailwind("")} color="transparent"  />
+                    <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tailwind("")} color="transparent"  />
                 </View>
                 
                 <ProgressCard title="Today's Focus" duration={history.todayDuration} sessions={history.todaySessions}/>
                 <ProgressCard title="Yesterday's Focus" duration={history.yesterdayDuration} sessions={history.yesterdaySessions}/>
-                <ProgressCard title="This Week's Focus" duration={history.weekDuration} sessions={history.weeklySessions}/>
+                <ProgressCard title="This Week's Focus" duration={history.weeklyDuration} sessions={history.weeklySessions}/>
                 {/* {Object.keys(history).length > 0 ? Object.keys(history).map((dateKey: any, index: number) => {
                     const {sessions} = history[dateKey]
                     
