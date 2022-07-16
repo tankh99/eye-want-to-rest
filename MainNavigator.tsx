@@ -7,6 +7,7 @@ import tailwind from 'tailwind-rn'
 import { Ionicons } from '@expo/vector-icons';
 import StatsScreen from './screens/StatsScreen';
 import BestiaryScreen from './screens/BestiaryScreen'
+import TestScreen from './screens/TestScreen'
 
 const Stack: any = createNativeStackNavigator()
 
@@ -25,6 +26,7 @@ export default function MainNavigator() {
             <Stack.Screen name="Exercises" component={ExerciseScreen}/>
             <Stack.Screen name="Stats" component={StatsScreen}/>
             <Stack.Screen name="Bestiary" component={BestiaryScreen}/>
+            <Stack.Screen name="Test" component={TestScreen}/>
         </Stack.Navigator>
     )
 }

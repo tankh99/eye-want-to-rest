@@ -47,7 +47,6 @@ export default function EyeButton({eyeOpen, toggleEye}: any) {
             }]}
             
             onPress={() => {
-                console.log("hello?")
                 toggleEye()
             }}
             onPressIn={() => {

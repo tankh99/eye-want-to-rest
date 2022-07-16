@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { Linking, TouchableOpacity, Text, View, Image, Dimensions, ScrollView, Touchable } from 'react-native'
+import { Linking, TouchableOpacity, Text, View, Button, Image, Dimensions, ScrollView, Modal, Touchable } from 'react-native'
 import {SafeAreaView } from 'react-native-safe-area-context'
 import tailwind from 'tailwind-rn'
 import {LinearGradient} from 'expo-linear-gradient'
 import * as WebBrowser from 'expo-web-browser';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import { exercises } from '../constants/exercises'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import {Picker} from '@react-native-picker/picker'
+// import HorizontalPicker from '@vseslav/react-native-horizontal-picker';
+import HorizontalPicker from 'react-native-picker-horizontal'
+import { Ionicons } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
 
 const screenWidth = Dimensions.get("window").width
 
 const widthBreakpoint = 768
+
+const dummySecData = [0, 10, 20,30,40,50]
+const dummyMinData = [0,1,2,3,4,5]
 // Not currently used
 export default function ExerciseScreen({route, navigation}: any) {
     const {exercise} = route.params
@@ -17,7 +26,8 @@ export default function ExerciseScreen({route, navigation}: any) {
     // const exercise = exercises[exerciseIdx]
     const {width, height} = Image.resolveAssetSource(exercise.images[0])
     
-    const [thumbnail, setThumbnail] = useState("")
+    const [exerciseDuration, setExerciseDuration] = useState(exercise.approximateDuration)
+    const [exerciseDurationSuffix, setExerciseDurationSuffix] = useState("sec")
 
     const [imageHeight, setImageHeight] = useState(height)
     const [imageWidth, setImageWidth] = useState(width)
@@ -64,12 +74,27 @@ export default function ExerciseScreen({route, navigation}: any) {
         }
     }
 
-    const cycleExercise = () => {
-        if (exerciseIdx + 1 >= exercises.length){
-            setExerciseIdx(0)
+    const [show, setShow] = useState(false)
+
+    const [value, setValue]: any = useState(new Date())
+    useState()
+
+    const onChange = (value: any) => {
+        setValue(value)
+    }
+    
+    const openPicker = () => {
+        setShow(!show)
+    }
+
+    const updateDuration = (time: number) => {
+        const newDuration = exerciseDuration + time;
+        if (exerciseDuration % 60 > 0) {
+            setExerciseDurationSuffix("min")
         } else {
-            setExerciseIdx(exerciseIdx + 1)
+            setExerciseDurationSuffix("sec")
         }
+        // setExerciseDuration(newDuration + )
     }
 
     return (
@@ -77,7 +102,8 @@ export default function ExerciseScreen({route, navigation}: any) {
             <LinearGradient
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
             style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
-            <SafeAreaView style={tailwind("flex-1 items-center")}>
+            <SafeAreaView style={tailwind("flex-1")}>
+            {/* <Text style={tailwind("text-white")} >Duration: {value}</Text> */}
             
                 <ScrollView horizontal={false}
                     style={tailwind("mt-8")}
@@ -124,12 +150,66 @@ export default function ExerciseScreen({route, navigation}: any) {
                                 Reference
                             </Text>
                         </TouchableOpacity>
+
+                    </ScrollView>
+                    <Button onPress={openPicker} title="Adjust Duration"/>
+                    {/* <View style={tailwind("flex flex-row items-center justify-center my-4")}>
+                        <TouchableOpacity>
+                            <AntDesign name="minus" color="white" size={24}/>
+                        </TouchableOpacity>
+                        <View style={tailwind("p-2 border border-white px-8 mx-2")}>
+                            <Text style={tailwind("text-white")}>{exerciseDuration}</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <Ionicons name="ios-add" color="white" size={24}/>
+                        </TouchableOpacity>
+                    </View> */}
+                    <Modal
+                        animationType='slide'
+                        onRequestClose={() => setShow(false)}
+                        transparent
+                        visible={show}>
+                            <View style={[tailwind("absolute top-1/2 left-1/2 bg-black"),{ width: 200, height: 400,
+                            transform: [
+                                {translateX: -screenWidth/1}
+                            ]}]}>
+                                <Text style={tailwind("text-white")}>HELLO</Text>
+                            </View>
+                    </Modal>
+                    {/* {show &&
+                        <View style={[tailwind("flex-row items-center mx-8"), {height:150}]}>
+                            <View style={[tailwind("flex-1"), {}]}>
+                                <Picker selectedValue={value}
+                                itemStyle={[tailwind("text-white"), {}]}
+                                prompt="Exercise Duration" // for Android only
+                                onValueChange={(value, index) => onChange(value)}>
+                                    {dummyMinData.map((value: any, index) => {
+                                        return <Picker.Item key={index} style={{}} label={value.toString()} value={value}/>
+                                    })}
+                                </Picker>
+                            </View>
+                            <Text style={tailwind("text-white")}>min</Text>
+                            <View style={[tailwind("flex-1"), {}]}>
+                                <Picker selectedValue={value}
+                                itemStyle={[tailwind("text-white"), {}]}
+                                prompt="Exercise Duration" // for Android only
+                                onValueChange={(value, index) => onChange(value)}>
+                                    {dummySecData.map((value: any, index) => {
+                                        console.log(value)
+                                        return <Picker.Item key={index} style={{}} label={value.toString()} value={value}/>
+                                    })}
+                                </Picker>
+                                
+                            </View>
+                            <Text style={tailwind("text-white")}>sec</Text>
+                        </View>
+                    } */}
                         <TouchableOpacity style={tailwind("p-2 border border-white w-full ")}
-                        onPress={() => {
-                            navigation.navigate("Main", {
-                                exerciseDone: true // true: To tell MainScreen not to show "Start Exercise button"
-                            })
-                        }} >
+                            onPress={() => {
+                                navigation.navigate("Main", {
+                                    exerciseDone: true // true: To tell MainScreen not to show "Start Exercise button"
+                                })
+                            }} >
                             <Text style={tailwind("text-white text-center")}>
                             Done
                             </Text>
@@ -142,7 +222,6 @@ export default function ExerciseScreen({route, navigation}: any) {
                             Cycle
                             </Text>
                         </TouchableOpacity> */}
-                </ScrollView>
             </SafeAreaView>
         </>
     )

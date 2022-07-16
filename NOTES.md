@@ -20,5 +20,6 @@ Guide URL: https://www.termsfeed.com/blog/ios-apps-privacy-policy/#How_To_Create
 #### Jest
 Running tests may sometimes run into import errors, in which case you must go to package.json, under jest.transformIgnorePatterns and add into the regex the library name that's causing you this error
 
-
+#### Other Issues
+- Datetimepicker does not render correctly if it is under a view with the style 'items-center'
 

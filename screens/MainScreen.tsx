@@ -17,7 +17,8 @@ import { getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
 import { Ionicons } from '@expo/vector-icons';
 import { getDefaultIconSize} from '../constants/globals'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+// import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 const DEFAULT_SESSION_DURATION = new Date(0,0,0,0,20,0) // 5 seconds
 
@@ -127,6 +128,7 @@ export default function MainScreen({navigation, route}: any) {
         <SafeAreaView style={tailwind("flex-1 pb-8 pt-4")}>
         
         <View style={[tailwind("flex-1 flex items-center justify-between")]}>
+
             {/* Top-right stats icon */}
             <View style={tailwind("w-full px-6 flex items-center justify-center flex-row z-10")}>
 
@@ -149,6 +151,7 @@ export default function MainScreen({navigation, route}: any) {
                     </TouchableOpacity>
                 </View>
             </View>
+                
 
             <View style={tailwind("absolute top-0 left-0 right-0 bottom-0 flex-1 items-center justify-center z-0")}>
 
