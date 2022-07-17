@@ -132,6 +132,7 @@ export default function MainScreen({navigation, route}: any) {
             {/* Top-right stats icon */}
             <View style={tailwind("w-full px-6 flex items-center justify-center flex-row z-10")}>
 
+            <Button onPress={() => navigation.navigate("Test")} title="Test"/>
                 {/* Placeholder Icon used to center text */}
                 {/* <Ionicons name="arrow-back" size={DEFAULT_ICON_SIZE} style={tailwind("")} color="transparent"  /> */}
 
@@ -151,7 +152,6 @@ export default function MainScreen({navigation, route}: any) {
                     </TouchableOpacity>
                 </View>
             </View>
-                
 
             <View style={tailwind("absolute top-0 left-0 right-0 bottom-0 flex-1 items-center justify-center z-0")}>
 
