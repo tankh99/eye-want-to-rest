@@ -22,6 +22,7 @@ export default function BestiaryScreen({navigation}: any) {
 
     }, [])
 
+
   return (
     <>
 
@@ -43,7 +44,7 @@ export default function BestiaryScreen({navigation}: any) {
             </View>
             <ScrollView style={tailwind("mb-24")} contentContainerStyle={[tailwind("flex flex-wrap flex-row")]} >
                     {exercises.map((exercise: Exercise, index: number) => {
-                        const {time, denom} = convertSecondsToLowestDenom(exercise.approximateDuration)
+                        const {time, denom} = convertSecondsToLowestDenom(exercise.durationRange[exercise.defaultDurationIndex])
                         return (
                             <TouchableOpacity 
                                 key={index} 

@@ -6,7 +6,8 @@ export interface Exercise {
     description: string,
     images: any[],
     steps: string[],
-    approximateDuration: number,
+    defaultDurationIndex: number,
+    durationRange: number[], // the range of all possible exercise durations
     frequency: number,
     reference: string,
     credit?: string
@@ -24,8 +25,10 @@ export const exercises: Exercise[] = [
             "Focus on something 20 feet away (6m). Try looking out the window for a far away tree or building",
             "Focus on the object for 20 seconds"
         ],
-        approximateDuration: 20,
-        frequency: 5,
+        
+        defaultDurationIndex: 0,
+        durationRange: [5,20],
+        frequency: 4,
         credit: `https://unsplash.com/@dylanferreira?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText`,
         reference: "https://youtu.be/_7hwZv36JMU"
     },
@@ -44,8 +47,9 @@ export const exercises: Exercise[] = [
             "Return your focus back to the object, then slowly move it away from your eyes as you maintain focus throughout",
             "Repeat three times"
         ],
-        approximateDuration: 60,
-        frequency: 4,
+        defaultDurationIndex: 0,
+        durationRange: [60, 120, 180],
+        frequency: 5,
         reference: "https://youtu.be/BuvMrCAt6TU"
     },
     {
@@ -62,7 +66,8 @@ export const exercises: Exercise[] = [
             "Feel the heat of your palms, but avoid applying pressure",
             "Repeat until your eyes feel relaxed"
         ],
-        approximateDuration: 30,
+        defaultDurationIndex: 0,
+        durationRange: [30, 60, 120, 180, 240, 300],
         frequency: 4,
         reference: "https://youtu.be/RoIYAoAalmI"
     },
@@ -79,7 +84,8 @@ export const exercises: Exercise[] = [
             "Ensure to massage the corners of your eyes",
             "Repeat for the other eye"
         ],
-        approximateDuration: 180,
+        defaultDurationIndex: 2,
+        durationRange: [60, 120, 180, 240, 300],
         frequency: 3,
         reference: "https://youtu.be/bGJqucoHmjs"
     },
@@ -111,8 +117,9 @@ export const exercises: Exercise[] = [
             "Trace the figure eight with your eyes and focus at objects that are at the edge of your vision. Do not move your head as you do so",
             "Trace 10 times, then switch directions",
         ],
-        approximateDuration: 60,
-        frequency: 2,
+        defaultDurationIndex: 0,
+        durationRange: [20, 30, 45, 60],
+        frequency: 3,
         reference: "https://youtu.be/mqXR8O2VJLo?t=183",
         credit: "https://www.wikihow.com/Exercise-Your-Eyes"
     },
@@ -129,10 +136,24 @@ export const exercises: Exercise[] = [
             "Repeat the above step, but up and down 3 times",
             "Repeat the above step, but diagonally 3 times"
         ],
-        approximateDuration: 30,
+        defaultDurationIndex: 0,
+        durationRange: [20, 30, 45],
         frequency: 4,
         reference: "https://youtu.be/mqXR8O2VJLo"
 
+    }, 
+    {
+        name: "Blink Repeatedly",
+        description: "",
+        images: [require(`${ASSET_PATH}/blink-repeatedly.jpeg`)],
+        steps: [
+            "Focus on a faraway object",
+            "Blink until your eyes relax"
+        ],
+        defaultDurationIndex: 0,
+        durationRange: [20, 30, 45],
+        frequency: 4,
+        reference: "https://www.youtube.com/watch?v=GtTEoLTz1JI"
     }
 ]
 

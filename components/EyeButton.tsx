@@ -11,7 +11,6 @@ import {WebView} from 'react-native-webview'
 import Eye from './Eye'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import * as Device from 'expo-device'
-import { getDeviceType } from '../constants/globals'
 
 
 
@@ -21,8 +20,8 @@ const CLOSE_EYE_PATH = `${ASSET_PATH}/close-eye-white.png`
 const ANIMATED_EYE_PATH = `${ASSET_PATH}/animated-eye.gif`
 
 
-const DEFAULT_EYE_STYLE = getDeviceType() ? 150 : 100
-const PRESSED_EYE_STYLE = getDeviceType() ? 175 : 125
+const DEFAULT_EYE_STYLE = 100 // tablet: 150
+const PRESSED_EYE_STYLE = 125 // tablet: 175
 export default function EyeButton({eyeOpen, toggleEye}: any) {
 
     const [buttonStyle, setButtonStyle] = useState(DEFAULT_EYE_STYLE)
@@ -32,11 +31,11 @@ export default function EyeButton({eyeOpen, toggleEye}: any) {
     // }, [eyeOpen])
 
     const size = useSharedValue(100)
-    const style = useAnimatedStyle(() => {
-        return {
-            width: withTiming(size.value)
-        }
-    })
+    // const style = useAnimatedStyle(() => {
+    //     return {
+    //         width: withTiming(size.value)
+    //     }
+    // })
 
     return (
         <View style={tailwind("")}>

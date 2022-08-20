@@ -6,6 +6,8 @@ import {LinearGradient} from 'expo-linear-gradient'
 import tailwind from 'tailwind-rn'
 import { PanGestureHandler, ScrollView, TapGestureHandler } from 'react-native-gesture-handler'
 import Animated, { useAnimatedGestureHandler, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
+import { Picker } from '@react-native-picker/picker'
+import {Audio} from 'expo-av'
 
 const dummyData = [10, 20,30,40,50,60]
 
@@ -18,16 +20,15 @@ export default function TestScreen() {
   useEffect(() => {
     let arr: any = []
     let offsets: any = []
-    for(let i = 0; i < 500; i+=1){
+    for(let i = 0; i < 5; i+=1){
       arr.push(i)
       offsets.push(ITEM_WIDTH * i)
     }
     setData(arr)
     setIntervals(offsets)
-
   
   }, [])
-  
+
   return (
     <>
       <SafeAreaView style={tailwind("flex-1")}>
@@ -48,23 +49,50 @@ export default function TestScreen() {
 
 
 function TimePicker(props: any) {
+  // console.log("offsets", props.offsets)
+  const [selected, setSelected] = useState(0)
+
+  const playsound = async () => {
+
+    const {sound} = await Audio.Sound.createAsync(
+      require("../assets/cowbell.wav")
+    )
+    sound.playAsync()
+  }
+  
   return (
+    <>
     <View>
+      <Text>{selected}</Text>
       <ScrollView 
-        style={[{paddingLeft: width/2 -50}]}
+        contentContainerStyle={[{paddingHorizontal: width/2 - ITEM_WIDTH/2}]}
         snapToInterval={100} // element width!
+        disableScrollViewPanResponder
         snapToAlignment="center"
-        showsHorizontalScrollIndicator={false}
         snapToOffsets={props.offsets}
-        // scrollToOverflowEnabled
-        // contentOffset={{x:-135, y:0}}
+        showsHorizontalScrollIndicator={false}
+        // contentOffset={{x:scrollOffset, y:0}}
+        snapToStart={false}
+        snapToEnd={false}
         // alwaysBounceVertical={false}
-        // contentInset={{left: 100, top:0, right: 0, bottom: 0}}
-        // contentInsetAdjustmentBehavior="never"
+        alwaysBounceVertical={false}
+        alwaysBounceHorizontal={false}
+        // contentInsetAdjustmentBehavior="scrollableAxes"
+        // contentInset={{top:0, bottom: 0, left: width/2}}
         // disableIntervalMomentum={true}
         decelerationRate="fast"
         maximumZoomScale={2}
-        zoomScale={1}
+        scrollEventThrottle={16}
+        onMomentumScrollEnd={(e) => {
+          if(e.nativeEvent.contentOffset.x % 100 == 0){
+            console.log("hello")
+            const item = props.data[e.nativeEvent.contentOffset.x / 100]
+            playsound()
+            setSelected(item)
+          }
+          console.log("hello")
+        }}
+        zoomScale={1} // only for images
         horizontal>
         {props.data.map((item: any, index: number) => {
           return (
@@ -73,8 +101,10 @@ function TimePicker(props: any) {
           )
         })}
       </ScrollView>
-      <Text style={tailwind("w-full text-center font-bold text-4xl")}>^</Text>
     </View>
+
+    <Text style={tailwind("w-full text-center font-bold text-4xl")}>^</Text>
+    </>
   )
 }
 

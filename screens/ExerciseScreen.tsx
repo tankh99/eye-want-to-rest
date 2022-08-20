@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Linking, TouchableOpacity, Text, View, Button, Image, Dimensions, ScrollView, Modal, Touchable } from 'react-native'
 import {SafeAreaView } from 'react-native-safe-area-context'
 import tailwind from 'tailwind-rn'
 import {LinearGradient} from 'expo-linear-gradient'
 import * as WebBrowser from 'expo-web-browser';
 import * as VideoThumbnails from 'expo-video-thumbnails';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { exercises } from '../constants/exercises'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import {Picker} from '@react-native-picker/picker'
@@ -12,6 +13,9 @@ import {Picker} from '@react-native-picker/picker'
 import HorizontalPicker from 'react-native-picker-horizontal'
 import { Ionicons } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons'
+import EyeExerciseTimer from '../components/EyeExerciseTimer'
+import { Entypo } from '@expo/vector-icons'
+import { FontAwesome } from '@expo/vector-icons'
 
 const screenWidth = Dimensions.get("window").width
 
@@ -22,12 +26,12 @@ const dummyMinData = [0,1,2,3,4,5]
 // Not currently used
 export default function ExerciseScreen({route, navigation}: any) {
     const {exercise} = route.params
-    const [exerciseIdx, setExerciseIdx] = useState(0)
     // const exercise = exercises[exerciseIdx]
     const {width, height} = Image.resolveAssetSource(exercise.images[0])
-    
-    const [exerciseDuration, setExerciseDuration] = useState(exercise.approximateDuration)
+    const [isCompleted, setIsCompleted] = useState(false)
     const [exerciseDurationSuffix, setExerciseDurationSuffix] = useState("sec")
+    const [showExerciseTimer, setShowExerciseTimer] = useState(false)
+    const [modalEntryText, setModalEntryText] = useState("Start Exercise")
 
     const [imageHeight, setImageHeight] = useState(height)
     const [imageWidth, setImageWidth] = useState(width)
@@ -44,17 +48,6 @@ export default function ExerciseScreen({route, navigation}: any) {
         setImageHeight(newHeight)
         console.log("new width", newWidth, "new height", newHeight);
     }, [])
-
-
-    const getThumbnail = async (videoLink: string) => {
-        console.log("getitng thumbnail for link:", videoLink)
-        
-        const {uri } = await VideoThumbnails.getThumbnailAsync(decodeURI(videoLink), {
-            time: 3000
-        })
-        console.log("uri", uri)
-        // setThumbnail(uri)
-    }
 
     const openBrowser = async (link: string) => {
         // Close previous browsers before moving on
@@ -74,29 +67,32 @@ export default function ExerciseScreen({route, navigation}: any) {
         }
     }
 
-    const [show, setShow] = useState(false)
-
-    const [value, setValue]: any = useState(new Date())
-    useState()
-
-    const onChange = (value: any) => {
-        setValue(value)
-    }
-    
-    const openPicker = () => {
-        setShow(!show)
-    }
-
-    const updateDuration = (time: number) => {
-        const newDuration = exerciseDuration + time;
-        if (exerciseDuration % 60 > 0) {
-            setExerciseDurationSuffix("min")
-        } else {
-            setExerciseDurationSuffix("sec")
+    const CLOSED_SLIDE_HEIGHT = 75
+    const OPEN_SLIDE_HEIGHT = 150
+    const slideValue = useSharedValue(CLOSED_SLIDE_HEIGHT)
+    const slideStyle = useAnimatedStyle(() => {
+        return {
+            height: withSpring(slideValue.value, {
+                stiffness: 90,
+                damping: 100
+            })
         }
-        // setExerciseDuration(newDuration + )
+    })
+
+    const openSlide = () => {
+        setModalEntryText("Close")  // Open
+        slideValue.value = OPEN_SLIDE_HEIGHT + 100;
     }
 
+    const closeSlide = () => {
+        setModalEntryText("Start Exercise Timer")  // Open
+        slideValue.value = CLOSED_SLIDE_HEIGHT;
+        // else slideValue.value = OPEN_SLIDE_HEIGHT + 100
+    }
+
+
+
+    const exerciseDefaultDuration = exercise.durationRange[exercise.defaultDurationIndex]
     return (
         <>
             <LinearGradient
@@ -109,7 +105,7 @@ export default function ExerciseScreen({route, navigation}: any) {
                     style={tailwind("mt-8")}
                     contentContainerStyle={[tailwind("items-center justify-center px-4"), {maxWidth: screenWidth}]}>
                     <Text style={tailwind("text-center text-4xl text-white")}>{exercise.name}</Text>
-                    <Text style={tailwind("text-center text-white opacity-70 pb-4")}>Approx. duration: {exercise.approximateDuration < 60 ? `${exercise.approximateDuration} seconds` : `${exercise.approximateDuration/60} ${exercise.approximateDuration/60 > 1 ? "minutes": "minute"}`} </Text>
+                    <Text style={tailwind("text-center text-white opacity-70 pb-4")}>Approx. duration: {exerciseDefaultDuration < 60 ? `${exerciseDefaultDuration} seconds` : `${exerciseDefaultDuration/60} ${exerciseDefaultDuration/60 > 1 ? "minutes": "minute"}`} </Text>
                         {/* Image */}
                         <View style={tailwind("relative mx-6")}>
                             <Image source={exercise.images[0]} resizeMode="contain" 
@@ -150,79 +146,68 @@ export default function ExerciseScreen({route, navigation}: any) {
                                 Reference
                             </Text>
                         </TouchableOpacity>
-
-                    </ScrollView>
-                    <Button onPress={openPicker} title="Adjust Duration"/>
-                    {/* <View style={tailwind("flex flex-row items-center justify-center my-4")}>
-                        <TouchableOpacity>
-                            <AntDesign name="minus" color="white" size={24}/>
-                        </TouchableOpacity>
-                        <View style={tailwind("p-2 border border-white px-8 mx-2")}>
-                            <Text style={tailwind("text-white")}>{exerciseDuration}</Text>
-                        </View>
-                        <TouchableOpacity>
-                            <Ionicons name="ios-add" color="white" size={24}/>
-                        </TouchableOpacity>
-                    </View> */}
-                    <Modal
-                        animationType='slide'
-                        onRequestClose={() => setShow(false)}
-                        transparent
-                        visible={show}>
-                            <View style={[tailwind("absolute top-1/2 left-1/2 bg-black"),{ width: 200, height: 400,
-                            transform: [
-                                {translateX: -screenWidth/1}
-                            ]}]}>
-                                <Text style={tailwind("text-white")}>HELLO</Text>
-                            </View>
-                    </Modal>
-                    {/* {show &&
-                        <View style={[tailwind("flex-row items-center mx-8"), {height:150}]}>
-                            <View style={[tailwind("flex-1"), {}]}>
-                                <Picker selectedValue={value}
-                                itemStyle={[tailwind("text-white"), {}]}
-                                prompt="Exercise Duration" // for Android only
-                                onValueChange={(value, index) => onChange(value)}>
-                                    {dummyMinData.map((value: any, index) => {
-                                        return <Picker.Item key={index} style={{}} label={value.toString()} value={value}/>
-                                    })}
-                                </Picker>
-                            </View>
-                            <Text style={tailwind("text-white")}>min</Text>
-                            <View style={[tailwind("flex-1"), {}]}>
-                                <Picker selectedValue={value}
-                                itemStyle={[tailwind("text-white"), {}]}
-                                prompt="Exercise Duration" // for Android only
-                                onValueChange={(value, index) => onChange(value)}>
-                                    {dummySecData.map((value: any, index) => {
-                                        console.log(value)
-                                        return <Picker.Item key={index} style={{}} label={value.toString()} value={value}/>
-                                    })}
-                                </Picker>
-                                
-                            </View>
-                            <Text style={tailwind("text-white")}>sec</Text>
-                        </View>
-                    } */}
-                        <TouchableOpacity style={tailwind("p-2 border border-white w-full ")}
+                        {isCompleted &&
+                            <TouchableOpacity style={tailwind("p-2 border border-white w-full ")}
                             onPress={() => {
-                                navigation.navigate("Main", {
-                                    exerciseDone: true // true: To tell MainScreen not to show "Start Exercise button"
-                                })
+                                navigation.navigate("Main")
                             }} >
-                            <Text style={tailwind("text-white text-center")}>
-                            Done
-                            </Text>
-                        </TouchableOpacity>
-
-                        {/* <TouchableOpacity onPress={() => {
-                            cycleExercise()
-                        }} style={tailwind("p-2 border border-white w-full ")}>
-                            <Text style={tailwind("text-white text-center")}>
-                            Cycle
-                            </Text>
-                        </TouchableOpacity> */}
+                                <Text style={tailwind("text-white text-center")}>
+                                Done
+                                </Text>
+                            </TouchableOpacity>
+                        }
+                </ScrollView>
+                
+                
             </SafeAreaView>
+            {/* Outside safeareaview because it interferes with how it appears and animates */}
+            <Animated.View
+                style={[
+                    {
+                        backgroundColor: "#222",
+                        height: OPEN_SLIDE_HEIGHT,
+                        width: '100%',
+                        
+                    },
+                    slideStyle,
+                    tailwind("")
+                ]}>
+
+                <TouchableOpacity
+                    style={[tailwind("justify-center items-center"), {height: CLOSED_SLIDE_HEIGHT}]}
+                    onPress={() => {
+                        const closed = slideValue.value <= OPEN_SLIDE_HEIGHT;
+                        const open = slideValue.value > CLOSED_SLIDE_HEIGHT
+                        if(open) closeSlide()
+                        else openSlide()
+                        // console.log(slideValue.value, height)
+                        // if(slideValue.value >= OPEN_SLIDE_HEIGHT) slideValue.value = CLOSED_SLIDE_HEIGHT;
+                        // else slideValue.value = OPEN_SLIDE_HEIGHT + 100
+                    }}>
+                    <View style={[tailwind("flex w-full px-4 flex-row justify-center")]}>
+                        
+                        {/* <Entypo name="cross" size={24} color="transparent" /> */}
+                        <Text style={[tailwind("text-white text-center text-lg font-bold self-center ")]}>{modalEntryText}</Text>
+                        
+                        {/* <Text style={[tailwind("text-white text-lg self-end font-bold")]}>
+                            {slideValue.value <= OPEN_SLIDE_HEIGHT 
+                                ? <FontAwesome name="caret-up" size={24} color="white" />
+                                : <Entypo name="cross" size={24} color="white" />
+                            } 
+                            
+                        </Text> */}
+                    </View>
+                </TouchableOpacity>
+
+                <EyeExerciseTimer exerciseDefaultDurationIndex={exercise.defaultDurationIndex} 
+                    navigation={navigation}
+                    onDone={() => {
+                        setIsCompleted(true);
+                        closeSlide()
+                    }}
+                    exerciseDurationRange={exercise.durationRange} style={tailwind("py-2 border-white")} />
+            </Animated.View>
+
         </>
     )
 }

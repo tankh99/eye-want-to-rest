@@ -11,7 +11,7 @@ import {NavigationContainer} from '@react-navigation/native'
 import MainNavigator from './MainNavigator';
 import {Audio} from 'expo-av'
 import * as Sentry from 'sentry-expo'
-import { getDeviceType, initDeviceType } from './constants/globals';
+import { getDeviceType } from './constants/globals';
 
 // Sentry.init({
 //   dsn: "https://4dbc82d3aff846c2a4f48a2bd8dd0d94@o1229881.ingest.sentry.io/6376215",
@@ -38,7 +38,7 @@ export default function App() {
     }
     setupDefaults()
     askForPermissions()
-    getDeviceType()
+    // getDeviceType()
     // const appStateListeneer:any = AppState.addEventListener("change", handleAppStateChange)
     // return () => {
     //   AppState.removeEventListener("change", appStateListeneer)
@@ -57,11 +57,10 @@ export default function App() {
           allowCriticalAlerts: true
         }
       })
-      console.log("Status", status)
       if(status.granted){
-        console.log("granted")
+        console.log("permissions granted")
       } else {
-        console.log("not granted")
+        console.log("permissions not granted")
       }
   }
 

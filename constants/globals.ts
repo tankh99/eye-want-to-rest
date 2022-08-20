@@ -5,11 +5,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // export let getDefaultIconSize() = isPad ? 36 : 28
 
 export function getDefaultIconSize(){
-    if (getDeviceType() == Device.DeviceType.TABLET){
-        return 36
-    } else {
-        return 28
-    }
+    // if (getDeviceType() == Device.DeviceType.TABLET){
+    //     return 36
+    // } else {
+    //     return 28
+    // }
+    return 28
 }
 
 
@@ -21,5 +22,6 @@ export function getDeviceType(): any{
             AsyncStorage.setItem("@deviceType", deviceType.toString())
         })
     } 
+
     return deviceType
 }

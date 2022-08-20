@@ -20,7 +20,11 @@ import { getDefaultIconSize} from '../constants/globals'
 // import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import DateTimePicker from '@react-native-community/datetimepicker'
 
-const DEFAULT_SESSION_DURATION = new Date(0,0,0,0,20,0) // 5 seconds
+const DEFAULT_SESSION_DURATION: Duration = {
+    hours: 0,
+    minutes: 20,
+    seconds: 0
+} // 5 seconds
 
 export default function MainScreen({navigation, route}: any) {
 
@@ -132,7 +136,7 @@ export default function MainScreen({navigation, route}: any) {
             {/* Top-right stats icon */}
             <View style={tailwind("w-full px-6 flex items-center justify-center flex-row z-10")}>
 
-            <Button onPress={() => navigation.navigate("Test")} title="Test"/>
+            {/* <Button onPress={() => navigation.navigate("Test")} title="Test"/ */}
                 {/* Placeholder Icon used to center text */}
                 {/* <Ionicons name="arrow-back" size={DEFAULT_ICON_SIZE} style={tailwind("")} color="transparent"  /> */}
 
