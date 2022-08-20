@@ -85,7 +85,7 @@ export default function ExerciseScreen({route, navigation}: any) {
     }
 
     const closeSlide = () => {
-        setModalEntryText("Start Exercise Timer")  // Open
+        setModalEntryText("Open Exercise Timer")  // Open
         slideValue.value = CLOSED_SLIDE_HEIGHT;
         // else slideValue.value = OPEN_SLIDE_HEIGHT + 100
     }

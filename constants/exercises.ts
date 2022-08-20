@@ -27,7 +27,7 @@ export const exercises: Exercise[] = [
         ],
         
         defaultDurationIndex: 0,
-        durationRange: [5,20],
+        durationRange: [20],
         frequency: 4,
         credit: `https://unsplash.com/@dylanferreira?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText`,
         reference: "https://youtu.be/_7hwZv36JMU"
@@ -76,7 +76,7 @@ export const exercises: Exercise[] = [
         description: `
             Best for people with dry eyes
         `,
-        images: [require(`${ASSET_PATH}/massage-eyes.png`)],
+        images: [require(`${ASSET_PATH}/massage-eyes.jpg`)],
         credit: "https://www.wikihow.com/Exercise-Your-Eyes",
         steps: [
             "Close your eyes and push down the top eyelid lightly using a finger. Push downward from the left of your eyelid to the right of the eyelid",
