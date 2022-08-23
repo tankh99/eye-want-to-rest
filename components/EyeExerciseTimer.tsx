@@ -15,6 +15,7 @@ interface P {
     navigation: any,
     setModalTitle: Function,
     setIsCompleted: Function,
+    isOpen: boolean,
     closeSlide: Function,
     style?: any,
     // defaultDurationInSec: number,
@@ -24,7 +25,7 @@ interface P {
 export default function EyeExerciseTimer(props: P) {
 
 
-    const {exerciseDurationRange, exerciseDefaultDurationIndex, navigation, setModalTitle, setIsCompleted, closeSlide, ...rest} = props
+    const {exerciseDurationRange, exerciseDefaultDurationIndex, navigation, setModalTitle, setIsCompleted, isOpen, closeSlide, ...rest} = props
     const defaultDuration = exerciseDurationRange[exerciseDefaultDurationIndex]
     const [offsets, setOffsets] = useState([])
     const [time, setTime] = useState(defaultDuration) // number
@@ -76,15 +77,19 @@ export default function EyeExerciseTimer(props: P) {
         }
         setFilteredData(filteredData)
         setOffsets(offsets)
-        setTimeout(() => { // Have to include a setTimeout, otherwise it won't even scroll
-            // Scrolls to the default duration position
-            scrollviewRef.current.scrollTo({x: exerciseDefaultDurationIndex * ITEM_WIDTH})
-        }, 0)
+
+        if(isOpen){
+
+            setTimeout(() => { // Have to include a setTimeout, otherwise it won't even scroll
+                // Scrolls to the default duration position
+                scrollviewRef.current.scrollTo({x: exerciseDefaultDurationIndex * ITEM_WIDTH})
+            }, 0)
+        }
 
         return () => {
             clearTimer()
         }
-    }, [])
+    }, [isOpen])
     
     const startExerciseTimer = () => {
         const startTime = new Date()
@@ -130,7 +135,7 @@ export default function EyeExerciseTimer(props: P) {
 
 
     return (
-      <View {...rest}>
+      <View style={tailwind("flex justify-center items-center")} {...rest}>
 
         {/* Timer */}
         {/* <Text style={tailwind("text-white text-xl text-center pb-2")}>
@@ -138,8 +143,11 @@ export default function EyeExerciseTimer(props: P) {
         </Text> */}
         {/* Horizontal Exercise Duration Picker */}
         {!started && // Hide after starting
-        <View style={tailwind("mt-2 mb-4")}>
-            <View style={[tailwind("opacity-50 p-2 bg-white absolute top-0 bottom-0"), {width: ITEM_WIDTH, left: width/2 - ITEM_WIDTH/2, right: 0 }]}></View>
+        <>
+        <Text style={tailwind("text-center text-white font-bold")}>Exercise Duration</Text>
+        <View style={tailwind("my-2")}>
+            <View style={[tailwind("opacity-50 bg-white absolute top-0 bottom-0"), {width: ITEM_WIDTH, left: width/2 - ITEM_WIDTH/2, right: 0 }]}></View>
+            
             <ScrollView 
                 ref={scrollviewRef}
                 contentContainerStyle={[{paddingRight: width/2 - ITEM_WIDTH/2, paddingLeft: (width/2 - ITEM_WIDTH/2)}]}
@@ -170,10 +178,11 @@ export default function EyeExerciseTimer(props: P) {
             })}
             </ScrollView>
         </View>
+        </>
         }
         
         {/* </View> */}
-        <View style={tailwind("pt-2 mx-8")}>
+        <View style={tailwind("mx-8")}>
         {/* {isCompleted ?
             <TouchableOpacity style={tailwind("p-2 border border-white w-full ")}
                 onPress={() => {

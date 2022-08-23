@@ -27,6 +27,10 @@ const DEFAULT_SESSION_DURATION: Duration = {
 
 export default function MainScreen({navigation, route}: any) {
 
+    let exerciseCompleted;
+    if(route.params){
+        exerciseCompleted = route.params.exerciseCompleted
+    }
     const [eyeOpen, setEyeOpen] = useState(false)
     const [notificationId, setNotificationId] = useState("")
     const [startTime, setStartTime]: any = useState(null)
@@ -178,7 +182,7 @@ export default function MainScreen({navigation, route}: any) {
             <View style={tailwind("flex w-full px-6 items-center max-w-screen-md")}>
                 {/* <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/> */}
                 <View style={tailwind("w-full flex items-center")}>
-                {completedFully ?
+                {completedFully && !exerciseCompleted ?
                     <View style={[tailwind("w-full"), {}]}>
                         {/* <Text style={tailwind("text-white text-2xl pb-4")}>It's time to relax your eyes</Text> */}
                         

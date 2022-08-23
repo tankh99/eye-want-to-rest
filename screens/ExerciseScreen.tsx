@@ -22,7 +22,11 @@ const screenWidth = Dimensions.get("window").width
 
 const widthBreakpoint = 768
 
+const CLOSED_SLIDE_HEIGHT = 75
+const OPEN_SLIDE_HEIGHT = 100
+
 // Not currently used
+const DEFAULT_MODAL_TITLE = `Open Exercise Timer`
 export default function ExerciseScreen({route, navigation}: any) {
     const {exercise} = route.params
     // const exercise = exercises[exerciseIdx]
@@ -30,7 +34,8 @@ export default function ExerciseScreen({route, navigation}: any) {
     const [isCompleted, setIsCompleted] = useState(false)
     const [exerciseDurationSuffix, setExerciseDurationSuffix] = useState("sec")
     const [showExerciseTimer, setShowExerciseTimer] = useState(false)
-    const [modalTitle, setModalTitle] = useState("Open Exercise Timer")
+    const [modalTitle, setModalTitle]: any = useState(DEFAULT_MODAL_TITLE)
+    const [modalOpen, setModalOpen] = useState(false)
 
     const [imageHeight, setImageHeight] = useState(height)
     const [imageWidth, setImageWidth] = useState(width)
@@ -65,9 +70,6 @@ export default function ExerciseScreen({route, navigation}: any) {
             console.error("Error opening browser", ex)
         }
     }
-
-    const CLOSED_SLIDE_HEIGHT = 75
-    const OPEN_SLIDE_HEIGHT = 125
     const slideValue = useSharedValue(CLOSED_SLIDE_HEIGHT)
     const slideStyle = useAnimatedStyle(() => {
         return {
@@ -79,7 +81,7 @@ export default function ExerciseScreen({route, navigation}: any) {
     })
 
     const openSlide = () => {
-        setModalTitle("Close")  // Open
+        // setModalTitle(<AntDesign name="caretdown" size={24} color="white" />)  // Open
         slideValue.value = OPEN_SLIDE_HEIGHT + 100;
     }
 
@@ -93,10 +95,12 @@ export default function ExerciseScreen({route, navigation}: any) {
 
     const exerciseDefaultDuration = exercise.durationRange[exercise.defaultDurationIndex]
     return (
-        <TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={() => closeSlide()}>
-            <LinearGradient
+        <>
+        <LinearGradient
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
             style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
+        <TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={() => closeSlide()}>
+            
             <SafeAreaView style={tailwind("flex-1")} >
             {/* <Text style={tailwind("text-white")} >Duration: {value}</Text> */}
             
@@ -108,16 +112,18 @@ export default function ExerciseScreen({route, navigation}: any) {
                         }}>
                         <Ionicons name="arrow-back" size={getDefaultIconSize()} color="white"  />
                     </TouchableOpacity>
-                    <Text style={tailwind("text-white text-center text-4xl my-8 flex justify-center")}>Progress</Text>
-                    
+                    <View>
+                    <Text style={tailwind("text-white text-center text-4xl mt-8 flex justify-center")}>{exercise.name}</Text>
+                    <Text style={tailwind("text-center text-white opacity-70")}>Approx. duration: {exerciseDefaultDuration < 60 ? `${exerciseDefaultDuration} seconds` : `${exerciseDefaultDuration/60} ${exerciseDefaultDuration/60 > 1 ? "minutes": "minute"}`} </Text>
+                    </View>
                     <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tailwind("")} color="transparent"  />
                 </View>
                 
                 <ScrollView horizontal={false}
                     style={tailwind("mt-8")}
                     contentContainerStyle={[tailwind("items-center justify-center px-4"), {maxWidth: screenWidth}]}>
-                    <Text style={tailwind("text-center text-4xl text-white")}>{exercise.name}</Text>
-                    <Text style={tailwind("text-center text-white opacity-70 pb-4")}>Approx. duration: {exerciseDefaultDuration < 60 ? `${exerciseDefaultDuration} seconds` : `${exerciseDefaultDuration/60} ${exerciseDefaultDuration/60 > 1 ? "minutes": "minute"}`} </Text>
+                    {/* <Text style={tailwind("text-center text-4xl text-white")}>{exercise.name}</Text> */}
+                    
                         {/* Image */}
                         <View style={tailwind("relative mx-6")}>
                             <Image source={exercise.images[0]} resizeMode="contain" 
@@ -172,6 +178,8 @@ export default function ExerciseScreen({route, navigation}: any) {
                 
                 
             </SafeAreaView>
+
+        </TouchableOpacity>
             {/* Outside safeareaview because it interferes with how it appears and animates */}
             <Animated.View
                 style={[
@@ -186,36 +194,36 @@ export default function ExerciseScreen({route, navigation}: any) {
                 <TouchableOpacity // Opens up the exercise timer
                     style={[tailwind("justify-center items-center"), {height: CLOSED_SLIDE_HEIGHT}]}
                     onPress={() => {
+                        setModalOpen(!modalOpen)
                         if(!isCompleted){
 
-                            const closed = slideValue.value <= OPEN_SLIDE_HEIGHT;
-                            const open = slideValue.value > CLOSED_SLIDE_HEIGHT
-                            if(open) closeSlide()
+                            if(modalOpen) closeSlide()
                             else openSlide()
     
                             const exerciseDurationInSeconds = exercise.durationRange[exercise.defaultDurationIndex];
                             const duration = formatSecondsToDuration(exerciseDurationInSeconds);
-                            setModalTitle(formatDurationToString(duration));
+                            if(modalTitle == DEFAULT_MODAL_TITLE) setModalTitle(formatDurationToString(duration));
                         } else {
-                            navigation.navigate("Main")
+                            navigation.navigate("Main", {
+                                exerciseCompleted: true
+                            })
                         }
 
                     }}>
                     <View style={[tailwind("flex w-full px-4 flex-row justify-center")]}>
-                        
                         <Text style={[tailwind("text-white text-center text-2xl font-bold self-center ")]}>{isCompleted ? "Done" : modalTitle}</Text>
-                        
                     </View>
                 </TouchableOpacity>
 
                 <EyeExerciseTimer exerciseDefaultDurationIndex={exercise.defaultDurationIndex} 
                     navigation={navigation}
+                    isOpen={modalOpen}
                     setModalTitle={setModalTitle}
                     setIsCompleted={setIsCompleted}
                     closeSlide={closeSlide}
-                    exerciseDurationRange={exercise.durationRange} style={tailwind("py-2 border-white")} />
+                    exerciseDurationRange={exercise.durationRange} 
+                    style={tailwind("")} />
             </Animated.View>
-
-        </TouchableOpacity>
+        </>
     )
 }

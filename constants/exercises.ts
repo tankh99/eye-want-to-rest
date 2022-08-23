@@ -117,8 +117,8 @@ export const exercises: Exercise[] = [
             "Trace the figure eight with your eyes and focus at objects that are at the edge of your vision. Do not move your head as you do so",
             "Trace 10 times, then switch directions",
         ],
-        defaultDurationIndex: 0,
-        durationRange: [20, 30, 45, 60],
+        defaultDurationIndex: 1,
+        durationRange: [30, 45, 60, 120],
         frequency: 3,
         reference: "https://youtu.be/mqXR8O2VJLo?t=183",
         credit: "https://www.wikihow.com/Exercise-Your-Eyes"
