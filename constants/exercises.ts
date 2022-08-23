@@ -84,7 +84,7 @@ export const exercises: Exercise[] = [
             "Ensure to massage the corners of your eyes",
             "Repeat for the other eye"
         ],
-        defaultDurationIndex: 2,
+        defaultDurationIndex: 1,
         durationRange: [60, 120, 180, 240, 300],
         frequency: 3,
         reference: "https://youtu.be/bGJqucoHmjs"
@@ -158,14 +158,27 @@ export const exercises: Exercise[] = [
 ]
 
 let weightedExercises: any = []
+// TODO: Shuffle this array!
 export function getWeightedExercises(){
-    if(!weightedExercises){
+    if(!weightedExercises || weightedExercises.length == 0){
         for(let exercise of exercises){
             for(let i = 0; i < exercise.frequency; i++){
                 weightedExercises.push(exercise)
             }
         }
+
+        weightedExercises = shuffleArray(weightedExercises)
     }
-    console.log("weighted exericses", weightedExercises)
     return weightedExercises
+}
+
+function shuffleArray(arr: Exercise[]){
+    let currentIndex = arr.length, randomIndex;
+    while(currentIndex != 0){
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+        [arr[currentIndex], arr[randomIndex]] = [arr[randomIndex], arr[currentIndex]];
+
+    }
+    return arr;
 }

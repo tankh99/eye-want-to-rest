@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { AppState, Button, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AppState, Button, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import tailwind from 'tailwind-rn';
 import * as Notifications from 'expo-notifications'
 import EyeButton from './components/EyeButton';
@@ -101,7 +101,13 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-        <NavigationContainer>
+
+
+          <LinearGradient
+          colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
+          style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
+            
+          <NavigationContainer>
             <MainNavigator/>
         </NavigationContainer>
     </SafeAreaProvider>

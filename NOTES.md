@@ -1,3 +1,15 @@
+# Updating Application
+Run the following commands to build and then to update the app
+```
+eas build
+eas submit
+```
+
+# Google Service Account file
+You access the google service account in Google Cloud. Select the project you want to link to, in this case it's Eye Want to Rest. Then in the top-left menu, click on IAM and Admin > Service Accounts. Select the first service account.
+
+Go to keys, create a new key iF you're on a new device. Keep the downloaded key JSON file in the credentials folder and link the file's path.
+
 To build an Android APK ```eas build -p android --profile preview```
 
 # Publishing

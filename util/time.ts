@@ -6,8 +6,12 @@ export function formatTime(time: number): string{
 }
 
 export function formatSecondsToDuration(seconds: number): Duration{
-    const date = intervalToDuration({start: 0, end: seconds * 1000})
-    return date;
+    const duration = intervalToDuration({start: 0, end: seconds * 1000})
+    return duration;
+}
+
+export function formatDurationToString(duration: Duration): string {
+    return `${duration.minutes?.toLocaleString("en-US", {minimumIntegerDigits: 2})}:${duration.seconds?.toLocaleString("en-US", {minimumIntegerDigits: 2})}`
 }
 
 // export function minutes(time: Date): string{
@@ -19,14 +23,6 @@ export function formatSecondsToDuration(seconds: number): Duration{
 //     if(time == null) return "00"
 //     return formatTime(time.getSeconds())
 // }
-
-export function getEmptyDate(): Date{
-    const date = new Date()
-    date.setHours(0)
-    date.setMinutes(0)
-    date.setSeconds(0)
-    return date;
-}
 
 export function getTotalSeconds(date: Duration): number{ // Only converts up to hours
     const totalSeconds = date.hours! * 3600 + date.minutes! * 60 + date.seconds!
@@ -45,8 +41,9 @@ export function calculateTargetTime (startTime: Date, delayInSeconds: number): D
 // onTimerDone should clear interval
 export function calculateTick (timeToWaitInSeconds: number, startTime: Date, onTimerDone: Function): Duration {
     const now = new Date()
+    console.log("startTime", startTime, " seconds ot wait", timeToWaitInSeconds);
     const targetTime = addSeconds(startTime, timeToWaitInSeconds)
-    const interval = {start: new Date(), end: targetTime}
+    const interval = {start: now, end: targetTime}
     const duration = intervalToDuration(interval);
     console.log("now", now, " targetTime", targetTime);
     if(now.getTime() + 1000 >= targetTime.getTime()) { // timer is done . +1000 so that it ends on 0 seconds

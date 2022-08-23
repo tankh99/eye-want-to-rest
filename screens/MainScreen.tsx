@@ -4,9 +4,8 @@ import {View, Text, Image, TouchableOpacity, Button} from 'react-native'
 import {StatusBar} from 'expo-status-bar'
 import tailwind from 'tailwind-rn'
 import { cancelAllNotifications, scheduleNotification } from '../util/notifications';
-import EyeExercises from '../components/EyeExercises';
 import Tips from '../components/Tips';
-import { exercises } from '../constants/exercises';
+import { getWeightedExercises } from '../constants/exercises';
 import * as Notifications from 'expo-notifications'
 import EyeButton from '../components/EyeButton';
 import Timer from '../components/Timer';
@@ -34,9 +33,6 @@ export default function MainScreen({navigation, route}: any) {
     const [showExercises, setShowExercises] = useState(false)
     const [completedFully, setCompletedFully] = useState(false)
     
-
-    const [exercise, setExercise]: any = useState(exercises[0])
-
     // const [eyeOpenSound, setEyeOpenSound]: any = useState(null)
     // const [eyeCloseSound, setEyeCloseSound]: any = useState(null)
 
@@ -168,8 +164,7 @@ export default function MainScreen({navigation, route}: any) {
                     setCompletedFully={setCompletedFully}
                     eyeOpen={eyeOpenRef.current} 
                     setEyeOpen={setEyeOpen}
-                    navigation={navigation}
-                    setExercise={setExercise}  />
+                    navigation={navigation} />
             </View>
             {/* {showExercises 
             && <EyeExercises 
@@ -189,7 +184,7 @@ export default function MainScreen({navigation, route}: any) {
                         
                         <TouchableOpacity onPress={() => {
                             navigation.navigate("Exercises", {
-                                exercise: exercises[getRandomInt(exercises.length)]
+                                exercise: getWeightedExercises()[getRandomInt(getWeightedExercises().length)]
                             })
                         }} style={tailwind("p-2 w-full flex border border-white")}>
                             <Text style={tailwind("text-white w-full text-center text-lg")}>

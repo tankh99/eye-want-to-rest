@@ -12,7 +12,7 @@ export default function Tips() {
         "Cover your eyes with your palms if your eyes feel dry",
         "Visit the local optometrist annually",
         "Avoid looking at bright colours to prevent eye strain",
-        
+        "Keep your head an arm's length from the screen"
     ]
 
     const [tip, setTip] = useState("")

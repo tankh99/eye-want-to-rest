@@ -4,10 +4,9 @@ import differenceInSeconds from 'date-fns/esm/fp/differenceInSeconds/index.js'
 import React, { useEffect, useRef, useState } from 'react'
 import { View, Text, Platform } from 'react-native'
 import tailwind from 'tailwind-rn'
-import { calculateTargetTime, calculateTick, getEmptyDate, getTotalSeconds } from '../util/time'
+import { calculateTargetTime, calculateTick, getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
 import { getRandomInt } from '../util/utils'
-import { exercises } from '../constants/exercises'
 import { insertHistory } from '../util/sqlite'
 import * as Device from 'expo-device'
 
@@ -15,7 +14,7 @@ interface P {
     sessionDuration: Duration,
     eyeOpen: boolean,
     setEyeOpen: any,
-    setExercise: any,
+    // setExercise: any,
     setCompletedFully?: any,
     setShowExercises: any, // deprecated
     startTime: Date,
@@ -27,7 +26,7 @@ interface P {
 // const DEFAULT_DURATION = 60 * 20 // 20 minutes
 const DEFAULT_FONT_SIZE = 80
 
-export default function Timer({startTime, navigation, sessionDuration, eyeOpen, setEyeOpen, setExercise, setCompletedFully, setShowExercises, style}: P) {
+export default function Timer({startTime, navigation, sessionDuration, eyeOpen, setEyeOpen, setCompletedFully, setShowExercises, style}: P) {
 
     const [timeLeft, setTimeLeft] = useState(sessionDuration)
     const [timerID, setTimerID]: any = useState(null)
@@ -90,7 +89,7 @@ export default function Timer({startTime, navigation, sessionDuration, eyeOpen, 
             )
             await bellSound.playAsync()
         }, 200)
-        setExercise(exercises[getRandomInt(exercises.length)])
+        // setExercise(exercises[getRandomInt(exercises.length)])
 
         insertHistory(new Date(), getTotalSeconds(sessionDuration))
         setCompletedFully(true)

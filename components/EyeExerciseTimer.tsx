@@ -3,17 +3,19 @@ import {View, ScrollView, Text, Dimensions, TouchableOpacity} from 'react-native
 import tailwind from "tailwind-rn"
 import {Audio } from 'expo-av'
 import { addSeconds, differenceInSeconds } from "date-fns"
-import { calculateTick, formatSecondsToDuration } from "../util/time"
+import { calculateTick, formatDurationToString, formatSecondsToDuration } from "../util/time"
 import { intervalToDuration } from "date-fns/esm"
 
 const {width, height} = Dimensions.get("screen")
-const ITEM_WIDTH = 100
+const ITEM_WIDTH = 75
 
 interface P {
     exerciseDefaultDurationIndex: number,
     exerciseDurationRange: number[],
     navigation: any,
-    onDone: Function,
+    setModalTitle: Function,
+    setIsCompleted: Function,
+    closeSlide: Function,
     style?: any,
     // defaultDurationInSec: number,
     // data: any[]
@@ -22,11 +24,10 @@ interface P {
 export default function EyeExerciseTimer(props: P) {
 
 
-    const {exerciseDurationRange, exerciseDefaultDurationIndex, navigation, onDone, ...rest} = props
+    const {exerciseDurationRange, exerciseDefaultDurationIndex, navigation, setModalTitle, setIsCompleted, closeSlide, ...rest} = props
     const defaultDuration = exerciseDurationRange[exerciseDefaultDurationIndex]
     const [offsets, setOffsets] = useState([])
     const [time, setTime] = useState(defaultDuration) // number
-    const [isCompleted, setIsCompleted] = useState(false)
     
     const [timeLeft, setTimeLeft] = useState(formatSecondsToDuration(defaultDuration)) // Date
     const [timerID, setTimerID]: any = useState(undefined)
@@ -41,7 +42,7 @@ export default function EyeExerciseTimer(props: P) {
 
     const scrollviewRef: any = useRef()
   
-    const playsound = async () => {
+    const playSound = async () => {
   
       const {sound} = await Audio.Sound.createAsync(
         require("../assets/cowbell.wav")
@@ -51,6 +52,7 @@ export default function EyeExerciseTimer(props: P) {
 
     useEffect(() => {
         
+        // Initialising horizontal scrollview picker
         let filteredData: any = []
         let offsets: any = []
         for(let i = 0; i < exerciseDurationRange.length; i+=1){
@@ -88,9 +90,12 @@ export default function EyeExerciseTimer(props: P) {
         const startTime = new Date()
         setStarted(true)
         // console.log(calculateTick(5, new Date(), () => {}))
+        closeSlide()
         const timerID = setInterval(() => {
-            const timeLeft = calculateTick(time, startTime, onTimerDone)
-            setTimeLeft(timeLeft)
+            const timeLeft: Duration = calculateTick(time, startTime, onTimerDone)
+            // setTimeLeft(timeLeft)
+            
+            setModalTitle(formatDurationToString(timeLeft));
         }, 200)
         setTimerID(timerID)
     }
@@ -98,9 +103,9 @@ export default function EyeExerciseTimer(props: P) {
     const onTimerDone = () => {
         console.log("exercise timer is done!")
         setStarted(false)
-        setIsCompleted(true)
-        playsound()
-        onDone()
+        playSound()
+        closeSlide()
+        setIsCompleted(true);
         return clearTimer()
     }
 
@@ -114,11 +119,13 @@ export default function EyeExerciseTimer(props: P) {
     }
 
     const updateTimer = (timeInSeconds: number) => {
-        const now = new Date()
-        const interval: Interval = {start: now, end: addSeconds(now, timeInSeconds)};
-        const duration = intervalToDuration(interval);
-        console.log(duration);
-        setTimeLeft(duration)
+        const duration = formatSecondsToDuration(timeInSeconds)
+        // const now = new Date()
+        // const interval: Interval = {start: now, end: addSeconds(now, timeInSeconds)};
+        // const duration = intervalToDuration(interval);
+        // console.log(duration);
+        // setTimeLeft(duration)
+        setModalTitle(formatDurationToString(duration));
     }
 
 
@@ -126,9 +133,9 @@ export default function EyeExerciseTimer(props: P) {
       <View {...rest}>
 
         {/* Timer */}
-        <Text style={tailwind("text-white text-xl text-center pb-2")}>
+        {/* <Text style={tailwind("text-white text-xl text-center pb-2")}>
             Duration: {timeLeft.minutes?.toLocaleString("en-US", {minimumIntegerDigits: 2})}:{timeLeft.seconds?.toLocaleString("en-US", {minimumIntegerDigits: 2})}
-        </Text>
+        </Text> */}
         {/* Horizontal Exercise Duration Picker */}
         {!started && // Hide after starting
         <View style={tailwind("mt-2 mb-4")}>
@@ -190,10 +197,7 @@ export default function EyeExerciseTimer(props: P) {
             </TouchableOpacity>
         : (<TouchableOpacity style={tailwind("p-2 border border-white w-full ")}
             onPress={() => {
-                setStarted(false)
-                setIsCompleted(true)
-                updateTimer(time)
-                clearTimer()
+                onTimerDone()
             }} >
             <Text style={tailwind("text-white text-center")}>
             Skip

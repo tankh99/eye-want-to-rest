@@ -8,7 +8,8 @@ export async function scheduleNotification(title: string, body: string, seconds:
         await Notifications.setNotificationChannelAsync("timer-done", {
             name: "Timer Done",
             importance: Notifications.AndroidImportance.HIGH,
-            sound: "cowbell.wav"
+            sound: "cowbell.wav",
+            enableVibrate: true
         })
     }
 

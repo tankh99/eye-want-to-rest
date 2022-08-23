@@ -81,4 +81,7 @@ describe("<Timer/>", () => {
         // expect(time.at(2).props().children).toEqual("00")
     })
 
+    it("Sends notifications", () => {
+        
+    })
 })
