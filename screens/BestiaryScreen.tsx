@@ -48,10 +48,10 @@ export default function BestiaryScreen({navigation}: any) {
                         return (
                             <TouchableOpacity 
                                 key={index} 
+                                style={[{width: SCREEN_WIDTH/2}, tailwind("p-2")]}
                                 onPress={() => navigation.navigate("Exercises", {
                                     exercise
-                                })}
-                                style={tailwind("p-2")}>
+                                })}>
                                 <Image source={exercise.images[0]} style={[tailwind("mb-2"), {height: imageHeight, width: imageWidth}]} resizeMode="cover"/>
                                 <Text style={tailwind("text-white font-bold text-base")}>{exercise.name}</Text>
                                 <Text style={tailwind("text-white")}>~{time}{denom}</Text>

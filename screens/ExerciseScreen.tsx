@@ -101,7 +101,7 @@ export default function ExerciseScreen({route, navigation}: any) {
         <LinearGradient
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
             style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
-        <TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={() => closeSlide()}>
+        
             
             <SafeAreaView style={tailwind("flex-1 mt-8")} >
             {/* <Text style={tailwind("text-white")} >Duration: {value}</Text> */}
@@ -120,14 +120,15 @@ export default function ExerciseScreen({route, navigation}: any) {
                     </View>
                     <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tailwind("")} color="transparent"  />
                 </View>
-                
                 <ScrollView horizontal={false}
                     style={tailwind("mt-8")}
                     contentContainerStyle={[tailwind("items-center justify-center px-4"), {maxWidth: screenWidth}]}>
+                    <TouchableOpacity style={[tailwind("mx-6"),{flex: 1}]} activeOpacity={1} onPress={() => closeSlide()}>
+
                     {/* <Text style={tailwind("text-center text-4xl text-white")}>{exercise.name}</Text> */}
                     
                         {/* Image */}
-                        <View style={tailwind("relative mx-6")}>
+                        <View style={tailwind("")}>
                             <Image source={exercise.images[0]} resizeMode="contain" 
                                 style={[tailwind(""), {height: imageHeight, width:imageWidth}]}/>
                             <TouchableOpacity
@@ -166,22 +167,11 @@ export default function ExerciseScreen({route, navigation}: any) {
                                 Reference
                             </Text>
                         </TouchableOpacity>
-                        {/* {isCompleted &&
-                            <TouchableOpacity style={tailwind("p-2 border border-white w-full ")}
-                            onPress={() => {
-                                navigation.navigate("Main")
-                            }} >
-                                <Text style={tailwind("text-white text-center")}>
-                                Done
-                                </Text>
-                            </TouchableOpacity>
-                        } */}
+                    </TouchableOpacity>
                 </ScrollView>
-                
                 
             </SafeAreaView>
 
-        </TouchableOpacity>
             {/* Outside safeareaview because it interferes with how it appears and animates */}
             <Animated.View
                 style={[

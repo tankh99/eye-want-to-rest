@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import * as Notifications from 'expo-notifications'
 import {Image, Pressable, Text, View, Platform} from 'react-native'
 import { TouchableOpacity } from 'react-native'
@@ -25,12 +25,9 @@ const PRESSED_EYE_STYLE = 125 // tablet: 175
 export default function EyeButton({eyeOpen, toggleEye}: any) {
 
     const [buttonStyle, setButtonStyle] = useState(DEFAULT_EYE_STYLE)
-    const [openEye, setOpenEye] = useState(require(`${ASSET_PATH}/open-eye-white.png`));
-    const [closedEye, setClosedEye] = useState()
-
-    useEffect(() => {
-        setClosedEye(require(`${ASSET_PATH}/close-eye-white.png`))
-    }, [])
+    const openEye = useMemo(() => require(`${ASSET_PATH}/open-eye-white.png`), []);
+    const closedEye = useMemo(() => require(`${ASSET_PATH}/close-eye-white.png`), [])
+    
     return (
         <View style={tailwind("")}>
         <TouchableOpacity

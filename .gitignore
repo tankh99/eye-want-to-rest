@@ -12,6 +12,8 @@ web-build/
 credentials/*
 .env
 .env.local
+credentials.json
+*.lock
 
 # package managers
 package-lock.json
