@@ -3,8 +3,11 @@ import {View, ScrollView, Text, Dimensions, TouchableOpacity} from 'react-native
 import tailwind from "tailwind-rn"
 import {Audio } from 'expo-av'
 import { addSeconds, differenceInSeconds } from "date-fns"
-import { calculateTick, formatDurationToString, formatSecondsToDuration } from "../util/time"
+import { calculateTick, formatDurationToString, formatSecondsToDuration, getTotalSeconds } from "../util/time"
 import { intervalToDuration } from "date-fns/esm"
+import { playTimerDoneSound } from "../util/sounds"
+import { cancelAllNotifications, scheduleNotification } from "../util/notifications"
+import * as Notifications from 'expo-notifications'
 
 const {width, height} = Dimensions.get("screen")
 const ITEM_WIDTH = 75
@@ -29,30 +32,21 @@ export default function EyeExerciseTimer(props: P) {
     const defaultDuration = exerciseDurationRange[exerciseDefaultDurationIndex]
     const [offsets, setOffsets] = useState([])
     const [time, setTime] = useState(defaultDuration) // number
-    
-    const [timeLeft, setTimeLeft] = useState(formatSecondsToDuration(defaultDuration)) // Date
+    const [notificationId, setNotificationId] = useState("")
     const [timerID, setTimerID]: any = useState(undefined)
-    
     const [started, setStarted] = useState(false)
-
-
     const [filteredData, setFilteredData]: any = useState([])
 
     const timerIDRef = useRef(timerID)
     timerIDRef.current = timerID
 
+    const notificationIdRef = useRef(notificationId);
+    notificationIdRef.current = notificationId;
+
     const scrollviewRef: any = useRef()
   
-    const playSound = async () => {
-  
-      const {sound} = await Audio.Sound.createAsync(
-        require("../assets/cowbell.wav")
-      )
-      sound.playAsync()
-    }
-
     useEffect(() => {
-        
+    
         // Initialising horizontal scrollview picker
         let filteredData: any = []
         let offsets: any = []
@@ -78,58 +72,77 @@ export default function EyeExerciseTimer(props: P) {
         setFilteredData(filteredData)
         setOffsets(offsets)
 
-        if(isOpen){
+        return () => {
+            // console.log("Clearing timer");
+            clearTimer()
+            try{
+                // console.log("Cancelled notification of ID: ", notificationIdRef.current);
+                Notifications.cancelScheduledNotificationAsync(notificationIdRef.current);
+            } catch (ex) {
+                console.error(ex);
+            }
+        }
+    }, [])
 
+    useEffect(() => {
+
+        if(isOpen){
             setTimeout(() => { // Have to include a setTimeout, otherwise it won't even scroll
                 // Scrolls to the default duration position
-                scrollviewRef.current.scrollTo({x: exerciseDefaultDurationIndex * ITEM_WIDTH})
+                scrollviewRef.current?.scrollTo({x: exerciseDefaultDurationIndex * ITEM_WIDTH})
             }, 0)
-        }
-
-        return () => {
-            clearTimer()
         }
     }, [isOpen])
     
-    const startExerciseTimer = () => {
+    const startExerciseTimer = async () => {
         const startTime = new Date()
         setStarted(true)
+        
         // console.log(calculateTick(5, new Date(), () => {}))
         closeSlide()
+        await setupNotifications();
         const timerID = setInterval(() => {
             const timeLeft: Duration = calculateTick(time, startTime, onTimerDone)
             // setTimeLeft(timeLeft)
-            
             setModalTitle(formatDurationToString(timeLeft));
         }, 200)
         setTimerID(timerID)
     }
 
+    const setupNotifications = async () => {
+        const notifs = await Notifications.getAllScheduledNotificationsAsync();
+        let notifStackEmpty = true;
+        if(notifs.length > 0){
+            console.log("There's notifications in the queue, going to cancel that")
+            notifStackEmpty = await cancelAllNotifications()
+        }
+        
+        const id = await scheduleNotification(
+            "Exercise Done",
+            "Time for work",
+            time,
+            false
+        )
+        console.log("Scheduled notification ", id, " of time: ", time);
+        setNotificationId(id);
+
+    }
+
     const onTimerDone = () => {
-        console.log("exercise timer is done!")
         setStarted(false)
-        playSound()
         closeSlide()
         setIsCompleted(true);
         return clearTimer()
     }
 
     const clearTimer = () => {
-        console.log(`clearing timer id: ${timerIDRef.current}`)
-        
         clearInterval(timerIDRef.current)
         setTimerID(null)
-        
         // setTimeLeft(new Date())
     }
 
     const updateTimer = (timeInSeconds: number) => {
         const duration = formatSecondsToDuration(timeInSeconds)
-        // const now = new Date()
-        // const interval: Interval = {start: now, end: addSeconds(now, timeInSeconds)};
-        // const duration = intervalToDuration(interval);
-        // console.log(duration);
-        // setTimeLeft(duration)
         setModalTitle(formatDurationToString(duration));
     }
 
@@ -206,6 +219,7 @@ export default function EyeExerciseTimer(props: P) {
             </TouchableOpacity>
         : (<TouchableOpacity style={tailwind("p-2 border border-white w-full ")}
             onPress={() => {
+                cancelAllNotifications();
                 onTimerDone()
             }} >
             <Text style={tailwind("text-white text-center")}>

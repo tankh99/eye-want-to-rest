@@ -3,106 +3,39 @@ import {View, Text, Button, TouchableOpacity} from 'react-native'
 import tailwind from 'tailwind-rn'
 import {LinearGradient} from 'expo-linear-gradient'
 import { useEffect, useState } from 'react'
-import { insertHistory, readHistory } from '../util/sqlite'
+import { DEFAULT_DB_NAME, insertHistory, readHistory } from '../util/sqlite'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { isToday, format, differenceInDays } from 'date-fns/esm'
 import _ from "lodash"
 import { Table, Row, Rows } from 'react-native-table-component-2';
 import { Card } from 'react-native-ui-lib'
-import { intervalToDuration, isThisWeek, isYesterday } from 'date-fns'
+import { add, intervalToDuration, isThisWeek, isYesterday } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons';
 import { getDefaultIconSize} from '../constants/globals'
 
 export default function StatsScreen({navigation}: any) {
 
     const [history, setHistory]: any[] = useState({})
-    const DEFAULT_DATE_FORMAT = "d/M/yyyy"
 
     useEffect(() => {
         // setHistory(readHistory())
         const init = async () => {
-            const results = await readHistory()
-            // console.log("Results in Stats Screen", results)
-            
+            const results = await readHistory(DEFAULT_DB_NAME)
             const groupedDates = groupDates(results)
             setHistory(groupedDates)
         }
         init()
     }, [])
 
-    const formatDataForTable = (data: any[]) => {
-        let tableData: any = {
-            tableHead: [],
-            tableData: []
-        }
-
-        for (let key of data[0]){
-            tableData.tableHead.push(key)
-        }
-    }
-
-    const groupDates = (list: any[]) => {
-        const groupedHistory: any = {
-            todayDuration: 0,
-            todaySessions: 0,
-            yesterdayDuration: 0,
-            yesterdaySessions: 0,
-            weeklySessions: 0,
-            weeklyDuration: 0,
-        }
-
-        let secondsToday = 0;
-        let secondsYesterday = 0
-        let secondsThisWeek = 0
-        // Loops through all rows in the database.
-        list.map((row: any, index: number) => {
-            let {startDate, duration} = row
-            startDate = (new Date(JSON.parse(startDate)))
-
-            const formattedStartDate = format(startDate, DEFAULT_DATE_FORMAT)
-            // const objected
-            
-            // Initialise the basic object before doing anything else
-            if(!groupedHistory[formattedStartDate]){
-                groupedHistory[formattedStartDate] = {
-                    sessions: 0,
-                    duration: 0
-                }
-            }
-            
-            // Update sessions
-            if(groupedHistory[formattedStartDate] && groupedHistory[formattedStartDate].sessions) {
-                groupedHistory[formattedStartDate].sessions+=1
-            } else {
-                groupedHistory[formattedStartDate].sessions = 1
-            }
-
-            if(isThisWeek(startDate)){
-                groupedHistory.weeklySessions += 1
-                secondsThisWeek += duration
-            }
-
-            if(isToday(startDate)) {
-                groupedHistory.todaySessions += 1
-                secondsToday += duration;
-            } else if (isYesterday(startDate)){
-                groupedHistory.yesterdaySessions += 1
-                secondsYesterday += duration;
-            }
-            
-        })
-        const todayDuration = (intervalToDuration({start:0, end: secondsToday * 1000}))
-        groupedHistory.todayDuration = todayDuration
-
-        const yesterdayDuration = intervalToDuration({start:0, end: secondsYesterday * 1000})
-        groupedHistory.yesterdayDuration = yesterdayDuration
-        
-        const weeklyDuration = intervalToDuration({start:0, end: secondsThisWeek * 1000})
-        groupedHistory.weeklyDuration = weeklyDuration;
-        return groupedHistory
-
-
-    }
+    // const testInsert = async () => {
+    //     const newDate = add(new Date(), {days: -7});
+    //     console.log("NEW DATE", newDate)
+    //     insertHistory(DEFAULT_DB_NAME, newDate, 10);
+    //     const results = await readHistory(DEFAULT_DB_NAME);
+    //     const groupedResults = groupDates(results)
+    //     console.log(groupedResults);
+    //     setHistory(groupedResults)
+    // }
 
     return (
         <>
@@ -123,9 +56,9 @@ export default function StatsScreen({navigation}: any) {
                     <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tailwind("")} color="transparent"  />
                 </View>
                 
-                <ProgressCard title="Today's Focus" duration={history.todayDuration} sessions={history.todaySessions}/>
-                <ProgressCard title="Yesterday's Focus" duration={history.yesterdayDuration} sessions={history.yesterdaySessions}/>
-                <ProgressCard title="This Week's Focus" duration={history.weeklyDuration} sessions={history.weeklySessions}/>
+                <ProgressCard title="Today's Screen Time" duration={history.todayDuration} sessions={history.todaySessions}/>
+                <ProgressCard title="Yesterday's Screen Time" duration={history.yesterdayDuration} sessions={history.yesterdaySessions}/>
+                <ProgressCard title="This Week's Screen Time" duration={history.weeklyDuration} sessions={history.weeklySessions}/>
                 {/* {Object.keys(history).length > 0 ? Object.keys(history).map((dateKey: any, index: number) => {
                     const {sessions} = history[dateKey]
                     
@@ -155,6 +88,7 @@ function ProgressCard({title, duration, sessions}: any) {
                         <Text style={tailwind("text-center text-gray-300 text-lg")}>{title}</Text>
                         {duration != null && 
                         <Text style={tailwind("text-center text-white text-2xl")}>
+                            {duration.days > 0 && `${duration.days}d `} 
                             {duration.hours > 0 && `${duration.hours}h `}
                             {duration.minutes > 0 && `${duration.minutes}m `}
                             {duration.seconds > 0 ? `${duration.seconds}s ` : 
@@ -170,4 +104,85 @@ function ProgressCard({title, duration, sessions}: any) {
             </View>
         </View>
     )
+}
+
+
+
+const formatDataForTable = (data: any[]) => {
+    let tableData: any = {
+        tableHead: [],
+        tableData: []
+    }
+
+    for (let key of data[0]){
+        tableData.tableHead.push(key)
+    }
+}
+
+
+const DEFAULT_DATE_FORMAT = "d/M/yyyy"
+
+export const groupDates = (list: any[]) => {
+    const groupedHistory: any = {
+        todayDuration: 0,
+        todaySessions: 0,
+        yesterdayDuration: 0,
+        yesterdaySessions: 0,
+        weeklySessions: 0,
+        weeklyDuration: 0,
+    }
+
+    let secondsToday = 0;
+    let secondsYesterday = 0
+    let secondsThisWeek = 0
+    // Loops through all rows in the database.
+    // console.log("Original list ", list)
+    list.map((row: any, index: number) => {
+        let {startDate, duration} = row
+        startDate = (new Date(JSON.parse(startDate)))
+
+        const formattedStartDate = format(startDate, DEFAULT_DATE_FORMAT)
+        // const objected
+        
+        // Initialise the basic object before doing anything else
+        // if(!groupedHistory[formattedStartDate]){
+        //     groupedHistory[formattedStartDate] = {
+        //         sessions: 0,
+        //         duration: 0
+        //     }
+        // }
+        // Update sessions
+        // if(groupedHistory[formattedStartDate] && groupedHistory[formattedStartDate].sessions) {
+        //     groupedHistory[formattedStartDate].sessions += 1
+        // } else {
+        //     groupedHistory[formattedStartDate].sessions = 1
+        // }
+
+        if(isThisWeek(startDate, {weekStartsOn: 1})){
+            // console.log(startDate)
+            groupedHistory.weeklySessions += 1
+            secondsThisWeek += duration
+        }
+
+        if(isToday(startDate)) {
+            groupedHistory.todaySessions += 1
+            secondsToday += duration;
+        } else if (isYesterday(startDate)){
+            groupedHistory.yesterdaySessions += 1
+            secondsYesterday += duration;
+        }
+        
+    })
+    
+    // secondsToday = 25 * 60 * 60;
+    const todayDuration = (intervalToDuration({start:0, end: secondsToday * 1000}))
+    groupedHistory.todayDuration = todayDuration
+
+    const yesterdayDuration = intervalToDuration({start:0, end: secondsYesterday * 1000})
+    groupedHistory.yesterdayDuration = yesterdayDuration
+    
+    const weeklyDuration = intervalToDuration({start:0, end: secondsThisWeek * 1000})
+    groupedHistory.weeklyDuration = weeklyDuration;
+    console.log(groupedHistory)
+    return groupedHistory
 }

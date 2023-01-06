@@ -25,18 +25,12 @@ const PRESSED_EYE_STYLE = 125 // tablet: 175
 export default function EyeButton({eyeOpen, toggleEye}: any) {
 
     const [buttonStyle, setButtonStyle] = useState(DEFAULT_EYE_STYLE)
+    const [openEye, setOpenEye] = useState(require(`${ASSET_PATH}/open-eye-white.png`));
+    const [closedEye, setClosedEye] = useState()
 
-    // useEffect(() => {
-        
-    // }, [eyeOpen])
-
-    const size = useSharedValue(100)
-    // const style = useAnimatedStyle(() => {
-    //     return {
-    //         width: withTiming(size.value)
-    //     }
-    // })
-
+    useEffect(() => {
+        setClosedEye(require(`${ASSET_PATH}/close-eye-white.png`))
+    }, [])
     return (
         <View style={tailwind("")}>
         <TouchableOpacity
@@ -58,7 +52,7 @@ export default function EyeButton({eyeOpen, toggleEye}: any) {
             <Image 
                 style={[{width: buttonStyle, height:buttonStyle}, tailwind("")]}
                 resizeMode="contain"
-                source={eyeOpen ? require(OPEN_EYE_PATH) : require(CLOSE_EYE_PATH)}/>
+                source={eyeOpen ? openEye : closedEye}/>
 
             
             {/* <WebView

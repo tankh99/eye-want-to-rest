@@ -1,4 +1,4 @@
-import { calculateTick } from "./time"
+import { calculateTick } from "../time"
 
 jest.useFakeTimers()
 jest.spyOn(global, "setInterval")

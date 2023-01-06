@@ -16,10 +16,9 @@ export interface Exercise {
 export const exercises: Exercise[] = [
 
     {
-        name: "20-20-20",
+        name: "Look far away",
         description: `
-            Every 20 minutes, look at something 20 feet away (6m) for 20 seconds
-        `,
+            Every 20 minutes, look at something 20 feet away (6m) for 20 seconds`,
         images: [require(`${ASSET_PATH}/20-20-20.jpeg`)],
         steps: [
             "Focus on something 20 feet away (6m). Try looking out the window for a far away tree or building",
@@ -47,9 +46,9 @@ export const exercises: Exercise[] = [
             "Return your focus back to the object, then slowly move it away from your eyes as you maintain focus throughout",
             "Repeat three times"
         ],
-        defaultDurationIndex: 0,
+        defaultDurationIndex: 1,
         durationRange: [60, 120, 180],
-        frequency: 5,
+        frequency: 3,
         reference: "https://youtu.be/BuvMrCAt6TU"
     },
     {
@@ -66,9 +65,9 @@ export const exercises: Exercise[] = [
             "Feel the heat of your palms, but avoid applying pressure",
             "Repeat until your eyes feel relaxed"
         ],
-        defaultDurationIndex: 0,
+        defaultDurationIndex: 1,
         durationRange: [30, 60, 120, 180, 240, 300],
-        frequency: 4,
+        frequency: 3,
         reference: "https://youtu.be/RoIYAoAalmI"
     },
     {
@@ -86,7 +85,7 @@ export const exercises: Exercise[] = [
         ],
         defaultDurationIndex: 1,
         durationRange: [60, 120, 180, 240, 300],
-        frequency: 3,
+        frequency: 2,
         reference: "https://youtu.be/bGJqucoHmjs"
     },
     // ADVANCED

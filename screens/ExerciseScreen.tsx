@@ -81,11 +81,13 @@ export default function ExerciseScreen({route, navigation}: any) {
     })
 
     const openSlide = () => {
+        setModalOpen(true)
         // setModalTitle(<AntDesign name="caretdown" size={24} color="white" />)  // Open
         slideValue.value = OPEN_SLIDE_HEIGHT + 100;
     }
 
     const closeSlide = () => {
+        setModalOpen(false)
         // setModalTitle("Open Exercise Timer")  // Open
         slideValue.value = CLOSED_SLIDE_HEIGHT;
         // else slideValue.value = OPEN_SLIDE_HEIGHT + 100
@@ -101,7 +103,7 @@ export default function ExerciseScreen({route, navigation}: any) {
             style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
         <TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={() => closeSlide()}>
             
-            <SafeAreaView style={tailwind("flex-1")} >
+            <SafeAreaView style={tailwind("flex-1 mt-8")} >
             {/* <Text style={tailwind("text-white")} >Duration: {value}</Text> */}
             
                 <View style={tailwind("flex items-center justify-between flex-row px-4")}>
@@ -113,7 +115,7 @@ export default function ExerciseScreen({route, navigation}: any) {
                         <Ionicons name="arrow-back" size={getDefaultIconSize()} color="white"  />
                     </TouchableOpacity>
                     <View>
-                    <Text style={tailwind("text-white text-center text-4xl mt-8 flex justify-center")}>{exercise.name}</Text>
+                    <Text style={tailwind("text-white text-center text-4xl flex justify-center mx-4")}>{exercise.name}</Text>
                     <Text style={tailwind("text-center text-white opacity-70")}>Approx. duration: {exerciseDefaultDuration < 60 ? `${exerciseDefaultDuration} seconds` : `${exerciseDefaultDuration/60} ${exerciseDefaultDuration/60 > 1 ? "minutes": "minute"}`} </Text>
                     </View>
                     <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tailwind("")} color="transparent"  />
@@ -194,9 +196,7 @@ export default function ExerciseScreen({route, navigation}: any) {
                 <TouchableOpacity // Opens up the exercise timer
                     style={[tailwind("justify-center items-center"), {height: CLOSED_SLIDE_HEIGHT}]}
                     onPress={() => {
-                        setModalOpen(!modalOpen)
                         if(!isCompleted){
-
                             if(modalOpen) closeSlide()
                             else openSlide()
     

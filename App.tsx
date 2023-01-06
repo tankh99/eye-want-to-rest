@@ -24,43 +24,32 @@ export default function App() {
 
   const appState = useRef(AppState.currentState)
   useEffect(() => {
-    try{
-    Notifications.requestPermissionsAsync({
-      ios: {
-        allowAlert: true,
-        allowBadge: true,
-        allowSound: true,
-        allowCriticalAlerts: true
-      }
-    })
-    } catch (ex){
-      console.error(ex)
-    }
+    
     setupDefaults()
     askForPermissions()
-    // getDeviceType()
-    // const appStateListeneer:any = AppState.addEventListener("change", handleAppStateChange)
-    // return () => {
-    //   AppState.removeEventListener("change", appStateListeneer)
-    // }
   }, [])
 
   const askForPermissions = async () => {
     const settings = await Notifications.getPermissionsAsync()
     // console.log(settings)
     if(settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL) return console.log("Granted")
-      const status: Notifications.NotificationPermissionsStatus = await Notifications.requestPermissionsAsync({
-        ios: {
-          allowAlert: true,
-          allowBadge: true,
-          allowSound: true,
-          allowCriticalAlerts: true
+      try{
+        const status: Notifications.NotificationPermissionsStatus = await Notifications.requestPermissionsAsync({
+          ios: {
+            allowAlert: true,
+            allowBadge: true,
+            allowSound: true,
+            allowCriticalAlerts: true
+          }
+        })
+
+        if(status.granted){
+          console.log("permissions granted")
+        } else {
+          console.log("permissions not granted")
         }
-      })
-      if(status.granted){
-        console.log("permissions granted")
-      } else {
-        console.log("permissions not granted")
+      } catch (ex) {
+        console.error("Exception occurred when requesting for permissions", ex);
       }
   }
 
@@ -83,26 +72,22 @@ export default function App() {
       })
     })
 
-    // Audio.requestPermissionsAsync();
     await Audio.setAudioModeAsync({
-      staysActiveInBackground: true,
-      // interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+      // staysActiveInBackground: true,
+      // interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX, // Means that it interrupts ongoing audio
+      // interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DUCK_OTHERS,
       shouldDuckAndroid: true,
       playThroughEarpieceAndroid: false,
       allowsRecordingIOS: false, // THIS REDUCES VOLUME OF ALL SOUNDS if SET TO TRUE!!
       // interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
-      playsInSilentModeIOS: true,
+      // playsInSilentModeIOS: true,
     })
-
-
   }
 
   
 
   return (
     <SafeAreaProvider>
-
-
           <LinearGradient
           colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
           style={tailwind("flex-1 absolute top-0 w-full h-full")}/>

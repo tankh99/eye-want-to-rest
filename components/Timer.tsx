@@ -4,19 +4,15 @@ import differenceInSeconds from 'date-fns/esm/fp/differenceInSeconds/index.js'
 import React, { useEffect, useRef, useState } from 'react'
 import { View, Text, Platform } from 'react-native'
 import tailwind from 'tailwind-rn'
+import { DEFAULT_DB_NAME, insertHistory } from '../util/sqlite'
 import { calculateTargetTime, calculateTick, getTotalSeconds } from '../util/time'
-import {Audio} from 'expo-av'
-import { getRandomInt } from '../util/utils'
-import { insertHistory } from '../util/sqlite'
-import * as Device from 'expo-device'
 
 interface P {
     sessionDuration: Duration,
     eyeOpen: boolean,
     setEyeOpen: any,
     // setExercise: any,
-    setCompletedFully?: any,
-    setShowExercises: any, // deprecated
+    setShowStartExercise: Function,
     startTime: Date,
     style?: any,
     navigation: any
@@ -26,13 +22,11 @@ interface P {
 // const DEFAULT_DURATION = 60 * 20 // 20 minutes
 const DEFAULT_FONT_SIZE = 80
 
-export default function Timer({startTime, navigation, sessionDuration, eyeOpen, setEyeOpen, setCompletedFully, setShowExercises, style}: P) {
+export default function Timer({startTime, navigation, sessionDuration, eyeOpen, setEyeOpen, setShowStartExercise, style}: P) {
 
     const [timeLeft, setTimeLeft] = useState(sessionDuration)
     const [timerID, setTimerID]: any = useState(null)
 
-    const [dropletSound ,setDropletSound]: any = useState()
-    const [bellSound, setBellSound]: any = useState()
     // let startTimeRef = useRef(startTime)
     // startTimeRef.current = startTime
 
@@ -49,27 +43,32 @@ export default function Timer({startTime, navigation, sessionDuration, eyeOpen, 
 
     const startTimer = () => {
         if(eyeOpen && !timerID){
-            // console.log(`eyeopen: ${eyeOpen}`)
-            const startTime = new Date()
             const id = setInterval(() => {
-                // calculateTick(getTotalSeconds(sessionDuration), startTime, () => onTimerDone())
-                // const timeLeft = calculateTick(getTotalSeconds(sessionDuration), startTime, onTimerDone)
-
-                const now = new Date()
-                const targetTime = addSeconds(startTime, getTotalSeconds(sessionDuration))
-                const interval = {start: new Date(), end: targetTime}
-                const timeLeft = intervalToDuration(interval);
-                console.log("now", now, " targetTime", targetTime);
-                if(now.getTime() + 1000 >= targetTime.getTime()) { // timer is done . +1000 so that it ends on 0 seconds
-                    return onTimerDone()
-                } else {   
-                    setTimeLeft(timeLeft)
-                }
+                timeStep()
             }, 200)
             setTimerID(id)
         } else {
             // console.log("Timer interval already exists")
             clearTimer()
+        }
+    }
+
+    const timeStep = () => {
+        // calculateTick(getTotalSeconds(sessionDuration), startTime, () => onTimerDone())
+        // const timeLeft = calculateTick(getTotalSeconds(sessionDuration), startTime, onTimerDone)
+
+        // const id = setTimeout(() => {
+        const now = new Date()
+        const targetTime = addSeconds(startTime, getTotalSeconds(sessionDuration))
+        const interval = {start: new Date(), end: targetTime}
+        const timeLeft = intervalToDuration(interval);
+        console.log("now", now, " targetTime", targetTime);
+        
+
+        if(now.getTime() + 1000 >= targetTime.getTime()) { // timer is done . +1000 so that it ends on 0 seconds
+            return onTimerDone()
+        } else {   
+            setTimeLeft(timeLeft)
         }
     }
 
@@ -80,48 +79,15 @@ export default function Timer({startTime, navigation, sessionDuration, eyeOpen, 
         setTimeLeft(sessionDuration)
     }
 
-    const onTimerDone = () => {
+    const onTimerDone = async () => { // Sound to be played will be left to the notification
         setEyeOpen(false) // Since this should always only run when the eye timer runs out
-        
-        setTimeout(async() => { // play bell sound after delay
-            const { sound: bellSound } = await Audio.Sound.createAsync(
-                require("../assets/cowbell.wav")
-            )
-            await bellSound.playAsync()
-        }, 200)
-        // setExercise(exercises[getRandomInt(exercises.length)])
-
-        insertHistory(new Date(), getTotalSeconds(sessionDuration))
-        setCompletedFully(true)
+        setShowStartExercise(true)
         setTimeLeft(sessionDuration)
+        // playTimerDoneSound();
+        insertHistory(DEFAULT_DB_NAME, new Date(), getTotalSeconds(sessionDuration))
         return clearTimer()
 
     }
-
-    // const onTick =
-
-    // const calculateTick = async (delayInSeconds: number, startTime: Date) => {
-    //     const now = new Date()
-    //     const targetTime = calculateTargetTime(startTime, delayInSeconds)
-        
-    //     let seconds = differenceInSeconds(now, targetTime)
-    //     let minutes = seconds / 60
-    //     seconds = seconds % 60
-    //     try{
-    //         if (minutes <= 0 && seconds <= 0){
-    //             // Ensure that time remains 0 even after more than 5 minutes of not coming back to screen
-    //             minutes = 0;
-    //             seconds = 0;
-    //         }
-    //     } catch (ex: any) {
-    //         console.error(ex.toString())
-    //     }
-    //     const timeLeft = new Date() // If you use this, will count up. But we want to count DOWN
-        
-    //     timeLeft.setMinutes(minutes)
-    //     timeLeft.setSeconds(seconds)
-    //     setTimeLeft(timeLeft)
-    // }
 
     return (
         <View style={style}>

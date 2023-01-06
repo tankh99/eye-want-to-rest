@@ -1,13 +1,14 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
 import {Text} from 'react-native'
-import Tips from './Tips'
-import MainScreen from '../screens/MainScreen'
-import Timer from './Timer'
+import Tips from '../Tips'
+import MainScreen from '../../screens/MainScreen'
+import Timer from '../Timer'
 import Enzyme, { shallow, configure, mount } from 'enzyme'
 
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import EyeButton from './EyeButton'
+import EyeButton from '../EyeButton'
+import { formatSecondsToDuration } from '../../util/time'
 
 jest.useFakeTimers()
 jest.spyOn(global, "setInterval")
@@ -15,16 +16,15 @@ jest.spyOn(global, "setInterval")
 Enzyme.configure({ adapter: new Adapter() });
 
 
-const DEFAULT_SESSION_DURATION = new Date(0,0,0,0,20,0)
+const DEFAULT_SESSION_DURATION = formatSecondsToDuration(20 * 60) // 20 minutes 
 describe("<Timer/>", () => {
     it("renders correctly", () => {
         const tree = renderer.create(
             <Timer sessionDuration={DEFAULT_SESSION_DURATION}
                     startTime={new Date()}
-                    setShowExercises={() => {}}
                     eyeOpen={false}
+                    setShowStartExercise={() => {}}
                     setEyeOpen={() => {}}
-                    setExercise={() => {}}
                     navigation={{}}
                 />
         )
@@ -35,10 +35,9 @@ describe("<Timer/>", () => {
         
         const component = <Timer sessionDuration={DEFAULT_SESSION_DURATION}
             startTime={new Date()}
-            setShowExercises={() => {}}
             eyeOpen={true}
+            setShowStartExercise={() => {}}
             setEyeOpen={() => {}}
-            setExercise={() => {}}
             navigation={{}}
         />
         // const button = shallow(component).findWhere((node) => node.prop("testID") == "test")

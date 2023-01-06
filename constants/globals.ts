@@ -4,6 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // export let getDefaultIconSize() = isPad ? 36 : 28
 
+export const DEFAULT_SESSION_DURATION: Duration = {
+    hours: 0,
+    minutes: 20,
+    seconds: 0
+}
+
 export function getDefaultIconSize(){
     // if (getDeviceType() == Device.DeviceType.TABLET){
     //     return 36

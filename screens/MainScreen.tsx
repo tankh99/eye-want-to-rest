@@ -15,27 +15,19 @@ import { getRandomInt } from '../util/utils'
 import { getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
 import { Ionicons } from '@expo/vector-icons';
-import { getDefaultIconSize} from '../constants/globals'
+import { DEFAULT_SESSION_DURATION, getDefaultIconSize} from '../constants/globals'
 // import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import DateTimePicker from '@react-native-community/datetimepicker'
-
-const DEFAULT_SESSION_DURATION: Duration = {
-    hours: 0,
-    minutes: 20,
-    seconds: 0
-} // 5 seconds
+import { playCloseEyeSound, playOpenEyeSound } from '../util/sounds'
 
 export default function MainScreen({navigation, route}: any) {
 
-    let exerciseCompleted;
-    if(route.params){
-        exerciseCompleted = route.params.exerciseCompleted
-    }
     const [eyeOpen, setEyeOpen] = useState(false)
     const [notificationId, setNotificationId] = useState("")
     const [startTime, setStartTime]: any = useState(null)
     const [showExercises, setShowExercises] = useState(false)
-    const [completedFully, setCompletedFully] = useState(false)
+    const [showStartExercise, setShowStartExercise] = useState(false)
+
     
     // const [eyeOpenSound, setEyeOpenSound]: any = useState(null)
     // const [eyeCloseSound, setEyeCloseSound]: any = useState(null)
@@ -58,14 +50,13 @@ export default function MainScreen({navigation, route}: any) {
     eyeOpenRef.current = eyeOpen;
 
     useEffect(() => {
-        
-        if(route.params && route.params.exerciseDone){ // Remove the "Start Execise" button
-            setCompletedFully(false)
+        if(route.params && route.params.exerciseCompleted){ // Remove the "Start Execise" button
+            setShowStartExercise(false)
         }
 
     }, [route.params])
     
-
+    // TODO: Move this function into Timer component
     const setupNotifications = async () => {
         const notifs = await Notifications.getAllScheduledNotificationsAsync()
         
@@ -74,8 +65,6 @@ export default function MainScreen({navigation, route}: any) {
             console.log("There's notifications in the queue, going to cancel that")
             noNotifications = await cancelAllNotifications()
         }
-        // console.log(`noNotifs: ${noNotifications}`)
-        // console.log(`eyeOpen: ${eyeOpenRef.current}`)
         if(eyeOpenRef.current && noNotifications){
             console.log("Scheduled notification")
             // const totalSeconds = DEFAULT_TIME.getMinutes() * 60 + DEFAULT_TIME.getSeconds()
@@ -89,40 +78,29 @@ export default function MainScreen({navigation, route}: any) {
         } else {
             cancelAllNotifications()
         }
-
     }
 
     // All functions from different components come together here
     const toggleEye = async () => {
         const tempEyeOpen = !eyeOpen; // a bit confusing, but it's because we want to inverse inverse the boolean. This makes somewhat more sense
         setEyeOpen(!eyeOpen)
-        setCompletedFully(false)
+        setShowStartExercise(false);
+        setShowExercises(false)
         setupNotifications()
         setStartTime(new Date())
         // dropDatabase()
         // updateDatabase()
 
-
         if(!tempEyeOpen) {
-            const { sound: eyeCloseSound } = await Audio.Sound.createAsync(
-                require("../assets/droplet-sound.wav"),
-                // {shouldPlay: true}
-            )
-            eyeCloseSound.playAsync()
+            playCloseEyeSound()
         } else {
             try{
-                const { sound: eyeOpenSound } = await Audio.Sound.createAsync(
-                    require("../assets/eye-open.wav"),
-                    // {shouldPlay: true}
-                )
-                eyeOpenSound.playAsync()
+                playOpenEyeSound()
             } catch (ex) {
                 console.error("error", ex)
             }
         }
     }
-
-    
 
     return (
         <>
@@ -164,8 +142,7 @@ export default function MainScreen({navigation, route}: any) {
                     style={tailwind("")}
                     startTime={startTime}
                     sessionDuration={DEFAULT_SESSION_DURATION}
-                    setShowExercises={setShowExercises} 
-                    setCompletedFully={setCompletedFully}
+                    setShowStartExercise={setShowStartExercise}
                     eyeOpen={eyeOpenRef.current} 
                     setEyeOpen={setEyeOpen}
                     navigation={navigation} />
@@ -182,7 +159,7 @@ export default function MainScreen({navigation, route}: any) {
             <View style={tailwind("flex w-full px-6 items-center max-w-screen-md")}>
                 {/* <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/> */}
                 <View style={tailwind("w-full flex items-center")}>
-                {completedFully && !exerciseCompleted ?
+                {showStartExercise ?
                     <View style={[tailwind("w-full"), {}]}>
                         {/* <Text style={tailwind("text-white text-2xl pb-4")}>It's time to relax your eyes</Text> */}
                         

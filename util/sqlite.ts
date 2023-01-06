@@ -1,25 +1,17 @@
 import * as SQLite from 'expo-sqlite'
 
-// async function openDatabase(pathToDatabaseFile: string): Promise<SQLite.WebSQLDatabase> {
-//     if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
-//       await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
-//     }
-//     await FileSystem.downloadAsync(
-//       Asset.fromModule(require(pathToDatabaseFile)).uri,
-//       FileSystem.documentDirectory + 'SQLite/myDatabaseName.db'
-//     );
-//     return SQLite.openDatabase('myDatabaseName.db');
-//   }
+export const DEFAULT_DB_NAME = "temp.db"
+export const TEST_DB_NAME = "test.db";
 
-export function dropDatabase(){
-    let db = SQLite.openDatabase("temp.db")
+export function dropDatabase(dbName: string){
+    let db = SQLite.openDatabase(dbName)
     db.transaction(tx => {
         tx.executeSql("DROP TABLE history;")
     })
 }
 
-export async function openDatabase(){
-    let db = SQLite.openDatabase("temp.db")
+export async function openDatabase(name: string){
+    let db = SQLite.openDatabase(`${name}`)
     return new Promise<SQLite.WebSQLDatabase>(resolve => {
         db.transaction(tx => {
             tx.executeSql(`CREATE TABLE IF NOT EXISTS history (
@@ -53,8 +45,8 @@ interface History {
 
 */
 
-export async function updateDatabase(){
-    let db = await openDatabase()
+export async function updateDatabase(dbName: string){
+    let db = await openDatabase(dbName)
     db.transaction(tx => {
         tx.executeSql("ALTER TABLE history DROP endDate;")
         tx.executeSql("ALTER TABLE history ADD duration INTEGER;")
@@ -62,21 +54,21 @@ export async function updateDatabase(){
 }
 
 
-export async function insertHistory(startDate: Date, duration: number){
-    let db = await openDatabase()
-
+export async function insertHistory(dbName: string, startDate: Date, durationInSeconds: number){
+    let db = await openDatabase(dbName)
+    // console.log(db)
     db.transaction(tx => {
-        tx.executeSql(`INSERT INTO history (startDate, duration) VALUES (?, ?)`, [JSON.stringify(startDate), duration])
+        tx.executeSql(`INSERT INTO history (startDate, duration) VALUES (?, ?)`, [JSON.stringify(startDate), durationInSeconds])
 
     }, (err) => {
         console.error("Error inserting", err)
     }, () => {
-        console.log("Inserted values", startDate, duration)
+        console.log("Inserted values", startDate, durationInSeconds)
     })   
 }
 
-export async function readHistory(): Promise<any[]>{
-    let db = await openDatabase()
+export async function readHistory(dbName: string): Promise<any[]>{
+    let db = await openDatabase(dbName)
     return new Promise(resolve => {
         let results: any[] = []
         db.transaction(tx => {
@@ -84,7 +76,6 @@ export async function readHistory(): Promise<any[]>{
                 `SELECT * FROM history;`, 
                 [], 
                 (_, {rows: {_array}}) => {
-                    
                     results = _array
                 }
             )}, 
