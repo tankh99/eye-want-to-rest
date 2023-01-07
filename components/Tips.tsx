@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text } from 'react-native'
-import tailwind from 'tailwind-rn'
+import tw from 'twrnc'
 import { getRandomInt } from '../util/utils'
 
 export default function Tips() {
@@ -31,10 +31,9 @@ export default function Tips() {
     }, [])
 
     return (
-        <View style={tailwind("flex-col px-4")}>
-        <Text style={tailwind("text-white flex-wrap text-lg font-bold text-center")}>Tip: </Text>
-            <Text style={tailwind("text-white flex-wrap text-center")}>{tip}</Text>
-            
+        <View style={tw`flex-col px-4`}>
+        <Text style={tw`text-white flex-wrap text-lg font-bold text-center`}>Tip: </Text>
+            <Text style={tw`text-white flex-wrap text-center`}>{tip}</Text>
         </View>
     )
 }
