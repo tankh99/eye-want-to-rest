@@ -3,7 +3,6 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack"
 import MainScreen from './screens/MainScreen'
 import ExerciseScreen from './screens/ExerciseScreen'
 import { View } from 'react-native'
-import tailwind from 'tailwind-rn'
 import { Ionicons } from '@expo/vector-icons';
 import StatsScreen from './screens/StatsScreen';
 import BestiaryScreen from './screens/BestiaryScreen'
@@ -26,10 +25,11 @@ export default function MainNavigator() {
         }}>
             
             <Stack.Screen name="Main" component={MainScreen} options={{}}/>
-            <Stack.Screen name="Exercises" component={ExerciseScreen}/>
+            {/* <Stack.Screen name="Exercises" component={ExerciseScreen}/>
+
             <Stack.Screen name="Stats" component={StatsScreen}/>
             <Stack.Screen name="Bestiary" component={BestiaryScreen}/>
-            <Stack.Screen name="Test" component={TestScreen}/>
+            <Stack.Screen name="Test" component={TestScreen}/> */}
         </Stack.Navigator>
     </>
     )

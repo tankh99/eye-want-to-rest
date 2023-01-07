@@ -6,8 +6,8 @@ module.exports = function(api) {
       
     ],
     plugins: [
+      "@babel/plugin-transform-modules-commonjs",
       "react-native-reanimated/plugin",
-      "@babel/plugin-transform-modules-commonjs"
     ]
   };
 };

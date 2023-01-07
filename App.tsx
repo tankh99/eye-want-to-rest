@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { AppState, Button, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import tailwind from 'tailwind-rn';
+import tw from 'twrnc';
 import * as Notifications from 'expo-notifications'
 import EyeButton from './components/EyeButton';
 import Timer from './components/Timer'
@@ -90,7 +90,7 @@ export default function App() {
     <SafeAreaProvider>
           <LinearGradient
           colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
-          style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
+          style={tw`flex-1 absolute top-0 w-full h-full`}/>
             
           <NavigationContainer>
             <MainNavigator/>

@@ -3,7 +3,7 @@ import { differenceInMinutes, getMinutes } from 'date-fns/esm'
 import differenceInSeconds from 'date-fns/esm/fp/differenceInSeconds/index.js'
 import React, { useEffect, useRef, useState } from 'react'
 import { View, Text, Platform } from 'react-native'
-import tailwind from 'tailwind-rn'
+import tw from 'twrnc'
 import { DEFAULT_DB_NAME, insertHistory } from '../util/sqlite'
 import { calculateTargetTime, calculateTick, getTotalSeconds } from '../util/time'
 
@@ -91,10 +91,10 @@ export default function Timer({startTime, navigation, sessionDuration, eyeOpen, 
 
     return (
         <View style={style}>
-            <View style={tailwind("flex flex-row justify-center")}>
-                <Text style={[tailwind("text-white"), {fontSize: DEFAULT_FONT_SIZE}]}>{timeLeft.minutes?.toLocaleString('en-US', {minimumIntegerDigits: 2})}</Text>
-                <Text style={[tailwind("text-white"), {fontSize: DEFAULT_FONT_SIZE}]}>:</Text>
-                <Text style={[tailwind("text-white"), {fontSize: DEFAULT_FONT_SIZE}]}>{timeLeft.seconds?.toLocaleString('en-US', {minimumIntegerDigits: 2})}</Text>
+            <View style={tw`flex flex-row justify-center`}>
+                <Text style={[tw`text-white`, {fontSize: DEFAULT_FONT_SIZE}]}>{timeLeft.minutes?.toLocaleString('en-US', {minimumIntegerDigits: 2})}</Text>
+                <Text style={[tw`text-white`, {fontSize: DEFAULT_FONT_SIZE}]}>:</Text>
+                <Text style={[tw`text-white`, {fontSize: DEFAULT_FONT_SIZE}]}>{timeLeft.seconds?.toLocaleString('en-US', {minimumIntegerDigits: 2})}</Text>
             </View>
         </View>
     )

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import {createNativeStackNavigator} from "@react-navigation/native-stack"
 import {View, Text, Image, TouchableOpacity, Button} from 'react-native'
 import {StatusBar} from 'expo-status-bar'
-import tailwind from 'tailwind-rn'
+import tw from 'twrnc'
 import { cancelAllNotifications, scheduleNotification } from '../util/notifications';
 import Tips from '../components/Tips';
 import { getWeightedExercises } from '../constants/exercises';
@@ -16,9 +16,8 @@ import { getTotalSeconds } from '../util/time'
 import {Audio} from 'expo-av'
 import { Ionicons } from '@expo/vector-icons';
 import { DEFAULT_SESSION_DURATION, getDefaultIconSize} from '../constants/globals'
-// import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
-import DateTimePicker from '@react-native-community/datetimepicker'
 import { playCloseEyeSound, playOpenEyeSound } from '../util/sounds'
+import {BannerAd, BannerAdSize, TestIds} from 'react-native-google-mobile-ads'
 
 export default function MainScreen({navigation, route}: any) {
 
@@ -106,40 +105,40 @@ export default function MainScreen({navigation, route}: any) {
         <>
         <LinearGradient
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
-            style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
-        <SafeAreaView style={tailwind("flex-1 pb-8 pt-4")}>
+            style={tw`flex-1 absolute top-0 w-full h-full`}/>
+        <SafeAreaView style={tw`flex-1 pb-8 pt-4`}>
         
-        <View style={[tailwind("flex-1 flex items-center justify-between")]}>
+        <View style={[tw`flex-1 flex items-center justify-between`]}>
 
             {/* Top-right stats icon */}
-            <View style={tailwind("w-full px-6 flex items-center justify-center flex-row z-10")}>
+            <View style={tw`w-full px-6 flex items-center justify-center flex-row z-10`}>
 
             {/* <Button onPress={() => navigation.navigate("Test")} title="Test"/ */}
                 {/* Placeholder Icon used to center text */}
-                {/* <Ionicons name="arrow-back" size={DEFAULT_ICON_SIZE} style={tailwind("")} color="transparent"  /> */}
+                {/* <Ionicons name="arrow-back" size={DEFAULT_ICON_SIZE} style={`(""`} color="transparent"  /> */}
 
                 {/*  */}
-                <View style={tailwind("flex-1")}></View>
+                <View style={tw`flex-1`}></View>
                 
-                <View style={tailwind("flex flex-row items-center")}>
+                <View style={tw`flex flex-row items-center`}>
                     <TouchableOpacity
-                        style={tailwind("flex mr-4")}
+                        style={tw`flex mr-4`}
                         onPress={() => navigation.navigate("Bestiary")}>
-                        <Ionicons name="book" style={[tailwind("")]} size={getDefaultIconSize()} color="white" />
+                        <Ionicons name="book" style={[tw``]} size={getDefaultIconSize()} color="white" />
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={tailwind("flex")}
+                        style={tw`flex`}
                         onPress={() => navigation.navigate("Stats")}>
-                        <Ionicons name="stats-chart" style={[tailwind("")]} size={getDefaultIconSize()} color="white" />
+                        <Ionicons name="stats-chart" style={[tw``]} size={getDefaultIconSize()} color="white" />
                     </TouchableOpacity>
                 </View>
             </View>
 
-            <View style={tailwind("absolute top-0 left-0 right-0 bottom-0 flex-1 items-center justify-center z-0")}>
+            <View style={tw`absolute top-0 left-0 right-0 bottom-0 flex-1 items-center justify-center z-0`}>
 
                 <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/>
                 <Timer 
-                    style={tailwind("")}
+                    style={tw``}
                     startTime={startTime}
                     sessionDuration={DEFAULT_SESSION_DURATION}
                     setShowStartExercise={setShowStartExercise}
@@ -156,32 +155,33 @@ export default function MainScreen({navigation, route}: any) {
             } */}
 
             {/* Eye Button */}
-            <View style={tailwind("flex w-full px-6 items-center max-w-screen-md")}>
+            <View style={tw`flex w-full px-6 items-center max-w-screen-md`}>
                 {/* <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/> */}
-                <View style={tailwind("w-full flex items-center")}>
+                <View style={tw`w-full flex items-center`}>
                 {showStartExercise ?
-                    <View style={[tailwind("w-full"), {}]}>
-                        {/* <Text style={tailwind("text-white text-2xl pb-4")}>It's time to relax your eyes</Text> */}
+                    <View style={[tw`w-full`, {}]}>
+                        {/* <Text style={tw`text-white text-2xl pb-4`}>It's time to relax your eyes</Text> */}
                         
                         <TouchableOpacity onPress={() => {
                             navigation.navigate("Exercises", {
                                 exercise: getWeightedExercises()[getRandomInt(getWeightedExercises().length)]
                             })
-                        }} style={tailwind("p-2 w-full flex border border-white")}>
-                            <Text style={tailwind("text-white w-full text-center text-lg")}>
+                        }} style={tw`p-2 w-full flex border border-white`}>
+                            <Text style={tw`text-white w-full text-center text-lg`}>
                             Start Exercise
                             </Text>
                         </TouchableOpacity>
                     </View>
                     : eyeOpen ? 
                         <Tips/>
-                    : <Text style={tailwind("text-white text-center text-xl")}>Press the closed eye to start</Text>
+                    : <Text style={tw`text-white text-center text-xl`}>Press the closed eye to start</Text>
                 }
+                <BannerAd size={BannerAdSize.BANNER} unitId={TestIds.BANNER}/>
                 </View>
             </View>
 
         {/* Bottom Aligned */}
-        {/* <View style={tailwind("absolute bottom-12")}>
+        {/* <View style={tw`absolute bottom-12`}>
         {
         eyeOpen 
         ? 
@@ -190,16 +190,16 @@ export default function MainScreen({navigation, route}: any) {
             : !showExercises ?
             completedFully ?
                 <View>
-                    <Text style={tailwind("text-white text-2xl pb-4")}>It's time to relax your eyes</Text>
-                    <TouchableOpacity onPress={() => setShowExercises(true)} style={tailwind("p-2 border border-white")}>
-                        <Text style={tailwind("text-white text-center")}>
+                    <Text style={tw`text-white text-2xl pb-4`}>It's time to relax your eyes</Text>
+                    <TouchableOpacity onPress={() => setShowExercises(true)} style={tw`p-2 border border-white`}>
+                        <Text style={tw`text-white text-center`}>
                         Start Exercise
                         </Text>
                     </TouchableOpacity>
                 </View>
             : 
-            <View style={tailwind("flex-row")}>
-                <Text style={tailwind("text-white text-xl p-4 text-center flex-wrap")}>Click the closed eye above to start</Text>
+            <View style={tw`flex-row`}>
+                <Text style={tw`text-white text-xl p-4 text-center flex-wrap`}>Click the closed eye above to start</Text>
             </View>
             : <></>
             }

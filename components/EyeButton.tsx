@@ -1,17 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import * as Notifications from 'expo-notifications'
 import {Image, Pressable, Text, View, Platform} from 'react-native'
 import { TouchableOpacity } from 'react-native'
-import tailwind from 'tailwind-rn'
-import LottieView from 'lottie-react-native'
-import { cancelAllNotifications, scheduleNotification } from '../util/notifications'
-import Animated, {useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
-import Svg, {Circle, Ellipse, Path} from 'react-native-svg';
-import {WebView} from 'react-native-webview'
-import Eye from './Eye'
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
-import * as Device from 'expo-device'
-
+import tw from 'twrnc'
 
 
 const ASSET_PATH = `../assets`
@@ -27,12 +17,14 @@ export default function EyeButton({eyeOpen, toggleEye}: any) {
     const [buttonStyle, setButtonStyle] = useState(DEFAULT_EYE_STYLE)
     const openEye = useMemo(() => require(`${ASSET_PATH}/open-eye-white.png`), []);
     const closedEye = useMemo(() => require(`${ASSET_PATH}/close-eye-white.png`), [])
-    
+    // const openEye = "";
+    // const closedEye = ""
+    // const closedEye =
     return (
-        <View style={tailwind("")}>
+        <View >
         <TouchableOpacity
             activeOpacity={1} // A workaround alternative for TouchableWithoutFeedback because it for some reason doesn't properly fire on Android
-            style={[tailwind(""), {
+            style={[{
                 height: PRESSED_EYE_STYLE
             }]}
             
@@ -47,7 +39,7 @@ export default function EyeButton({eyeOpen, toggleEye}: any) {
             }} 
         >
             <Image 
-                style={[{width: buttonStyle, height:buttonStyle}, tailwind("")]}
+                style={[{width: buttonStyle, height:buttonStyle}]}
                 resizeMode="contain"
                 source={eyeOpen ? openEye : closedEye}/>
 

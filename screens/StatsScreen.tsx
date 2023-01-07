@@ -1,14 +1,12 @@
 
 import {View, Text, Button, TouchableOpacity} from 'react-native'
-import tailwind from 'tailwind-rn'
+import tw from 'twrnc'
 import {LinearGradient} from 'expo-linear-gradient'
 import { useEffect, useState } from 'react'
 import { DEFAULT_DB_NAME, insertHistory, readHistory } from '../util/sqlite'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { isToday, format, differenceInDays } from 'date-fns/esm'
 import _ from "lodash"
-import { Table, Row, Rows } from 'react-native-table-component-2';
-import { Card } from 'react-native-ui-lib'
 import { add, intervalToDuration, isThisWeek, isYesterday } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons';
 import { getDefaultIconSize} from '../constants/globals'
@@ -41,19 +39,19 @@ export default function StatsScreen({navigation}: any) {
         <>
             <LinearGradient
                 colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
-                style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
+                style={tw`flex-1 absolute top-0 w-full h-full`}/>
             <SafeAreaView>
-                <View style={tailwind("flex items-center justify-between flex-row px-4")}>
+                <View style={tw`flex items-center justify-between flex-row px-4`}>
                     <TouchableOpacity 
-                        style={tailwind("")} 
+                        style={tw``} 
                         onPress={() => {
                             navigation.goBack()
                         }}>
                         <Ionicons name="arrow-back" size={getDefaultIconSize()} color="white"  />
                     </TouchableOpacity>
-                    <Text style={tailwind("text-white text-center text-4xl my-8 flex justify-center")}>Progress</Text>
+                    <Text style={tw`text-white text-center text-4xl my-8 flex justify-center`}>Progress</Text>
                     
-                    <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tailwind("")} color="transparent"  />
+                    <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tw``} color="transparent"  />
                 </View>
                 
                 <ProgressCard title="Today's Screen Time" duration={history.todayDuration} sessions={history.todaySessions}/>
@@ -64,12 +62,12 @@ export default function StatsScreen({navigation}: any) {
                     
                     return (
                         <View key={index}>
-                            <Text style={tailwind("text-white")}>Date: {dateKey}</Text>
-                            <Text style={tailwind("text-white")}>Sessions: {sessions}</Text>
+                            <Text style={tw`text-white`}>Date: {dateKey}</Text>
+                            <Text style={tw`text-white`}>Sessions: {sessions}</Text>
                         </View>
                     )
                 }) :
-                    <Text style={tailwind("text-white")}>No History</Text>
+                    <Text style={tw`text-white`}>No History</Text>
                 } */}
             </SafeAreaView>
         </>
@@ -78,16 +76,16 @@ export default function StatsScreen({navigation}: any) {
 
 function ProgressCard({title, duration, sessions}: any) {
     return (
-        <View style={tailwind("mx-4 bg-transparent border border-gray-300 border-2 mb-8 ")}>
+        <View style={tw`mx-4 bg-transparent border border-gray-300 border-2 mb-8 `}>
                     {/* <LinearGradient
                         colors={['rgba(50, 20, 100, 1)', `rgba(30, 1, 55, 1)`]}
-                        style={tailwind("flex-1 absolute w-full h-full")}/> */}
-            <View style={tailwind("py-4")}>
-                <View style={tailwind("flex justify-center px-8")}>
-                    <View style={tailwind("flex mb-4")}>
-                        <Text style={tailwind("text-center text-gray-300 text-lg")}>{title}</Text>
+                        style={tw`flex-1 absolute w-full h-full`}/> */}
+            <View style={tw`py-4`}>
+                <View style={tw`flex justify-center px-8`}>
+                    <View style={tw`flex mb-4`}>
+                        <Text style={tw`text-center text-gray-300 text-lg`}>{title}</Text>
                         {duration != null && 
-                        <Text style={tailwind("text-center text-white text-2xl")}>
+                        <Text style={tw`text-center text-white text-2xl`}>
                             {duration.days > 0 && `${duration.days}d `} 
                             {duration.hours > 0 && `${duration.hours}h `}
                             {duration.minutes > 0 && `${duration.minutes}m `}
@@ -96,9 +94,9 @@ function ProgressCard({title, duration, sessions}: any) {
                         </Text>
                         }
                     </View>
-                    <View style={tailwind("flex")}>
-                        <Text style={tailwind("text-center text-gray-300 text-xl text-sm")}>Sessions</Text>
-                        <Text style={tailwind("text-center text-center text-white text-lg")}>{sessions}</Text>
+                    <View style={tw`flex`}>
+                        <Text style={tw`text-center text-gray-300 text-xl text-sm`}>Sessions</Text>
+                        <Text style={tw`text-center text-center text-white text-lg`}>{sessions}</Text>
                     </View>
                 </View>
             </View>

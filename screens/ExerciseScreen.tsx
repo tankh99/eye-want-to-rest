@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Linking, TouchableOpacity, Text, View, Button, Image, Dimensions, ScrollView, Modal, Touchable } from 'react-native'
 import {SafeAreaView } from 'react-native-safe-area-context'
-import tailwind from 'tailwind-rn'
+import tw from 'twrnc'
 import {LinearGradient} from 'expo-linear-gradient'
 import * as WebBrowser from 'expo-web-browser';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import DateTimePicker from '@react-native-community/datetimepicker'
 import {Picker} from '@react-native-picker/picker'
-// import HorizontalPicker from '@vseslav/react-native-horizontal-picker';
 import HorizontalPicker from 'react-native-picker-horizontal'
 import { Ionicons } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons'
@@ -100,43 +99,43 @@ export default function ExerciseScreen({route, navigation}: any) {
         <>
         <LinearGradient
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
-            style={tailwind("flex-1 absolute top-0 w-full h-full")}/>
+            style={tw`flex-1 absolute top-0 w-full h-full`}/>
         
             
-            <SafeAreaView style={tailwind("flex-1 mt-8")} >
-            {/* <Text style={tailwind("text-white")} >Duration: {value}</Text> */}
+            <SafeAreaView style={tw`flex-1 mt-8`} >
+            {/* <Text style={tw("text-white")} >Duration: {value}</Text> */}
             
-                <View style={tailwind("flex items-center justify-between flex-row px-4")}>
+                <View style={tw`flex items-center justify-between flex-row px-4`}>
                     <TouchableOpacity 
-                        style={tailwind("")} 
+                        style={tw``} 
                         onPress={() => {
                             navigation.goBack()
                         }}>
                         <Ionicons name="arrow-back" size={getDefaultIconSize()} color="white"  />
                     </TouchableOpacity>
                     <View>
-                    <Text style={tailwind("text-white text-center text-4xl flex justify-center mx-4")}>{exercise.name}</Text>
-                    <Text style={tailwind("text-center text-white opacity-70")}>Approx. duration: {exerciseDefaultDuration < 60 ? `${exerciseDefaultDuration} seconds` : `${exerciseDefaultDuration/60} ${exerciseDefaultDuration/60 > 1 ? "minutes": "minute"}`} </Text>
+                    <Text style={tw`text-white text-center text-4xl flex justify-center mx-4`}>{exercise.name}</Text>
+                    <Text style={tw`text-center text-white opacity-70`}>Approx. duration: {exerciseDefaultDuration < 60 ? `${exerciseDefaultDuration} seconds` : `${exerciseDefaultDuration/60} ${exerciseDefaultDuration/60 > 1 ? "minutes": "minute"}`} </Text>
                     </View>
-                    <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tailwind("")} color="transparent"  />
+                    <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tw``} color="transparent"  />
                 </View>
                 <ScrollView horizontal={false}
-                    style={tailwind("mt-8")}
-                    contentContainerStyle={[tailwind("items-center justify-center px-4"), {maxWidth: screenWidth}]}>
-                    <TouchableOpacity style={[tailwind("mx-6"),{flex: 1}]} activeOpacity={1} onPress={() => closeSlide()}>
+                    style={tw`mt-8`}
+                    contentContainerStyle={[tw`items-center justify-center px-4`, {maxWidth: screenWidth}]}>
+                    <TouchableOpacity style={[tw`mx-6`,{flex: 1}]} activeOpacity={1} onPress={() => closeSlide()}>
 
-                    {/* <Text style={tailwind("text-center text-4xl text-white")}>{exercise.name}</Text> */}
+                    {/* <Text style={tw("text-center text-4xl text-white")}>{exercise.name}</Text> */}
                     
                         {/* Image */}
-                        <View style={tailwind("")}>
+                        <View style={tw``}>
                             <Image source={exercise.images[0]} resizeMode="contain" 
-                                style={[tailwind(""), {height: imageHeight, width:imageWidth}]}/>
+                                style={[tw``, {height: imageHeight, width:imageWidth}]}/>
                             <TouchableOpacity
-                                style={tailwind("text-white opacity-70")}
+                                style={tw`text-white opacity-70`}
                                 onPress={() => {
                                     openBrowser(exercise.credit)
                                 }}>
-                                <Text style={tailwind("text-center underline text-white opacity-70 mt-2 mb-4")}>
+                                <Text style={tw`text-center underline text-white opacity-70 mt-2 mb-4`}>
                                     Image Credit
                                 </Text>
                             </TouchableOpacity>
@@ -144,12 +143,12 @@ export default function ExerciseScreen({route, navigation}: any) {
                         {/* {exercise && exercise.images.map((image: any, index: number) => (
                             <Image key={index} source={(image)} resizeMode="contain" style={{height: 300, aspectRatio: 1}}/>
                         ))} */}
-                        {/* <Text style={tailwind("text-center text-white pb-2 leading-8")}>{exercise.description.trim()}</Text> */}
-                        <View style={tailwind("flex-col mb-4")}>
+                        {/* <Text style={tw("text-center text-white pb-2 leading-8")}>{exercise.description.trim()}</Text> */}
+                        <View style={tw`flex-col mb-4`}>
                         {exercise.steps && exercise.steps.map((step: string, index: number) => (
-                            <View key={index} style={tailwind("flex-row flex-wrap")}>
-                                {/* <Text style={tailwind("flex flex-wrap text-left text-white")}>{index + 1}. </Text> */}
-                                <Text style={tailwind("flex flex-wrap w-full text-left text-white pb-2")}>
+                            <View key={index} style={tw`flex-row flex-wrap`}>
+                                {/* <Text style={tw("flex flex-wrap text-left text-white")}>{index + 1}. </Text> */}
+                                <Text style={tw`flex flex-wrap w-full text-left text-white pb-2`}>
                                     {step}
                                 </Text>
                             </View>
@@ -159,11 +158,11 @@ export default function ExerciseScreen({route, navigation}: any) {
 
 
                         <TouchableOpacity
-                            style={tailwind("mb-6 self-start")}
+                            style={tw`mb-6 self-start`}
                             onPress={async () => {
                                 openBrowser(exercise.reference)
                             }}>
-                            <Text style={tailwind("text-white underline")}>
+                            <Text style={tw`text-white underline`}>
                                 Reference
                             </Text>
                         </TouchableOpacity>
@@ -181,10 +180,10 @@ export default function ExerciseScreen({route, navigation}: any) {
                         width: '100%',
                     },
                     slideStyle,
-                    tailwind("")
+                    tw``
                 ]}>
                 <TouchableOpacity // Opens up the exercise timer
-                    style={[tailwind("justify-center items-center"), {height: CLOSED_SLIDE_HEIGHT}]}
+                    style={[tw`justify-center items-center`, {height: CLOSED_SLIDE_HEIGHT}]}
                     onPress={() => {
                         if(!isCompleted){
                             if(modalOpen) closeSlide()
@@ -200,8 +199,8 @@ export default function ExerciseScreen({route, navigation}: any) {
                         }
 
                     }}>
-                    <View style={[tailwind("flex w-full px-4 flex-row justify-center")]}>
-                        <Text style={[tailwind("text-white text-center text-2xl font-bold self-center ")]}>{isCompleted ? "Done" : modalTitle}</Text>
+                    <View style={[tw`flex w-full px-4 flex-row justify-center`]}>
+                        <Text style={[tw`text-white text-center text-2xl font-bold self-center`]}>{isCompleted ? "Done" : modalTitle}</Text>
                     </View>
                 </TouchableOpacity>
 
@@ -212,7 +211,7 @@ export default function ExerciseScreen({route, navigation}: any) {
                     setIsCompleted={setIsCompleted}
                     closeSlide={closeSlide}
                     exerciseDurationRange={exercise.durationRange} 
-                    style={tailwind("")} />
+                    style={tw``} />
             </Animated.View>
         </>
     )

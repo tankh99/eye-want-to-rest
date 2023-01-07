@@ -1,13 +1,8 @@
 import { View, Text, Dimensions } from 'react-native'
 import React, {useEffect, useState} from 'react'
-import DateTimePicker from '@react-native-community/datetimepicker'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import {LinearGradient} from 'expo-linear-gradient'
-import tailwind from 'tailwind-rn'
-import { PanGestureHandler, ScrollView, TapGestureHandler } from 'react-native-gesture-handler'
-import Animated, { useAnimatedGestureHandler, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
-import { Picker } from '@react-native-picker/picker'
-import {Audio} from 'expo-av'
+import tw from 'twrnc'
+
 
 const dummyData = [10, 20,30,40,50,60]
 
@@ -31,9 +26,9 @@ export default function TestScreen() {
 
   return (
     <>
-      <SafeAreaView style={tailwind("flex-1")}>
+      <SafeAreaView style={tw`flex-1`}>
         <Text>Test Screen</Text>
-        {/* <View style={tailwind("flex-1 items-center justify-center")}>
+        {/* <View style={tw`flex-1 items-center justify-center`}>
         <AnimatedBall/>
         </View> */}
         {/* <AnimatedScrollView/> */}
@@ -97,7 +92,7 @@ export default function TestScreen() {
 //       </ScrollView>
 //     </View>
 
-//     <Text style={tailwind("w-full text-center font-bold text-4xl")}>^</Text>
+//     <Text style={tw`w-full text-center font-bold text-4xl`}>^</Text>
 //     </>
 //   )
 // }
@@ -149,11 +144,11 @@ export default function TestScreen() {
 //   })
 //   return (
 //     <View>
-//       <Animated.View style={[tailwind("w-16 h-16 rounded"), animatedShapeStyle, {backgroundColor:"red"}]} />
+//       <Animated.View style={[tw`w-16 h-16 rounded`, animatedShapeStyle, {backgroundColor:"red"}]} />
 //       <Animated.ScrollView 
 //         onScroll={handler}
 //         scrollEventThrottle={16}
-//         style={[tailwind(""), {height: 1000}]}>
+//         style={[tw``, {height: 1000}]}>
 //           <Text>Hello</Text>
 //       </Animated.ScrollView>
 //     </View>
@@ -162,7 +157,7 @@ export default function TestScreen() {
 
 // // function AnimatedSensor(props: any) {
   
-// //   <Animated.View style={[tailwind("rounded-full w-16 h-16"), uas]} />
+// //   <Animated.View style={[tw`rounded-full w-16 h-16`, uas]} />
 // // }
 
 // function AnimatedBall(props: any) {
@@ -209,10 +204,10 @@ export default function TestScreen() {
 //   })
 
 //   return (
-//     <View style={tailwind("flex-1 items-center justify-center")}>    
+//     <View style={tw`flex-1 items-center justify-center`}>    
 //       <PanGestureHandler onGestureEvent={eventHandler}>
 //         {/* <Text>{x.value}</Text> */}
-//         <Animated.View style={[tailwind("rounded-full w-16 h-16"), uas]} />
+//         <Animated.View style={[tw`rounded-full w-16 h-16`, uas]} />
 //       </PanGestureHandler>
 //     </View>
 //   )
@@ -222,7 +217,7 @@ export default function TestScreen() {
 //   const {defaultIndex, data} = props
 //   const [selectedIndex, setSelectedIndex] = useState(defaultIndex)
 //   return (
-//     <View style={tailwind("flex flex-row")}>
+//     <View style={tw`flex flex-row`}>
 //       {data.map((item: any, index: number) => {
 //         return (
 //           <View key={index}>

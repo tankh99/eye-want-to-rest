@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import {View, ScrollView, Text, Dimensions, TouchableOpacity} from 'react-native'
-import tailwind from "tailwind-rn"
+import tw from "twrnc"
 import {Audio } from 'expo-av'
 import { addSeconds, differenceInSeconds } from "date-fns"
 import { calculateTick, formatDurationToString, formatSecondsToDuration, getTotalSeconds } from "../util/time"
@@ -148,18 +148,18 @@ export default function EyeExerciseTimer(props: P) {
 
 
     return (
-      <View style={tailwind("flex justify-center items-center")} {...rest}>
+      <View style={tw`flex justify-center items-center`} {...rest}>
 
         {/* Timer */}
-        {/* <Text style={tailwind("text-white text-xl text-center pb-2")}>
+        {/* <Text style={tw`text-white text-xl text-center pb-2`}>
             Duration: {timeLeft.minutes?.toLocaleString("en-US", {minimumIntegerDigits: 2})}:{timeLeft.seconds?.toLocaleString("en-US", {minimumIntegerDigits: 2})}
         </Text> */}
         {/* Horizontal Exercise Duration Picker */}
         {!started && // Hide after starting
         <>
-        <Text style={tailwind("text-center text-white font-bold")}>Exercise Duration</Text>
-        <View style={tailwind("my-2")}>
-            <View style={[tailwind("opacity-50 bg-white absolute top-0 bottom-0"), {width: ITEM_WIDTH, left: width/2 - ITEM_WIDTH/2, right: 0 }]}></View>
+        <Text style={tw`text-center text-white font-bold`}>Exercise Duration</Text>
+        <View style={tw`my-2`}>
+            <View style={[tw`opacity-50 bg-white absolute top-0 bottom-0`, {width: ITEM_WIDTH, left: width/2 - ITEM_WIDTH/2, right: 0 }]}></View>
             
             <ScrollView 
                 ref={scrollviewRef}
@@ -186,7 +186,7 @@ export default function EyeExerciseTimer(props: P) {
                 
             {filteredData.map((item: any, index: number) => {
                 return (
-                    <Text style={[tailwind(`text-xl text-center text-white`), {width: ITEM_WIDTH}]} key={index}>{item.label}</Text>
+                    <Text style={[tw`text-xl text-center text-white`, {width: ITEM_WIDTH}]} key={index}>{item.label}</Text>
                 )
             })}
             </ScrollView>
@@ -195,34 +195,34 @@ export default function EyeExerciseTimer(props: P) {
         }
         
         {/* </View> */}
-        <View style={tailwind("mx-8")}>
+        <View style={tw`mx-8`}>
         {/* {isCompleted ?
-            <TouchableOpacity style={tailwind("p-2 border border-white w-full ")}
+            <TouchableOpacity style={tw`p-2 border border-white w-full `}
                 onPress={() => {
                     navigation.navigate("Main", {
                         exerciseDone: true // true: To tell MainScreen not to show "Start Exercise button"
                     })
                 }} >
-                <Text style={tailwind("text-white text-center")}>
+                <Text style={tw`text-white text-center`}>
                 Done
                 </Text>
             </TouchableOpacity>
            :  */}
            {!started ?
-            <TouchableOpacity style={tailwind("p-2 border border-white w-full ")}
+            <TouchableOpacity style={tw`p-2 border border-white w-full `}
             onPress={() => {
                 startExerciseTimer()
             }} >
-                <Text style={tailwind("text-white text-center")}>
+                <Text style={tw`text-white text-center`}>
                 Start
                 </Text>
             </TouchableOpacity>
-        : (<TouchableOpacity style={tailwind("p-2 border border-white w-full ")}
+        : (<TouchableOpacity style={tw`p-2 border border-white w-full `}
             onPress={() => {
                 cancelAllNotifications();
                 onTimerDone()
             }} >
-            <Text style={tailwind("text-white text-center")}>
+            <Text style={tw`text-white text-center`}>
             Skip
             </Text>
         </TouchableOpacity>)}
