@@ -1,4 +1,4 @@
-import { add, addSeconds, intervalToDuration, sub } from 'date-fns'
+import { add, addSeconds, format, intervalToDuration, sub } from 'date-fns'
 import { differenceInMinutes, getMinutes } from 'date-fns/esm'
 import differenceInSeconds from 'date-fns/esm/fp/differenceInSeconds/index.js'
 import React, { useEffect, useRef, useState } from 'react'
@@ -25,28 +25,20 @@ const DEFAULT_FONT_SIZE = 80
 export default function Timer({startTime, navigation, sessionDuration, eyeOpen, setEyeOpen, setShowStartExercise, style}: P) {
 
     const [timeLeft, setTimeLeft] = useState(sessionDuration)
-    const [timerID, setTimerID]: any = useState(null)
-
-    // let startTimeRef = useRef(startTime)
-    // startTimeRef.current = startTime
-
-    let timerIDRef = useRef(timerID)
-    timerIDRef.current = timerID
+    let timerId = useRef<any>(undefined)
 
     useEffect(() => {
         startTimer()
-
         return () => {
             clearTimer()
         }
     }, [eyeOpen])
 
     const startTimer = () => {
-        if(eyeOpen && !timerID){
-            const id = setInterval(() => {
+        if(eyeOpen){
+            timerId.current = setInterval(() => {
                 timeStep()
             }, 200)
-            setTimerID(id)
         } else {
             // console.log("Timer interval already exists")
             clearTimer()
@@ -54,17 +46,10 @@ export default function Timer({startTime, navigation, sessionDuration, eyeOpen, 
     }
 
     const timeStep = () => {
-        // calculateTick(getTotalSeconds(sessionDuration), startTime, () => onTimerDone())
-        // const timeLeft = calculateTick(getTotalSeconds(sessionDuration), startTime, onTimerDone)
-
-        // const id = setTimeout(() => {
         const now = new Date()
         const targetTime = addSeconds(startTime, getTotalSeconds(sessionDuration))
         const interval = {start: new Date(), end: targetTime}
         const timeLeft = intervalToDuration(interval);
-        console.log("now", now, " targetTime", targetTime);
-        
-
         if(now.getTime() + 1000 >= targetTime.getTime()) { // timer is done . +1000 so that it ends on 0 seconds
             return onTimerDone()
         } else {   
@@ -73,9 +58,7 @@ export default function Timer({startTime, navigation, sessionDuration, eyeOpen, 
     }
 
     const clearTimer = () => {
-        // console.log(`clearing timer id: ${timerIDRef.current}`)
-        clearInterval(timerIDRef.current)
-        setTimerID(null)
+        clearInterval(timerId.current)
         setTimeLeft(sessionDuration)
     }
 

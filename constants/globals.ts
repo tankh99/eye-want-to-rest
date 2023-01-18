@@ -6,8 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const DEFAULT_SESSION_DURATION: Duration = {
     hours: 0,
-    minutes: 20,
-    seconds: 0
+    minutes: 0,
+    seconds: 5
 }
 
 export function getDefaultIconSize(){

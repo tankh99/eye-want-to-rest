@@ -3,7 +3,6 @@ import { calculateTick } from "../time"
 jest.useFakeTimers()
 jest.spyOn(global, "setInterval")
 
-
 describe("time.ts", () => {
     it("calculateTick should return formatted duration", () => {
         const now = new Date()

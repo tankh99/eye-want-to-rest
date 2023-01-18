@@ -1,21 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Linking, TouchableOpacity, Text, View, Button, Image, Dimensions, ScrollView, Modal, Touchable } from 'react-native'
-import {SafeAreaView } from 'react-native-safe-area-context'
+import React, { useEffect, useState } from 'react'
+import { TouchableOpacity, Text, View, Image, Dimensions, ScrollView } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import tw from 'twrnc'
-import {LinearGradient} from 'expo-linear-gradient'
-import * as WebBrowser from 'expo-web-browser';
-import * as VideoThumbnails from 'expo-video-thumbnails';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import DateTimePicker from '@react-native-community/datetimepicker'
-import {Picker} from '@react-native-picker/picker'
-import HorizontalPicker from 'react-native-picker-horizontal'
+import { LinearGradient } from 'expo-linear-gradient'
+import * as WebBrowser from 'expo-web-browser'
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated'
 import { Ionicons } from '@expo/vector-icons'
-import { AntDesign } from '@expo/vector-icons'
 import EyeExerciseTimer from '../components/EyeExerciseTimer'
-import { Entypo } from '@expo/vector-icons'
-import { FontAwesome } from '@expo/vector-icons'
 import { formatDurationToString, formatSecondsToDuration } from '../util/time'
 import { getDefaultIconSize } from '../constants/globals'
+import { getExercisePreference } from '../util/sqlite'
+import { Exercise } from '../constants/exercises'
 
 const screenWidth = Dimensions.get("window").width
 
@@ -31,25 +26,35 @@ export default function ExerciseScreen({route, navigation}: any) {
     // const exercise = exercises[exerciseIdx]
     const {width, height} = Image.resolveAssetSource(exercise.images[0])
     const [isCompleted, setIsCompleted] = useState(false)
-    const [exerciseDurationSuffix, setExerciseDurationSuffix] = useState("sec")
-    const [showExerciseTimer, setShowExerciseTimer] = useState(false)
     const [modalTitle, setModalTitle]: any = useState(DEFAULT_MODAL_TITLE)
     const [modalOpen, setModalOpen] = useState(false)
 
     const [imageHeight, setImageHeight] = useState(height)
     const [imageWidth, setImageWidth] = useState(width)
-    useEffect(() => {
-        console.log("width", width, "height", height)
-        // console.log("width", Image.resolveAssetSource(exercise.images[0]).width)
-        // console.log("height", Image.resolveAssetSource(exercise.images[0]).height)
 
-        // 600 is an arbitrary breakpoint
+    const [defaultExderciseDurationIndex, setDefaultExerciseDurationIndex] = useState(-1);
+
+    useEffect(() => {
         const newWidth = screenWidth > widthBreakpoint ? widthBreakpoint : screenWidth - 24
         const percDecrease = newWidth / width;
         const newHeight = Math.floor(height * percDecrease)
         setImageWidth(newWidth)
         setImageHeight(newHeight)
-        console.log("new width", newWidth, "new height", newHeight);
+
+        const getPreferences = async () => {
+            getExercisePreference(exercise.id)
+            .then((pref: any) => {
+                if (!pref) {
+                    setDefaultExerciseDurationIndex(exercise.defaultDurationIndex)
+                    return;
+                }
+                console.log(pref.defaultIndex)
+                setDefaultExerciseDurationIndex(pref.defaultIndex);
+            }).catch((err) => {
+                console.error(err)
+            })
+        }
+        getPreferences();
     }, [])
 
     const openBrowser = async (link: string) => {
@@ -93,7 +98,7 @@ export default function ExerciseScreen({route, navigation}: any) {
     }
 
 
-
+    
     const exerciseDefaultDuration = exercise.durationRange[exercise.defaultDurationIndex]
     return (
         <>
@@ -123,9 +128,7 @@ export default function ExerciseScreen({route, navigation}: any) {
                     style={tw`mt-8`}
                     contentContainerStyle={[tw`items-center justify-center px-4`, {maxWidth: screenWidth}]}>
                     <TouchableOpacity style={[tw`mx-6`,{flex: 1}]} activeOpacity={1} onPress={() => closeSlide()}>
-
                     {/* <Text style={tw("text-center text-4xl text-white")}>{exercise.name}</Text> */}
-                    
                         {/* Image */}
                         <View style={tw``}>
                             <Image source={exercise.images[0]} resizeMode="contain" 
@@ -204,14 +207,19 @@ export default function ExerciseScreen({route, navigation}: any) {
                     </View>
                 </TouchableOpacity>
 
-                <EyeExerciseTimer exerciseDefaultDurationIndex={exercise.defaultDurationIndex} 
-                    navigation={navigation}
-                    isOpen={modalOpen}
-                    setModalTitle={setModalTitle}
-                    setIsCompleted={setIsCompleted}
-                    closeSlide={closeSlide}
-                    exerciseDurationRange={exercise.durationRange} 
-                    style={tw``} />
+                {defaultExderciseDurationIndex != -1 &&
+                    <EyeExerciseTimer 
+                        exerciseId={exercise.id}
+                        exerciseDefaultDurationIndex={defaultExderciseDurationIndex} 
+                        navigation={navigation}
+                        isOpen={modalOpen}
+                        setModalTitle={setModalTitle}
+                        setIsCompleted={setIsCompleted}
+                        closeSlide={closeSlide}
+                        exerciseDurationRange={exercise.durationRange} 
+                        style={tw``} />
+                }
+
             </Animated.View>
         </>
     )

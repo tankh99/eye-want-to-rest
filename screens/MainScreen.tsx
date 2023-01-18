@@ -1,49 +1,35 @@
 import React, { useEffect, useRef, useState } from 'react'
-import {createNativeStackNavigator} from "@react-navigation/native-stack"
-import {View, Text, Image, TouchableOpacity, Button} from 'react-native'
-import {StatusBar} from 'expo-status-bar'
+import { View, Text, Platform, TouchableOpacity } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
 import tw from 'twrnc'
-import { cancelAllNotifications, scheduleNotification } from '../util/notifications';
-import Tips from '../components/Tips';
-import { getWeightedExercises } from '../constants/exercises';
+import { cancelAllNotifications, scheduleNotification } from '../util/notifications'
+import Tips from '../components/Tips'
+import { getWeightedExercises } from '../constants/exercises'
 import * as Notifications from 'expo-notifications'
-import EyeButton from '../components/EyeButton';
-import Timer from '../components/Timer';
-import {SafeAreaView } from 'react-native-safe-area-context'
-import {LinearGradient} from 'expo-linear-gradient'
+import EyeButton from '../components/EyeButton'
+import Timer from '../components/Timer'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { LinearGradient } from 'expo-linear-gradient'
 import { getRandomInt } from '../util/utils'
 import { getTotalSeconds } from '../util/time'
-import {Audio} from 'expo-av'
-import { Ionicons } from '@expo/vector-icons';
-import { DEFAULT_SESSION_DURATION, getDefaultIconSize} from '../constants/globals'
+import { Ionicons } from '@expo/vector-icons'
+import { DEFAULT_SESSION_DURATION, getDefaultIconSize } from '../constants/globals'
 import { playCloseEyeSound, playOpenEyeSound } from '../util/sounds'
-import {BannerAd, BannerAdSize, TestIds} from 'react-native-google-mobile-ads'
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
+
+const adUnitId = __DEV__
+    ? TestIds.BANNER
+    : Platform.OS === "ios" 
+        ? process.env.REACT_APP_IOS_BANNER_ID!
+        : process.env.REACT_APP_ANDROID_BANNER_ID!
 
 export default function MainScreen({navigation, route}: any) {
-
+    // console.log("ad id", adUnitId)
     const [eyeOpen, setEyeOpen] = useState(false)
     const [notificationId, setNotificationId] = useState("")
     const [startTime, setStartTime]: any = useState(null)
     const [showExercises, setShowExercises] = useState(false)
     const [showStartExercise, setShowStartExercise] = useState(false)
-
-    
-    // const [eyeOpenSound, setEyeOpenSound]: any = useState(null)
-    // const [eyeCloseSound, setEyeCloseSound]: any = useState(null)
-
-    // useEffect(() => {
-
-        // const loadSounds = async () => {
-
-            // const sound = new Audio.Sound()
-            // await sound.loadAsync(require("../assets/eye-open.wav"))
-            // await sound.playAsync()   
-
-        //     setEyeOpenSound(eyeOpenSound)
-        //     setEyeCloseSound(eyeCloseSound)
-        // }
-        // loadSounds()
-    // }, [])
 
     let eyeOpenRef = useRef(eyeOpen)
     eyeOpenRef.current = eyeOpen;
@@ -107,19 +93,13 @@ export default function MainScreen({navigation, route}: any) {
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
             style={tw`flex-1 absolute top-0 w-full h-full`}/>
         <SafeAreaView style={tw`flex-1 pb-8 pt-4`}>
+        <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
         
         <View style={[tw`flex-1 flex items-center justify-between`]}>
-
+            
             {/* Top-right stats icon */}
-            <View style={tw`w-full px-6 flex items-center justify-center flex-row z-10`}>
-
-            {/* <Button onPress={() => navigation.navigate("Test")} title="Test"/ */}
-                {/* Placeholder Icon used to center text */}
-                {/* <Ionicons name="arrow-back" size={DEFAULT_ICON_SIZE} style={`(""`} color="transparent"  /> */}
-
-                {/*  */}
+            <View style={tw`w-full mt-4 px-6 flex items-center justify-center flex-row z-10`}>
                 <View style={tw`flex-1`}></View>
-                
                 <View style={tw`flex flex-row items-center`}>
                     <TouchableOpacity
                         style={tw`flex mr-4`}
@@ -135,7 +115,6 @@ export default function MainScreen({navigation, route}: any) {
             </View>
 
             <View style={tw`absolute top-0 left-0 right-0 bottom-0 flex-1 items-center justify-center z-0`}>
-
                 <EyeButton eyeOpen={eyeOpen} toggleEye={toggleEye}/>
                 <Timer 
                     style={tw``}
@@ -176,7 +155,6 @@ export default function MainScreen({navigation, route}: any) {
                         <Tips/>
                     : <Text style={tw`text-white text-center text-xl`}>Press the closed eye to start</Text>
                 }
-                <BannerAd size={BannerAdSize.BANNER} unitId={TestIds.BANNER}/>
                 </View>
             </View>
 

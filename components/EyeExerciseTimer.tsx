@@ -8,11 +8,13 @@ import { intervalToDuration } from "date-fns/esm"
 import { playTimerDoneSound } from "../util/sounds"
 import { cancelAllNotifications, scheduleNotification } from "../util/notifications"
 import * as Notifications from 'expo-notifications'
+import { getExercisePreference, saveExercisePreference } from "../util/sqlite"
 
 const {width, height} = Dimensions.get("screen")
 const ITEM_WIDTH = 75
 
 interface P {
+    exerciseId: string,
     exerciseDefaultDurationIndex: number,
     exerciseDurationRange: number[],
     navigation: any,
@@ -28,7 +30,7 @@ interface P {
 export default function EyeExerciseTimer(props: P) {
 
 
-    const {exerciseDurationRange, exerciseDefaultDurationIndex, navigation, setModalTitle, setIsCompleted, isOpen, closeSlide, ...rest} = props
+    const {exerciseId, exerciseDurationRange, exerciseDefaultDurationIndex, navigation, setModalTitle, setIsCompleted, isOpen, closeSlide, ...rest} = props
     const defaultDuration = exerciseDurationRange[exerciseDefaultDurationIndex]
     const [offsets, setOffsets] = useState([])
     const [time, setTime] = useState(defaultDuration) // number
@@ -46,8 +48,18 @@ export default function EyeExerciseTimer(props: P) {
     const scrollviewRef: any = useRef()
   
     useEffect(() => {
-    
-        // Initialising horizontal scrollview picker
+        initialiseTimePicker()
+        return () => {
+            clearTimer()
+            try{
+                Notifications.cancelScheduledNotificationAsync(notificationIdRef.current);
+            } catch (ex) {
+                console.error(ex);
+            }
+        }
+    }, [])
+
+    const initialiseTimePicker = () => {
         let filteredData: any = []
         let offsets: any = []
         for(let i = 0; i < exerciseDurationRange.length; i+=1){
@@ -71,27 +83,22 @@ export default function EyeExerciseTimer(props: P) {
         }
         setFilteredData(filteredData)
         setOffsets(offsets)
+    }
 
-        return () => {
-            // console.log("Clearing timer");
-            clearTimer()
-            try{
-                // console.log("Cancelled notification of ID: ", notificationIdRef.current);
-                Notifications.cancelScheduledNotificationAsync(notificationIdRef.current);
-            } catch (ex) {
-                console.error(ex);
-            }
-        }
-    }, [])
+    // const [defaultExderciseDurationIndex, setDefaultExerciseDurationIndex] = useState(exerciseDefaultDurationIndex);
 
     useEffect(() => {
+        const updateTimePicker = () => {
 
-        if(isOpen){
-            setTimeout(() => { // Have to include a setTimeout, otherwise it won't even scroll
-                // Scrolls to the default duration position
-                scrollviewRef.current?.scrollTo({x: exerciseDefaultDurationIndex * ITEM_WIDTH})
-            }, 0)
+            if(isOpen){
+                setTimeout(() => { // Have to include a setTimeout, otherwise it won't even scroll
+                    // Scrolls to the default duration position
+                    scrollviewRef.current?.scrollTo({x: exerciseDefaultDurationIndex * ITEM_WIDTH})
+                }, 0)
+            }
         }
+        updateTimePicker()
+        // getPreferences();
     }, [isOpen])
     
     const startExerciseTimer = async () => {
@@ -141,21 +148,19 @@ export default function EyeExerciseTimer(props: P) {
         // setTimeLeft(new Date())
     }
 
-    const updateTimer = (timeInSeconds: number) => {
+    const updateTimer = (timeInSeconds: number, index: number) => {
         const duration = formatSecondsToDuration(timeInSeconds)
         setModalTitle(formatDurationToString(duration));
+        saveExercisePreference(exerciseId, index);
+
     }
 
 
     return (
       <View style={tw`flex justify-center items-center`} {...rest}>
 
-        {/* Timer */}
-        {/* <Text style={tw`text-white text-xl text-center pb-2`}>
-            Duration: {timeLeft.minutes?.toLocaleString("en-US", {minimumIntegerDigits: 2})}:{timeLeft.seconds?.toLocaleString("en-US", {minimumIntegerDigits: 2})}
-        </Text> */}
         {/* Horizontal Exercise Duration Picker */}
-        {!started && // Hide after starting
+        {!started &&
         <>
         <Text style={tw`text-center text-white font-bold`}>Exercise Duration</Text>
         <View style={tw`my-2`}>
@@ -164,9 +169,6 @@ export default function EyeExerciseTimer(props: P) {
             <ScrollView 
                 ref={scrollviewRef}
                 contentContainerStyle={[{paddingRight: width/2 - ITEM_WIDTH/2, paddingLeft: (width/2 - ITEM_WIDTH/2)}]}
-                // contentOffset={{x: (exerciseDefaultDurationIndex+1*2) * ITEM_WIDTH/2, y: 0}}
-                // contentInset={{right: (exerciseDefaultDurationIndex+1*2) * ITEM_WIDTH/2, top:0,bottom:0,left:0}}
-                // contentInsetAdjustmentBehavior={"always"}
                 snapToInterval={width} // value should be element width!
                 snapToAlignment="center"
                 showsHorizontalScrollIndicator={false}
@@ -174,10 +176,11 @@ export default function EyeExerciseTimer(props: P) {
                 decelerationRate="fast"
                 onMomentumScrollEnd={(e) => {
                     if(e.nativeEvent.contentOffset.x % ITEM_WIDTH == 0){
-                        const time = filteredData[e.nativeEvent.contentOffset.x / ITEM_WIDTH].value
+                        const index = e.nativeEvent.contentOffset.x / ITEM_WIDTH
+                        const time = filteredData[index].value
                         // playsound()
                         setTime(time)
-                        updateTimer(time)
+                        updateTimer(time, index)
                     }
                 }}
                 maximumZoomScale={2}

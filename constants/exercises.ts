@@ -2,6 +2,7 @@
 const ASSET_PATH = "../assets/exercises"
 
 export interface Exercise {
+    id: string,
     name: string,
     description: string,
     images: any[],
@@ -16,6 +17,7 @@ export interface Exercise {
 export const exercises: Exercise[] = [
 
     {
+        id: "0",
         name: "Look far away",
         description: `
             Every 20 minutes, look at something 20 feet away (6m) for 20 seconds`,
@@ -32,6 +34,7 @@ export const exercises: Exercise[] = [
         reference: "https://youtu.be/_7hwZv36JMU"
     },
     {
+        id: "1",
         name: "Pencil Pushups",
         description: `
             Alternate your focus on an object near and an object far
@@ -52,6 +55,7 @@ export const exercises: Exercise[] = [
         reference: "https://youtu.be/BuvMrCAt6TU"
     },
     {
+        id: "2",
         name: "Palm your Eyes",
         description: `
             Cover your eyes with your palms
@@ -71,6 +75,7 @@ export const exercises: Exercise[] = [
         reference: "https://youtu.be/RoIYAoAalmI"
     },
     {
+        id: "3",
         name: "Massage your Eyes",
         description: `
             Best for people with dry eyes
@@ -106,6 +111,7 @@ export const exercises: Exercise[] = [
     //     reference: "https://youtu.be/oI2qmqhcr_4"
     // },
     {
+        id: "4",
         name: "Figure Eight",
         description: `
             Make an imaginary figure eight with your eyes
@@ -123,6 +129,7 @@ export const exercises: Exercise[] = [
         credit: "https://www.wikihow.com/Exercise-Your-Eyes"
     },
     {
+        id: "5",
         name: "Directional Eyes",
         description: `
             Look up, down, left and right. 
@@ -142,6 +149,7 @@ export const exercises: Exercise[] = [
 
     }, 
     {
+        id: "6",
         name: "Blink Repeatedly",
         description: "",
         images: [require(`${ASSET_PATH}/blink-repeatedly.jpeg`)],

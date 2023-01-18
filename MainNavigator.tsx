@@ -16,20 +16,19 @@ export default function MainNavigator() {
         <>
         <Stack.Navigator screenOptions={{
             headerShown: false,
-            // headerTitle: (props: any) => (
-            //     <Ionicons name="stats-chart" size={24} color="black" />
-            // ),
-            // headerRight: () => (
-            //     <Ionicons name="stats-chart" size={24} color="black" />
-            // )
+            headerTitle: (props: any) => (
+                <Ionicons name="stats-chart" size={24} color="black" />
+            ),
+            headerRight: () => (
+                <Ionicons name="stats-chart" size={24} color="black" />
+            )
         }}>
             
             <Stack.Screen name="Main" component={MainScreen} options={{}}/>
-            {/* <Stack.Screen name="Exercises" component={ExerciseScreen}/>
-
+            <Stack.Screen name="Exercises" component={ExerciseScreen}/>
             <Stack.Screen name="Stats" component={StatsScreen}/>
             <Stack.Screen name="Bestiary" component={BestiaryScreen}/>
-            <Stack.Screen name="Test" component={TestScreen}/> */}
+            <Stack.Screen name="Test" component={TestScreen}/>
         </Stack.Navigator>
     </>
     )

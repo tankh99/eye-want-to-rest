@@ -1,6 +1,8 @@
 {
   "cli": {
-    "version": ">= 0.48.2"
+    "version": ">= 0.48.2",
+    // Remove the following line if you ever want to setup push notifications
+    "promptToConfigurePushNotifications": false 
   },
   "build": {
     "development": {
@@ -19,7 +21,7 @@
       }
     },
     "preview3": {
-      "developmentClient": true 
+      "developmentClient": true
     },
     "production": {}
   },

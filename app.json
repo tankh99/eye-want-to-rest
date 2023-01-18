@@ -1,9 +1,5 @@
 {
   "displayName": "Eye Want to Rest",
-  "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-4743735900113393~2066734175",
-    "ios_app_id": "ca-app-pub-4743735900113393~6197550878"
-  },
   "expo": {
     "name": "Eye Want to Rest",
     "slug": "eye-want-to-rest",
@@ -61,7 +57,24 @@
             "assets/sounds/cowbell.wav"
           ]
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFramework": "static"
+          }
+        }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3640b375-8ffa-48bc-b100-fac1e09046df"
+      }
+    }
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-4743735900113393~2066734175",
+    "ios_app_id": "ca-app-pub-4743735900113393~6197550878"
   }
 }
