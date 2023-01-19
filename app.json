@@ -3,7 +3,7 @@
   "expo": {
     "name": "Eye Want to Rest",
     "slug": "eye-want-to-rest",
-    "version": "1.1.6",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/app-logo.png",
     "splash": {
@@ -34,7 +34,7 @@
       "bundleIdentifier": "com.khanghou.eyewanttorest"
     },
     "android": {
-      "versionCode": 18,
+      "versionCode": 19,
       "icon": "./assets/app-logo.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/app-logo.png",
