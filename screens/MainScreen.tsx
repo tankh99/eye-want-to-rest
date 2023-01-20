@@ -13,24 +13,16 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { getRandomInt } from '../util/utils'
 import { getTotalSeconds } from '../util/time'
 import { Ionicons } from '@expo/vector-icons'
-import { DEFAULT_SESSION_DURATION, getDefaultIconSize } from '../constants/globals'
+import { DEFAULT_SESSION_DURATION, adUnitId, getDefaultIconSize } from '../constants/globals'
 import { playCloseEyeSound, playOpenEyeSound } from '../util/sounds'
 import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
-
-const adUnitId = __DEV__
-    ? TestIds.BANNER
-    : Platform.OS === "ios" 
-        ? process.env.REACT_APP_IOS_BANNER_ID!
-        : process.env.REACT_APP_ANDROID_BANNER_ID!
 
 export default function MainScreen({navigation, route}: any) {
     // console.log("ad id", adUnitId)
     const [eyeOpen, setEyeOpen] = useState(false)
-    const [notificationId, setNotificationId] = useState("")
     const [startTime, setStartTime]: any = useState(null)
-    const [showExercises, setShowExercises] = useState(false)
     const [showStartExercise, setShowStartExercise] = useState(false)
-
+    const notificationId = useRef<any>(undefined);
     let eyeOpenRef = useRef(eyeOpen)
     eyeOpenRef.current = eyeOpen;
 
@@ -53,13 +45,12 @@ export default function MainScreen({navigation, route}: any) {
         if(eyeOpenRef.current && noNotifications){
             console.log("Scheduled notification")
             // const totalSeconds = DEFAULT_TIME.getMinutes() * 60 + DEFAULT_TIME.getSeconds()
-            const id = await scheduleNotification(
+            notificationId.current = await scheduleNotification(
                 "Break Time", 
                 "It's time to rest your eyes", 
                 getTotalSeconds(DEFAULT_SESSION_DURATION), 
                 false
             )
-            setNotificationId(id)
         } else {
             cancelAllNotifications()
         }
@@ -69,12 +60,6 @@ export default function MainScreen({navigation, route}: any) {
     const toggleEye = async () => {
         const tempEyeOpen = !eyeOpen; // a bit confusing, but it's because we want to inverse inverse the boolean. This makes somewhat more sense
         setEyeOpen(!eyeOpen)
-        setShowStartExercise(false);
-        setShowExercises(false)
-        setupNotifications()
-        setStartTime(new Date())
-        // dropDatabase()
-        // updateDatabase()
 
         if(!tempEyeOpen) {
             playCloseEyeSound()
@@ -85,6 +70,12 @@ export default function MainScreen({navigation, route}: any) {
                 console.error("error", ex)
             }
         }
+        setShowStartExercise(false);
+        setupNotifications()
+        setStartTime(new Date())
+        // dropDatabase()
+        // updateDatabase()
+
     }
 
     return (
@@ -93,7 +84,9 @@ export default function MainScreen({navigation, route}: any) {
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
             style={tw`flex-1 absolute top-0 w-full h-full`}/>
         <SafeAreaView style={tw`flex-1 pb-8 pt-4`}>
-        <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
+        {/* {eyeOpen && */}
+            <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
+        {/* } */}
         
         <View style={[tw`flex-1 flex items-center justify-between`]}>
             

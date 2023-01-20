@@ -8,9 +8,10 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-na
 import { Ionicons } from '@expo/vector-icons'
 import EyeExerciseTimer from '../components/EyeExerciseTimer'
 import { formatDurationToString, formatSecondsToDuration } from '../util/time'
-import { getDefaultIconSize } from '../constants/globals'
+import { adUnitId, getDefaultIconSize } from '../constants/globals'
 import { getExercisePreference } from '../util/sqlite'
 import { Exercise } from '../constants/exercises'
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
 
 const screenWidth = Dimensions.get("window").width
 
@@ -109,8 +110,8 @@ export default function ExerciseScreen({route, navigation}: any) {
             
             <SafeAreaView style={tw`flex-1 mt-8`} >
             {/* <Text style={tw("text-white")} >Duration: {value}</Text> */}
-            
-                <View style={tw`flex items-center justify-between flex-row px-4`}>
+            <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
+                <View style={tw`flex mt-4 items-center justify-between flex-row px-4`}>
                     <TouchableOpacity 
                         style={tw``} 
                         onPress={() => {
