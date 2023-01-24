@@ -3,16 +3,20 @@ import * as Device from 'expo-device'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TestIds } from "react-native-google-mobile-ads";
 
+const IOS_BANNER_ID="ca-app-pub-4743735900113393/8504467556"
+const ANDROID_BANNER_ID="ca-app-pub-4743735900113393/9885344286"
+
+// export const adUnitId = IOS_BANNER_ID
 export const adUnitId = __DEV__
     ? TestIds.BANNER
     : Platform.OS === "ios" 
-        ? process.env.REACT_APP_IOS_BANNER_ID!
-        : process.env.REACT_APP_ANDROID_BANNER_ID!
+        ? IOS_BANNER_ID
+        : ANDROID_BANNER_ID
 
 export const DEFAULT_SESSION_DURATION: Duration = {
     hours: 0,
-    minutes: 0,
-    seconds: 5
+    minutes: 20,
+    seconds: 0
 }
 
 export function getDefaultIconSize(){

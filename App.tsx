@@ -1,18 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { AppState, Button, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AppState, StyleSheet } from 'react-native';
 import tw from 'twrnc';
-import * as Notifications from 'expo-notifications'
-import EyeButton from './components/EyeButton';
-import Timer from './components/Timer'
-import React, { useEffect, useRef, useState } from 'react';
-import {LinearGradient} from 'expo-linear-gradient'
-import {SafeAreaProvider} from 'react-native-safe-area-context'
-import {NavigationContainer} from '@react-navigation/native'
+import * as Notifications from 'expo-notifications';
+import React, { useEffect, useRef } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
-import {Audio} from 'expo-av'
-import * as Sentry from 'sentry-expo'
-import { getDeviceType } from './constants/globals';
-import { MaxAdContentRating, MobileAds } from 'react-native-google-mobile-ads';
+import { Audio } from 'expo-av';
+import mobileAds, { MaxAdContentRating, MobileAds } from 'react-native-google-mobile-ads';
 
 
 // Sentry.init({
@@ -25,9 +20,16 @@ import { MaxAdContentRating, MobileAds } from 'react-native-google-mobile-ads';
 MobileAds().setRequestConfiguration({
   maxAdContentRating: MaxAdContentRating.PG,
   tagForUnderAgeOfConsent: true
-}).then(() => {
-  console.log("successfully setup config")
 })
+
+mobileAds().initialize()
+.then(() => {
+  console.log("initialised mobile ads")
+}).catch((err) => {
+  console.log(err)
+})
+
+MobileAds().openAdInspector()
 
 export default function App() {
 

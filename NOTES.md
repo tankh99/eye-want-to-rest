@@ -35,3 +35,6 @@ Running tests may sometimes run into import errors, in which case you must go to
 #### Other Issues
 - Datetimepicker does not render correctly if it is under a view with the style 'items-center'
 - useSharedvalue holds state between state resets. You must reload Expo manually in order to see the changes
+
+# Learning Points:
+1. .env is merged into the app when building. Do not store secrets inside .env!

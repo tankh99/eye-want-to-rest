@@ -110,8 +110,10 @@ export default function ExerciseScreen({route, navigation}: any) {
             
             <SafeAreaView style={tw`flex-1 mt-8`} >
             {/* <Text style={tw("text-white")} >Duration: {value}</Text> */}
-            <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
-                <View style={tw`flex mt-4 items-center justify-between flex-row px-4`}>
+            <View style={tw`mt-4`}>
+                <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
+            </View>
+                <View style={tw`flex items-center justify-between flex-row px-4`}>
                     <TouchableOpacity 
                         style={tw``} 
                         onPress={() => {
