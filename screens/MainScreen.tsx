@@ -89,7 +89,6 @@ export default function MainScreen({navigation, route}: any) {
         {/* {eyeOpen && */}
         <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
         {/* } */}
-        
         <View style={[tw`flex-1 flex items-center justify-between`]}>
             
             {/* Top-right stats icon */}
@@ -120,13 +119,6 @@ export default function MainScreen({navigation, route}: any) {
                     setEyeOpen={setEyeOpen}
                     navigation={navigation} />
             </View>
-            {/* {showExercises 
-            && <EyeExercises 
-                exercise={exercise}
-                setExercise={setExercise}
-                setCompletedFully={setCompletedFully}
-                setShowExercises={setShowExercises}/>
-            } */}
 
             {/* Eye Button */}
             <View style={tw`flex w-full px-6 items-center max-w-screen-md`}>
