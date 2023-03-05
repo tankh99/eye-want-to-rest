@@ -26,8 +26,6 @@ export default function MainScreen({navigation, route}: any) {
     let eyeOpenRef = useRef(eyeOpen)
     eyeOpenRef.current = eyeOpen;
 
-    
-
     useEffect(() => {
         if(route.params && route.params.exerciseCompleted){ // Remove the "Start Execise" button
             setShowStartExercise(false)
@@ -79,7 +77,6 @@ export default function MainScreen({navigation, route}: any) {
         // updateDatabase()
 
     }
-
     return (
         <>
         <LinearGradient
@@ -87,7 +84,8 @@ export default function MainScreen({navigation, route}: any) {
             style={tw`flex-1 absolute top-0 w-full h-full`}/>
         <SafeAreaView style={tw`flex-1 pb-8 pt-4`}>
         {/* {eyeOpen && */}
-        <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
+        <BannerAd unitId={TestIds.BANNER} size={BannerAdSize.FLUID}/>
+        {/* <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/> */}
         {/* } */}
         <View style={[tw`flex-1 flex items-center justify-between`]}>
             

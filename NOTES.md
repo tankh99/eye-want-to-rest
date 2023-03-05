@@ -5,6 +5,15 @@ eas build
 eas submit
 ```
 
+# Building expo dev client
+eas device:create
+eas build --profile development --platform ios
+
+Download the profile given in the QR code
+then run 
+`expo start --dev-client`
+
+
 # Google Service Account file
 You access the google service account in Google Cloud. Select the project you want to link to, in this case it's Eye Want to Rest. Then in the top-left menu, click on IAM and Admin > Service Accounts. Select the first service account.
 

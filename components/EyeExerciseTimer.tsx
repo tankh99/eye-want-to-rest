@@ -1,37 +1,44 @@
 import React, { useEffect, useRef, useState } from "react"
-import {View, ScrollView, Text, Dimensions, TouchableOpacity} from 'react-native'
+import { View, ScrollView, Text, Dimensions, TouchableOpacity } from 'react-native'
 import tw from "twrnc"
-import {Audio } from 'expo-av'
-import { addSeconds, differenceInSeconds } from "date-fns"
-import { calculateTick, formatDurationToString, formatSecondsToDuration, getTotalSeconds } from "../util/time"
-import { intervalToDuration } from "date-fns/esm"
-import { playTimerDoneSound } from "../util/sounds"
+import { calculateTick, formatDurationToString, formatSecondsToDuration } from "../util/time"
 import { cancelAllNotifications, scheduleNotification } from "../util/notifications"
 import * as Notifications from 'expo-notifications'
 import { getExercisePreference, saveExercisePreference } from "../util/sqlite"
+import { Exercise, exercises } from "../constants/exercises"
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from "react-native-reanimated"
 
 const {width, height} = Dimensions.get("screen")
 const ITEM_WIDTH = 75
 
 interface P {
-    exerciseId: string,
-    exerciseDefaultDurationIndex: number,
+    exercise: Exercise,
     exerciseDurationRange: number[],
     navigation: any,
-    setModalTitle: Function,
-    setIsCompleted: Function,
     isOpen: boolean,
-    closeSlide: Function,
+    onOpen: Function,
+    onClose: Function,
     style?: any,
     // defaultDurationInSec: number,
     // data: any[]
 }
 
+const CLOSED_SLIDE_HEIGHT = 75
+const OPEN_SLIDE_HEIGHT = 100
+
+// Not currently used
+const DEFAULT_MODAL_TITLE = `Open Exercise Timer`
+
 export default function EyeExerciseTimer(props: P) {
 
 
-    const {exerciseId, exerciseDurationRange, exerciseDefaultDurationIndex, navigation, setModalTitle, setIsCompleted, isOpen, closeSlide, ...rest} = props
-    const defaultDuration = exerciseDurationRange[exerciseDefaultDurationIndex]
+    const [defaultExerciseDurationIndex, setDefaultExerciseDurationIndex] = useState(0);
+
+    const [isCompleted, setIsCompleted] = useState(false)
+    const [modalTitle, setModalTitle]: any = useState(DEFAULT_MODAL_TITLE)
+
+    const {exercise, exerciseDurationRange, navigation, onOpen, onClose, isOpen, ...rest} = props
+    const defaultDuration = exerciseDurationRange[defaultExerciseDurationIndex]
     const [offsets, setOffsets] = useState([])
     const [time, setTime] = useState(defaultDuration) // number
     const [notificationId, setNotificationId] = useState("")
@@ -59,11 +66,35 @@ export default function EyeExerciseTimer(props: P) {
         }
     }, [])
 
+
+    const slideValue = useSharedValue(CLOSED_SLIDE_HEIGHT)
+    const slideStyle = useAnimatedStyle(() => {
+        return {
+            height: withSpring(slideValue.value, {
+                stiffness: 90,
+                damping: 100
+            })
+        }
+    })
+
+    useEffect(() => {
+        if (isOpen) {
+            onOpen()
+            // setModalTitle(<AntDesign name="caretdown" size={24} color="white" />)  // Open
+            slideValue.value = OPEN_SLIDE_HEIGHT + 100;
+        } else {
+            onClose()
+            // setModalTitle("Open Exercise Timer")  // Open
+            slideValue.value = CLOSED_SLIDE_HEIGHT;
+            // else slideValue.value = OPEN_SLIDE_HEIGHT + 100
+        }
+    }, [isOpen])
+
+
     const initialiseTimePicker = () => {
         let filteredData: any = []
         let offsets: any = []
         for(let i = 0; i < exerciseDurationRange.length; i+=1){
-            
             offsets.push(ITEM_WIDTH * i)
             let time = exerciseDurationRange[i]
             const timeObj = {
@@ -85,28 +116,40 @@ export default function EyeExerciseTimer(props: P) {
         setOffsets(offsets)
     }
 
-    // const [defaultExderciseDurationIndex, setDefaultExerciseDurationIndex] = useState(exerciseDefaultDurationIndex);
-
     useEffect(() => {
         const updateTimePicker = () => {
-
             if(isOpen){
                 setTimeout(() => { // Have to include a setTimeout, otherwise it won't even scroll
                     // Scrolls to the default duration position
-                    scrollviewRef.current?.scrollTo({x: exerciseDefaultDurationIndex * ITEM_WIDTH})
+                    scrollviewRef.current?.scrollTo({x: defaultExerciseDurationIndex * ITEM_WIDTH})
                 }, 0)
             }
         }
+        getPreferences()
         updateTimePicker()
         // getPreferences();
     }, [isOpen])
+
+    const getPreferences = async () => {
+        getExercisePreference(exercise.id)
+        .then((pref: any) => {
+            console.log("pref:",pref)
+            if (!pref) {
+                setDefaultExerciseDurationIndex(exercise.defaultDurationIndex)
+                return;
+            }
+            setDefaultExerciseDurationIndex(pref.defaultIndex);
+        }).catch((err) => {
+            console.error(err)
+        })
+    }
     
     const startExerciseTimer = async () => {
         const startTime = new Date()
         setStarted(true)
         
         // console.log(calculateTick(5, new Date(), () => {}))
-        closeSlide()
+        onClose()
         await setupNotifications();
         const timerID = setInterval(() => {
             const timeLeft: Duration = calculateTick(time, startTime, onTimerDone)
@@ -137,7 +180,7 @@ export default function EyeExerciseTimer(props: P) {
 
     const onTimerDone = () => {
         setStarted(false)
-        closeSlide()
+        onClose()
         setIsCompleted(true);
         return clearTimer()
     }
@@ -148,88 +191,114 @@ export default function EyeExerciseTimer(props: P) {
         // setTimeLeft(new Date())
     }
 
+    // When choosing exercise time
     const updateTimer = (timeInSeconds: number, index: number) => {
         const duration = formatSecondsToDuration(timeInSeconds)
         setModalTitle(formatDurationToString(duration));
-        saveExercisePreference(exerciseId, index);
+        // console.log("Index and time in seconds:", index, timeInSeconds)
+        saveExercisePreference(exercise.id, index);
 
     }
 
-
     return (
-      <View style={tw`flex justify-center items-center`} {...rest}>
-
-        {/* Horizontal Exercise Duration Picker */}
-        {!started &&
         <>
-        <Text style={tw`text-center text-white font-bold`}>Exercise Duration</Text>
-        <View style={tw`my-2`}>
-            <View style={[tw`opacity-50 bg-white absolute top-0 bottom-0`, {width: ITEM_WIDTH, left: width/2 - ITEM_WIDTH/2, right: 0 }]}></View>
             
-            <ScrollView 
-                ref={scrollviewRef}
-                contentContainerStyle={[{paddingRight: width/2 - ITEM_WIDTH/2, paddingLeft: (width/2 - ITEM_WIDTH/2)}]}
-                snapToInterval={width} // value should be element width!
-                snapToAlignment="center"
-                showsHorizontalScrollIndicator={false}
-                snapToOffsets={offsets}
-                decelerationRate="fast"
-                onMomentumScrollEnd={(e) => {
-                    if(e.nativeEvent.contentOffset.x % ITEM_WIDTH == 0){
-                        const index = e.nativeEvent.contentOffset.x / ITEM_WIDTH
-                        const time = filteredData[index].value
-                        // playsound()
-                        setTime(time)
-                        updateTimer(time, index)
-                    }
-                }}
-                maximumZoomScale={2}
-                zoomScale={1}
-                horizontal>
-                
-            {filteredData.map((item: any, index: number) => {
-                return (
-                    <Text style={[tw`text-xl text-center text-white`, {width: ITEM_WIDTH}]} key={index}>{item.label}</Text>
-                )
-            })}
-            </ScrollView>
-        </View>
+            {/* Outside safeareaview because it interferes with how it appears and animates */}
+            <Animated.View
+                style={[
+                    {
+                        backgroundColor: "#222",
+                        height: OPEN_SLIDE_HEIGHT,
+                        width: '100%',
+                    },
+                    slideStyle,
+                    tw``
+                ]}>
+                    <TouchableOpacity // Opens up the exercise timer
+                    style={[tw`justify-center items-center`, {height: CLOSED_SLIDE_HEIGHT}]}
+                    onPress={() => {
+                        if(!isCompleted){
+                            if(isOpen) onClose()
+                            else onOpen()
+
+                            const exerciseDurationInSeconds = exercise.durationRange[defaultExerciseDurationIndex];
+                            const duration = formatSecondsToDuration(exerciseDurationInSeconds);
+                            if(modalTitle == DEFAULT_MODAL_TITLE) setModalTitle(formatDurationToString(duration));
+
+                        } else {
+                            navigation.navigate("Main", {
+                                exerciseCompleted: true
+                            })
+                        }
+
+                    }}>
+                    <View style={[tw`flex w-full px-4 flex-row justify-center`]}>
+                        <Text style={[tw`text-white text-center text-2xl font-bold self-center`]}>{isCompleted ? "Done" : modalTitle}</Text>
+                    </View>
+                </TouchableOpacity>
+                <View style={tw`flex justify-center items-center`} {...rest}>
+                {/* Horizontal Exercise Duration Picker */}
+                {!started &&
+                <>
+                <Text style={tw`text-center text-white font-bold`}>Exercise Duration</Text>
+                <View style={tw`my-2`}>
+                    <View style={[tw`opacity-50 bg-white absolute top-0 bottom-0`, {width: ITEM_WIDTH, left: width/2 - ITEM_WIDTH/2, right: 0 }]}></View>
+                    
+                    <ScrollView 
+                        ref={scrollviewRef}
+                        contentContainerStyle={[{paddingRight: width/2 - ITEM_WIDTH/2, paddingLeft: (width/2 - ITEM_WIDTH/2)}]}
+                        snapToInterval={width} // value should be element width!
+                        snapToAlignment="center"
+                        showsHorizontalScrollIndicator={false}
+                        snapToOffsets={offsets}
+                        decelerationRate="fast"
+                        onMomentumScrollEnd={(e) => {
+                            if(e.nativeEvent.contentOffset.x % ITEM_WIDTH == 0){
+                                const index = e.nativeEvent.contentOffset.x / ITEM_WIDTH
+                                const time = filteredData[index].value
+                                // playsound()
+                                setTime(time)
+                                updateTimer(time, index)
+                            }
+                        }}
+                        maximumZoomScale={2}
+                        zoomScale={1}
+                        horizontal>
+                        
+                    {filteredData.map((item: any, index: number) => {
+                        return (
+                            <Text style={[tw`text-xl text-center text-white`, {width: ITEM_WIDTH}]} key={index}>{item.label}</Text>
+                        )
+                    })}
+                    </ScrollView>
+                </View>
+                </>
+                }
+
+                {/* </View> */}
+                <View style={tw`mx-8`}>
+                {!started ?
+                    <TouchableOpacity style={tw`p-2 border border-white w-full `}
+                    onPress={() => {
+                        startExerciseTimer()
+                    }} >
+                        <Text style={tw`text-white text-center`}>
+                        Start
+                        </Text>
+                    </TouchableOpacity>
+                : (<TouchableOpacity style={tw`p-2 border border-white w-full `}
+                    onPress={() => {
+                        cancelAllNotifications();
+                        onTimerDone()
+                    }} >
+                    <Text style={tw`text-white text-center`}>
+                    Skip
+                    </Text>
+                </TouchableOpacity>)}
+                </View>
+                </View>
+
+            </Animated.View>
         </>
-        }
-        
-        {/* </View> */}
-        <View style={tw`mx-8`}>
-        {/* {isCompleted ?
-            <TouchableOpacity style={tw`p-2 border border-white w-full `}
-                onPress={() => {
-                    navigation.navigate("Main", {
-                        exerciseDone: true // true: To tell MainScreen not to show "Start Exercise button"
-                    })
-                }} >
-                <Text style={tw`text-white text-center`}>
-                Done
-                </Text>
-            </TouchableOpacity>
-           :  */}
-           {!started ?
-            <TouchableOpacity style={tw`p-2 border border-white w-full `}
-            onPress={() => {
-                startExerciseTimer()
-            }} >
-                <Text style={tw`text-white text-center`}>
-                Start
-                </Text>
-            </TouchableOpacity>
-        : (<TouchableOpacity style={tw`p-2 border border-white w-full `}
-            onPress={() => {
-                cancelAllNotifications();
-                onTimerDone()
-            }} >
-            <Text style={tw`text-white text-center`}>
-            Skip
-            </Text>
-        </TouchableOpacity>)}
-        </View>
-      </View>
     )
   }

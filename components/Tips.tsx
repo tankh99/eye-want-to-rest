@@ -12,7 +12,9 @@ export default function Tips() {
         "Cover your eyes with your palms if your eyes feel dry",
         "Visit the local optometrist annually",
         "Avoid looking at bright colours to prevent eye strain",
-        "Keep your head an arm's length from the screen"
+        "Keep your head an arm's length from the screen",
+        "Always keep an arm's length away from the screen",
+        "Allow yourself to both sit upright and slouch"
     ]
 
     const [tip, setTip] = useState("")
