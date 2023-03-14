@@ -17,8 +17,8 @@ export const adUnitId = __DEV__
 
 export const DEFAULT_SESSION_DURATION: Duration = {
     hours: 0,
-    minutes: 0,
-    seconds: 5
+    minutes: 20,
+    seconds: 0
 }
 
 export function getDefaultIconSize(){
