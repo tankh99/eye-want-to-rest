@@ -10,6 +10,7 @@ import _ from "lodash"
 import { add, intervalToDuration, isThisWeek, isYesterday } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons';
 import { getDefaultIconSize} from '../constants/globals'
+import Navbar from '../components/Navbar'
 
 export default function StatsScreen({navigation}: any) {
 
@@ -41,18 +42,9 @@ export default function StatsScreen({navigation}: any) {
                 colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
                 style={tw`flex-1 absolute top-0 w-full h-full`}/>
             <SafeAreaView>
-                <View style={tw`flex items-center justify-between flex-row px-4`}>
-                    <TouchableOpacity 
-                        style={tw``} 
-                        onPress={() => {
-                            navigation.goBack()
-                        }}>
-                        <Ionicons name="arrow-back" size={getDefaultIconSize()} color="white"  />
-                    </TouchableOpacity>
+                <Navbar navigation={navigation}>
                     <Text style={tw`text-white text-center text-4xl my-8 flex justify-center`}>Progress</Text>
-                    
-                    <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tw``} color="transparent"  />
-                </View>
+                </Navbar>
                 
                 <ProgressCard title="Today's Screen Time" duration={history.todayDuration} sessions={history.todaySessions}/>
                 <ProgressCard title="Yesterday's Screen Time" duration={history.yesterdayDuration} sessions={history.yesterdaySessions}/>

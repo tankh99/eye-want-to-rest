@@ -189,3 +189,10 @@ function shuffleArray(arr: Exercise[]){
     }
     return arr;
 }
+
+export const credits = exercises.map(e => {
+    return {
+        name: e.name,
+        credit: e.credit
+    }
+})

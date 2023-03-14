@@ -1,0 +1,3 @@
+- [ ] Allow user to update the value of the timer, and save it.
+- [ ] When editing the session duration, the changes are not reflected immediately. Need to consider using a global shared state
+- [ ] Now it seems like the timer runs even though the eye is closed

@@ -8,7 +8,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import { Audio } from 'expo-av';
 import mobileAds, { MaxAdContentRating, MobileAds } from 'react-native-google-mobile-ads';
-
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 // Sentry.init({
 //   dsn: "https://4dbc82d3aff846c2a4f48a2bd8dd0d94@o1229881.ingest.sentry.io/6376215",
@@ -72,8 +73,10 @@ export default function App() {
   // }
   
   // Sets up notification handler config and audio config
+
   const setupDefaults =  async () => {
 
+    
     // Allows notification to show up in foreground
     Notifications.setNotificationHandler({
       handleNotification: async() => ({
@@ -98,15 +101,17 @@ export default function App() {
   
 
   return (
-    <SafeAreaProvider>
-          <LinearGradient
-          colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
-          style={tw`flex-1 absolute top-0 w-full h-full`}/>
-            
-          <NavigationContainer>
-            <MainNavigator/>
-        </NavigationContainer>
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <SafeAreaProvider>
+            <LinearGradient
+            colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
+            style={tw`flex-1 absolute top-0 w-full h-full`}/>
+              
+            <NavigationContainer>
+              <MainNavigator/>
+          </NavigationContainer>
+      </SafeAreaProvider>
+    </Provider>
   );
 }
 

@@ -31,7 +31,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.khanghou.eyewanttorest"
+      "bundleIdentifier": "com.khanghou.eyewanttorest",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "versionCode": 20,

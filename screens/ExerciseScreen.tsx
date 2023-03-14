@@ -12,6 +12,7 @@ import { adUnitId, getDefaultIconSize } from '../constants/globals'
 import { getExercisePreference } from '../util/sqlite'
 import { Exercise } from '../constants/exercises'
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
+import Navbar from '../components/Navbar'
 
 const screenWidth = Dimensions.get("window").width
 
@@ -77,18 +78,11 @@ export default function ExerciseScreen({route, navigation}: any) {
                 <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
             </View>
                 <View style={tw`flex items-center justify-between flex-row px-4`}>
-                    <TouchableOpacity 
-                        style={tw``} 
-                        onPress={() => {
-                            navigation.goBack()
-                        }}>
-                        <Ionicons name="arrow-back" size={getDefaultIconSize()} color="white"  />
-                    </TouchableOpacity>
-                    <View>
-                    <Text style={tw`text-white text-center text-4xl flex justify-center mx-4`}>{exercise.name}</Text>
-                    <Text style={tw`text-center text-white opacity-70`}>Approx. duration: {exerciseDefaultDuration < 60 ? `${exerciseDefaultDuration} seconds` : `${exerciseDefaultDuration/60} ${exerciseDefaultDuration/60 > 1 ? "minutes": "minute"}`} </Text>
-                    </View>
-                    <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tw``} color="transparent"  />
+                    
+                    <Navbar navigation={navigation}>
+                        <Text style={tw`text-white text-center text-4xl flex justify-center mx-4`}>{exercise.name}</Text>
+                        <Text style={tw`text-center text-white opacity-70`}>Approx. duration: {exerciseDefaultDuration < 60 ? `${exerciseDefaultDuration} seconds` : `${exerciseDefaultDuration/60} ${exerciseDefaultDuration/60 > 1 ? "minutes": "minute"}`} </Text>
+                    </Navbar>
                 </View>
                 <ScrollView horizontal={false}
                     style={tw`mt-8`}

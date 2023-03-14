@@ -8,6 +8,7 @@ import StatsScreen from './screens/StatsScreen';
 import BestiaryScreen from './screens/BestiaryScreen'
 import TestScreen from './screens/TestScreen'
 import { LinearGradient } from 'expo-linear-gradient'
+import SettingsScreen from './screens/SettingsScreen'
 
 const Stack: any = createNativeStackNavigator()
 
@@ -29,6 +30,7 @@ export default function MainNavigator() {
             <Stack.Screen name="Stats" component={StatsScreen}/>
             <Stack.Screen name="Bestiary" component={BestiaryScreen}/>
             <Stack.Screen name="Test" component={TestScreen}/>
+            <Stack.Screen name="Settings" component={SettingsScreen}/>
         </Stack.Navigator>
     </>
     )
