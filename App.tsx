@@ -7,9 +7,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import MainNavigator from './MainNavigator';
 import { Audio } from 'expo-av';
-import mobileAds, { MaxAdContentRating, MobileAds } from 'react-native-google-mobile-ads';
 import { Provider } from 'react-redux';
 import store from './store/store';
+import mobileAds from 'react-native-google-mobile-ads';
 
 // Sentry.init({
 //   dsn: "https://4dbc82d3aff846c2a4f48a2bd8dd0d94@o1229881.ingest.sentry.io/6376215",
@@ -18,10 +18,10 @@ import store from './store/store';
 //   debug: true // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
 // });
 
-MobileAds().setRequestConfiguration({
-  maxAdContentRating: MaxAdContentRating.PG,
-  tagForUnderAgeOfConsent: true
-})
+// MobileAds().setRequestConfiguration({
+//   maxAdContentRating: MaxAdContentRating.PG,
+//   tagForUnderAgeOfConsent: true
+// })
 
 mobileAds().initialize()
 .then(() => {
@@ -30,7 +30,7 @@ mobileAds().initialize()
   console.log(err)
 })
 
-MobileAds().openAdInspector()
+// MobileAds().openAdInspector()
 
 export default function App() {
 

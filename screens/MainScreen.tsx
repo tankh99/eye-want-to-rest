@@ -13,7 +13,7 @@ import { getTotalSeconds } from '../util/time'
 import { Ionicons } from '@expo/vector-icons'
 import { adUnitId, DEFAULT_SESSION_DURATION, getDefaultIconSize } from '../constants/globals'
 import { playCloseEyeSound, playOpenEyeSound } from '../util/sounds'
-import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
 import BackgroundGradient from '../components/BackgroundGradient'
 import MyButton from '../components/MyButton'
 
@@ -88,7 +88,9 @@ export default function MainScreen({navigation, route}: any) {
         {/* {eyeOpen && */}
         {/* TODO: Change back to actualy test unid */}
             {/* <BannerAd unitId={TestIds.BANNER} size={BannerAdSize.FLUID}/> */}
-            <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
+            <BannerAd unitId={adUnitId} 
+                requestOptions={{requestNonPersonalizedAdsOnly: true}}
+                size={BannerAdSize.FLUID}/>
             {/* } */}
             <View style={[tw`flex-1 flex items-center justify-between`]}>
             

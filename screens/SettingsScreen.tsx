@@ -83,7 +83,7 @@ export default function SettingsScreen({navigation}: any) {
               value={sessionDurationInput.seconds!.toString()} 
               onChange={onSecondsChange}/>
           <MyButton onPress={() => {
-            saveSessionDuration(sessionDuration)
+            saveSessionDuration(sessionDurationInput)
             dispatch(setSessionDuration(sessionDurationInput))
           }}>
               <Text style={tw`text-white w-full text-center`}>
@@ -98,7 +98,7 @@ export default function SettingsScreen({navigation}: any) {
                   Credits
               </Text>
           </TouchableOpacity>
-          <Button onPress={getSessionDuration1} title="Get"/>
+          {/* <Button onPress={getSessionDuration1} title="Get"/> */}
           {showCredits &&
 
             <View style={[tw`absolute bottom-0 m-4 w-full p-4 left-0 bg-black`, 
