@@ -1,20 +1,19 @@
-import { add, addSeconds, format, intervalToDuration, minutesInHour, sub } from 'date-fns'
-import { differenceInMinutes, getMinutes } from 'date-fns/esm'
-import differenceInSeconds from 'date-fns/esm/fp/differenceInSeconds/index.js'
+import { addSeconds, intervalToDuration } from 'date-fns'
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Text, Platform, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { View, Text } from 'react-native'
 import tw from 'twrnc'
 import { DEFAULT_DB_NAME, insertHistory } from '../util/sqlite'
-import { calculateTargetTime, calculateTick, getTotalSeconds } from '../util/time'
-import {Picker} from '@react-native-picker/picker'
+import { getTotalSeconds } from '../util/time'
 import { DEFAULT_SESSION_DURATION } from '../constants/globals'
 import { getSessionDuration } from '../util/prefs'
-import useSessionTimer from '../util/useSessionTimer'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
+import * as Notifications from 'expo-notifications'
 import { setSessionDuration } from '../store/session/sessionSlice'
+import { cancelAllNotifications, scheduleNotification } from '../util/notifications'
+import { playTimerDoneSound } from '../util/sounds'
 
 interface P {
-    eyeOpen: boolean,
+    eyeOpenRef: any,
     setEyeOpen: any,
     // setExercise: any,
     setShowStartExercise: Function,
@@ -31,14 +30,17 @@ const PICKER_HEIGHT = 100;
 // const DEFAULT_DURATION = 60 * 20 // 20 minutes
 const DEFAULT_FONT_SIZE = 80
 
-export default function Timer({eyeOpen, setEyeOpen, setShowStartExercise, style}: P) {
+export default function Timer({eyeOpenRef, setEyeOpen, setShowStartExercise, style}: P) {
 
+    const eyeOpen = eyeOpenRef.current;
     // const [startTime, setStartTime] = useState(new Date())
     // const [sessionDuration, setSessionDuration] = useSessionTimer();
     let timerId = useRef<any>(undefined)
     const sessionDuration = useAppSelector(state => state.session.sessionDuration)
     const [timeLeft, setTimeLeft] = useState(sessionDuration)
     const dispatch = useAppDispatch();
+    const notificationId = useRef<any>(undefined);
+    
 
     useEffect(() => {
         getSessionDuration()
@@ -54,14 +56,16 @@ export default function Timer({eyeOpen, setEyeOpen, setShowStartExercise, style}
     }, [sessionDuration])
 
     useEffect(() => {
-        startTimer(new Date())
+        if (eyeOpen) {
+            setupNotifications()
+            startTimer(new Date())
+        }
         return () => {
             clearTimer()
         }
     }, [eyeOpen])
 
     const startTimer = (startTime: Date) => {
-        
         if(eyeOpen){
             timeStep(startTime);
             timerId.current = setInterval(() => {
@@ -69,6 +73,32 @@ export default function Timer({eyeOpen, setEyeOpen, setShowStartExercise, style}
             }, 200)
         } else {
             clearTimer()
+        }
+    }
+
+    // TODO: Move this function into Timer component
+    const setupNotifications = async () => {
+        const notifs = await Notifications.getAllScheduledNotificationsAsync()
+        
+        let noNotifications: any = true;
+        if (notifs.length > 0){
+            console.log("There's notifications in the queue, going to cancel that")
+            noNotifications = await cancelAllNotifications()
+        }
+        if(eyeOpen && noNotifications){
+
+            console.log("Scheduled notification for", getTotalSeconds(sessionDuration), "seconds")
+            // const totalSeconds = DEFAULT_TIME.getMinutes() * 60 + DEFAULT_TIME.getSeconds()
+            // notificationId.current = await scheduleNotification(
+            await scheduleNotification(
+                "Break Time",
+                "It's time to rest your eyes",
+                getTotalSeconds(sessionDuration),
+                false
+            )
+            // console.log(notificationId.current)
+        } else {
+            cancelAllNotifications()
         }
     }
 
@@ -92,6 +122,7 @@ export default function Timer({eyeOpen, setEyeOpen, setShowStartExercise, style}
     const onTimerDone = async () => { // Sound to be played will be left to the notification
         setEyeOpen(false) // Since this should always only run when the eye timer runs out
         setShowStartExercise(true)
+        // playTimerDoneSound()
         setTimeLeft(sessionDuration)
         insertHistory(DEFAULT_DB_NAME, new Date(), getTotalSeconds(sessionDuration))
         return clearTimer()

@@ -120,7 +120,7 @@ export default function ExerciseScreen({route, navigation}: any) {
                                 Reference
                             </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={tw`text-white opacity-70`}
                             onPress={() => {
                                 openBrowser(exercise.credit)
@@ -128,7 +128,7 @@ export default function ExerciseScreen({route, navigation}: any) {
                             <Text style={tw`underline text-white opacity-70`}>
                                 Credit
                             </Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </TouchableOpacity>
                 </ScrollView>
                 

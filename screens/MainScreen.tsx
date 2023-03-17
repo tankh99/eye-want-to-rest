@@ -21,7 +21,6 @@ export default function MainScreen({navigation, route}: any) {
     // console.log("ad id", adUnitId)
     const [eyeOpen, setEyeOpen] = useState(false)
     const [showStartExercise, setShowStartExercise] = useState(false)
-    const notificationId = useRef<any>(undefined);
 
     let eyeOpenRef = useRef(eyeOpen)
     eyeOpenRef.current = eyeOpen;
@@ -33,34 +32,11 @@ export default function MainScreen({navigation, route}: any) {
 
     }, [route.params])
     
-    // TODO: Move this function into Timer component
-    const setupNotifications = async () => {
-        const notifs = await Notifications.getAllScheduledNotificationsAsync()
-        
-        let noNotifications: any = true;
-        if (notifs.length > 0){
-            console.log("There's notifications in the queue, going to cancel that")
-            noNotifications = await cancelAllNotifications()
-        }
-        if(eyeOpenRef.current && noNotifications){
-            console.log("Scheduled notification")
-            // const totalSeconds = DEFAULT_TIME.getMinutes() * 60 + DEFAULT_TIME.getSeconds()
-            notificationId.current = await scheduleNotification(
-                "Break Time", 
-                "It's time to rest your eyes", 
-                getTotalSeconds(DEFAULT_SESSION_DURATION), 
-                false
-            )
-        } else {
-            cancelAllNotifications()
-        }
-    }
 
     // All functions from different components come together here
     const toggleEye = async () => {
         const tempEyeOpen = !eyeOpen; // a bit confusing, but it's because we want to inverse inverse the boolean. This makes somewhat more sense
         setEyeOpen(!eyeOpen)
-
         if(!tempEyeOpen) {
             playCloseEyeSound()
         } else {
@@ -71,9 +47,6 @@ export default function MainScreen({navigation, route}: any) {
             }
         }
         setShowStartExercise(false);
-        setupNotifications()
-        // dropDatabase()
-        // updateDatabase()
 
     }
     
@@ -131,7 +104,7 @@ export default function MainScreen({navigation, route}: any) {
                     <Timer
                         style={tw``}
                         setShowStartExercise={setShowStartExercise}
-                        eyeOpen={eyeOpenRef.current} 
+                        eyeOpenRef={eyeOpenRef} 
                         setEyeOpen={setEyeOpen}
                         navigation={navigation} />
                 </View>

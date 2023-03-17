@@ -18,12 +18,12 @@ import mobileAds from 'react-native-google-mobile-ads';
 //   debug: true // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
 // });
 
-// MobileAds().setRequestConfiguration({
-//   maxAdContentRating: MaxAdContentRating.PG,
+// mobileAds().setRequestConfiguration({
 //   tagForUnderAgeOfConsent: true
 // })
 
-mobileAds().initialize()
+mobileAds()
+.initialize()
 .then(() => {
   console.log("initialised mobile ads")
 }).catch((err) => {
