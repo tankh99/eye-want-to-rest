@@ -8,7 +8,6 @@ const HANDLE_WIDTH = 20;
 export default function Slider() {
 
     const size = useSharedValue(100)
-    const offset = useSharedValue(0);
     // slider
     const sliderWidth = useSharedValue(0)
     const progress = useSharedValue(0)
@@ -47,18 +46,10 @@ export default function Slider() {
 
     // end slider
 
-    const style = useAnimatedStyle(() => {
-        return {
-            width: size.value,
-            height: size.value,
-            backgroundColor:"white",
-            transform: [{translateX: offset.value * 200}]
-        }
-    })
     return (
         <View style={{
             height: 20,
-            width: Dimensions.get("screen").width * 0.9
+            width: Dimensions.get("screen").width * 0.5
         }}>
             {/* <Button title="Resize" onPress={() => size.value  = withSpring(size.value + 50)}/> */}
             {/* <Button title="Resize" onPress={() => progress.value = withTiming(progress.value + 10)}/> */}
