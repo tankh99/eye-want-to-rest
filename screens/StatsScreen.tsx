@@ -26,16 +26,6 @@ export default function StatsScreen({navigation}: any) {
         init()
     }, [])
 
-    // const testInsert = async () => {
-    //     const newDate = add(new Date(), {days: -7});
-    //     console.log("NEW DATE", newDate)
-    //     insertHistory(DEFAULT_DB_NAME, newDate, 10);
-    //     const results = await readHistory(DEFAULT_DB_NAME);
-    //     const groupedResults = groupDates(results)
-    //     console.log(groupedResults);
-    //     setHistory(groupedResults)
-    // }
-
     return (
         <>
             <LinearGradient
@@ -126,30 +116,11 @@ export const groupDates = (list: any[]) => {
     let secondsYesterday = 0
     let secondsThisWeek = 0
     // Loops through all rows in the database.
-    // console.log("Original list ", list)
     list.map((row: any, index: number) => {
         let {startDate, duration} = row
         startDate = (new Date(JSON.parse(startDate)))
 
-        const formattedStartDate = format(startDate, DEFAULT_DATE_FORMAT)
-        // const objected
-        
-        // Initialise the basic object before doing anything else
-        // if(!groupedHistory[formattedStartDate]){
-        //     groupedHistory[formattedStartDate] = {
-        //         sessions: 0,
-        //         duration: 0
-        //     }
-        // }
-        // Update sessions
-        // if(groupedHistory[formattedStartDate] && groupedHistory[formattedStartDate].sessions) {
-        //     groupedHistory[formattedStartDate].sessions += 1
-        // } else {
-        //     groupedHistory[formattedStartDate].sessions = 1
-        // }
-
         if(isThisWeek(startDate, {weekStartsOn: 1})){
-            // console.log(startDate)
             groupedHistory.weeklySessions += 1
             secondsThisWeek += duration
         }

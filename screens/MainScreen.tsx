@@ -16,10 +16,8 @@ import { playCloseEyeSound, playOpenEyeSound } from '../util/sounds'
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
 import BackgroundGradient from '../components/BackgroundGradient'
 import MyButton from '../components/MyButton'
-import {useKeepAwake} from 'expo-keep-awake'
 
 export default function MainScreen({navigation, route}: any) {
-    // console.log("ad id", adUnitId)
     const [eyeOpen, setEyeOpen] = useState(false)
     const [showStartExercise, setShowStartExercise] = useState(false)
     let eyeOpenRef = useRef(eyeOpen)
@@ -36,7 +34,6 @@ export default function MainScreen({navigation, route}: any) {
     // All functions from different components come together here
     const toggleEye = () => {
         const tempEyeOpen = !eyeOpen; // a bit confusing, but it's because we want to inverse inverse the boolean. This makes somewhat more sense
-        
         setEyeOpen(!eyeOpen)
         if(!tempEyeOpen) {
             playCloseEyeSound()
@@ -58,23 +55,9 @@ export default function MainScreen({navigation, route}: any) {
         })
     }
 
-    const test = () => {
-        Notifications.scheduleNotificationAsync({
-            content: {
-                title: "ossy",
-                body: "dickhead"
-            },
-            trigger: {
-                seconds: 5
-            }
-        })
-    }
-
     return (
         <BackgroundGradient>
         {/* {eyeOpen && */}
-        {/* TODO: Change back to actualy test unid */}
-            {/* <BannerAd unitId={TestIds.BANNER} size={BannerAdSize.FLUID}/> */}
             <BannerAd unitId={adUnitId} 
                 requestOptions={{requestNonPersonalizedAdsOnly: true}}
                 size={BannerAdSize.FLUID}/>
@@ -106,7 +89,6 @@ export default function MainScreen({navigation, route}: any) {
                 {/* <KeyboardAvoidingView > */}
                     
                 <View style={tw`absolute top-0 left-0 right-0 bottom-0 flex-1 items-center justify-center z-0`}>                        
-                <Button onPress={test} title="Test"/>
                     <EyeButton 
                         eyeOpen={eyeOpen} 
                         toggleEye={toggleEye}/>

@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from '../store/hooks'
 import * as Notifications from 'expo-notifications'
 import { setSessionDuration } from '../store/session/sessionSlice'
 import { cancelAllNotifications, scheduleNotification } from '../util/notifications'
-import ScrollPicker from './ScrollPicker'
 
 interface P {
     eyeOpenRef: any,
@@ -87,15 +86,12 @@ export default function Timer({eyeOpenRef, setEyeOpen, setShowStartExercise, sty
         }
         if(eyeOpen && noNotifications){
 
-            console.log("Scheduled notification for", getTotalSeconds(sessionDuration), "seconds")
-            // const totalSeconds = DEFAULT_TIME.getMinutes() * 60 + DEFAULT_TIME.getSeconds()
-            // notificationId.current = await scheduleNotification(
+            // console.log("Scheduled notification for", getTotalSeconds(sessionDuration), "seconds")
             await scheduleNotification(
                 "Break Time",
                 "It's time to rest your eyes",
                 getTotalSeconds(sessionDuration)
             )
-            // console.log(notificationId.current)
         }
     }
 

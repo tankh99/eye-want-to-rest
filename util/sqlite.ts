@@ -145,6 +145,6 @@ export async function saveExercisePreference(exerciseId: string, index: number) 
     }, (err) => {
         console.error("Error inserting exercise time", err)
     }, () => {
-        // console.log("Inserted values", exerciseId, index)
+        console.log("Inserted values", exerciseId, index)
     })   
 }

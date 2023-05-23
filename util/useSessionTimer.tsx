@@ -7,7 +7,6 @@ export default function useSessionTimer() {
   useEffect(() => {
     getSessionDuration()
     .then(session => {
-      console.log(session)
       setSessionDuration(session);
     })
   }, [])

@@ -31,8 +31,6 @@ export function getTotalSeconds(date: Duration): number{ // Only converts up to 
 
 export function calculateTargetTime (startTime: Date, delayInSeconds: number): Date {
     const targetTime = add(startTime, {seconds: delayInSeconds})
-    // console.log(startTime)
-    // console.log(targetTime)
     return targetTime
 }
 

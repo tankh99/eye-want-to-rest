@@ -147,7 +147,6 @@ export default function EyeExerciseTimer(props: P) {
         const startTime = new Date()
         setStarted(true)
         
-        // console.log(calculateTick(5, new Date(), () => {}))
         onClose()
         await setupNotifications();
         const timerID = setInterval(() => {
@@ -194,9 +193,7 @@ export default function EyeExerciseTimer(props: P) {
     const updateTimer = (timeInSeconds: number, index: number) => {
         const duration = formatSecondsToDuration(timeInSeconds)
         setModalTitle(formatDurationToString(duration));
-        // console.log("Index and time in seconds:", index, timeInSeconds)
         setExercisePref(exercise.id, index);
-
     }
 
     return (

@@ -56,13 +56,6 @@ export default function SettingsScreen({navigation}: any) {
       seconds
     }))
   }
-  
-
-  const getSessionDuration1 = async() => {
-    const result = await AsyncStorage.getItem(SESSION_DURATION_KEY);
-
-    console.log(result)
-  }
 
   const [showCredits, setShowCredits] = useState(false)
 

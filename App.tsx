@@ -10,6 +10,7 @@ import { Audio } from 'expo-av';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import mobileAds from 'react-native-google-mobile-ads';
+import { useKeepAwake } from 'expo-keep-awake';
 
 // Sentry.init({
 //   dsn: "https://4dbc82d3aff846c2a4f48a2bd8dd0d94@o1229881.ingest.sentry.io/6376215",
@@ -27,7 +28,7 @@ mobileAds()
 .then(() => {
   console.log("initialised mobile ads")
 }).catch((err) => {
-  console.log(err)
+  console.error(err)
 })
 
 // MobileAds().openAdInspector()
@@ -35,6 +36,8 @@ mobileAds()
 export default function App() {
 
   const appState = useRef(AppState.currentState)
+  useKeepAwake()
+
   useEffect(() => {
     
     setupDefaults()
@@ -75,8 +78,6 @@ export default function App() {
   // Sets up notification handler config and audio config
 
   const setupDefaults =  async () => {
-
-    
     // Allows notification to show up in foreground
     Notifications.setNotificationHandler({
       handleNotification: async() => ({

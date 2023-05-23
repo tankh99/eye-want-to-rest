@@ -14,7 +14,6 @@ export async function getSessionDuration() {
 }
 
 export function saveSessionDuration(sessionDuration: Duration) {
-  console.log("saving", sessionDuration)
   AsyncStorage.setItem(SESSION_DURATION_KEY, JSON.stringify(sessionDuration))
 }
 
