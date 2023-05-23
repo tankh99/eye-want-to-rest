@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { View, Text, TouchableOpacity, Button } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import tw from 'twrnc'
 import { cancelAllNotifications, scheduleNotification } from '../util/notifications'
@@ -16,12 +16,12 @@ import { playCloseEyeSound, playOpenEyeSound } from '../util/sounds'
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads'
 import BackgroundGradient from '../components/BackgroundGradient'
 import MyButton from '../components/MyButton'
+import {useKeepAwake} from 'expo-keep-awake'
 
 export default function MainScreen({navigation, route}: any) {
     // console.log("ad id", adUnitId)
     const [eyeOpen, setEyeOpen] = useState(false)
     const [showStartExercise, setShowStartExercise] = useState(false)
-
     let eyeOpenRef = useRef(eyeOpen)
     eyeOpenRef.current = eyeOpen;
 
@@ -34,11 +34,13 @@ export default function MainScreen({navigation, route}: any) {
     
 
     // All functions from different components come together here
-    const toggleEye = async () => {
+    const toggleEye = () => {
         const tempEyeOpen = !eyeOpen; // a bit confusing, but it's because we want to inverse inverse the boolean. This makes somewhat more sense
+        
         setEyeOpen(!eyeOpen)
         if(!tempEyeOpen) {
             playCloseEyeSound()
+            cancelAllNotifications()
         } else {
             try{
                 playOpenEyeSound()
@@ -53,6 +55,18 @@ export default function MainScreen({navigation, route}: any) {
     const onStartExercise = () => {
         navigation.navigate("Exercises", {
             exercise: getWeightedExercises()[getRandomInt(getWeightedExercises().length)]
+        })
+    }
+
+    const test = () => {
+        Notifications.scheduleNotificationAsync({
+            content: {
+                title: "ossy",
+                body: "dickhead"
+            },
+            trigger: {
+                seconds: 5
+            }
         })
     }
 
@@ -92,14 +106,10 @@ export default function MainScreen({navigation, route}: any) {
                 {/* <KeyboardAvoidingView > */}
                     
                 <View style={tw`absolute top-0 left-0 right-0 bottom-0 flex-1 items-center justify-center z-0`}>                        
+                <Button onPress={test} title="Test"/>
                     <EyeButton 
-                        setShowStartExercise={setShowStartExercise}
-                        showStartExercise={showStartExercise}
-                        onStartExercise={onStartExercise}
-                        eyeOpenRef={eyeOpenRef}
-                        setEyeOpen={setEyeOpen}
-                        navigation={navigation}
-                        eyeOpen={eyeOpen} toggleEye={toggleEye}/>
+                        eyeOpen={eyeOpen} 
+                        toggleEye={toggleEye}/>
 
                     <Timer
                         style={tw``}
@@ -108,20 +118,20 @@ export default function MainScreen({navigation, route}: any) {
                         setEyeOpen={setEyeOpen}
                         navigation={navigation} />
                 </View>
-                    <View style={tw`w-full px-8 flex items-center`}>
-                    {showStartExercise ?
-                        <View style={[tw`w-full`, {}]}>
-                            <MyButton onPress={onStartExercise}>
-                                <Text style={tw`text-white w-full text-center text-lg`}>
-                                    Start Exercise
-                                </Text>
-                            </MyButton>
-                        </View>
-                        : eyeOpen ? 
-                            <Tips/>
-                        : <Text style={tw`text-white text-center text-xl`}>Press the closed eye to start</Text>
-                    }
+                <View style={tw`w-full px-8 flex items-center`}>
+                {showStartExercise ?
+                    <View style={[tw`w-full`, {}]}>
+                        <MyButton onPress={onStartExercise}>
+                            <Text style={tw`text-white w-full text-center text-lg`}>
+                                Start Exercise
+                            </Text>
+                        </MyButton>
                     </View>
+                    : eyeOpen ? 
+                        <Tips/>
+                    : <Text style={tw`text-white text-center text-xl`}>Press the closed eye to start</Text>
+                }
+                </View>
                 {/* </KeyboardAvoidingView> */}
                 
             <StatusBar style="light" />

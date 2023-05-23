@@ -1,29 +1,30 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {Image, Pressable, Text, View, Platform} from 'react-native'
 import { TouchableOpacity } from 'react-native'
 import tw from 'twrnc'
-import { getWeightedExercises } from '../constants/exercises'
-import { getRandomInt } from '../util/utils'
-import Timer from './Timer'
-import Tips from './Tips'
-
+import openEye from "../assets/open-eye-white.png"
+import closedEye from "../assets/close-eye-white.png"
 
 const ASSET_PATH = `../assets`
 const OPEN_EYE_PATH = `${ASSET_PATH}/open-eye-white.png`
 const CLOSE_EYE_PATH = `${ASSET_PATH}/close-eye-white.png`
 const ANIMATED_EYE_PATH = `${ASSET_PATH}/animated-eye.gif`
 
-
 const DEFAULT_EYE_STYLE = 100 // tablet: 150
 const PRESSED_EYE_STYLE = 125 // tablet: 175
-export default function EyeButton({eyeOpen, toggleEye, setEyeOpen, navigation, eyeOpenRef, setShowStartExercise, onStartExercise, showStartExercise}: any) {
 
+interface P {
+    eyeOpen: boolean,
+    toggleEye: any
+}
+
+export default function EyeButton({eyeOpen, toggleEye}: P) {
+
+    const toggleEyeCallback = useCallback(() => toggleEye(), [eyeOpen, toggleEye])
     const [buttonStyle, setButtonStyle] = useState(DEFAULT_EYE_STYLE)
-    const openEye = useMemo(() => require(`${ASSET_PATH}/open-eye-white.png`), []);
-    const closedEye = useMemo(() => require(`${ASSET_PATH}/close-eye-white.png`), [])
-    // const openEye = "";
-    // const closedEye = ""
-    // const closedEye =
+    // const openEye = useMemo(() => require(`${ASSET_PATH}/open-eye-white.png`), []);
+    // const closedEye = useMemo(() => require(`${ASSET_PATH}/close-eye-white.png`), [])
+    
     return (
         <View style={tw`flex w-full px-6 items-center max-w-screen-md`}>
             <TouchableOpacity
@@ -33,7 +34,7 @@ export default function EyeButton({eyeOpen, toggleEye, setEyeOpen, navigation, e
                 }]}
                 
                 onPress={() => {
-                    toggleEye()
+                    toggleEyeCallback()
                 }}
                 onPressIn={() => {
                     setButtonStyle(PRESSED_EYE_STYLE)
@@ -42,7 +43,7 @@ export default function EyeButton({eyeOpen, toggleEye, setEyeOpen, navigation, e
                     setButtonStyle(DEFAULT_EYE_STYLE)
                 }} 
             >
-                <Image 
+                <Image
                     style={[{width: buttonStyle, height:buttonStyle}]}
                     resizeMode="contain"
                     source={eyeOpen ? openEye : closedEye}/>

@@ -3,7 +3,7 @@
   "expo": {
     "name": "Eye Want to Rest",
     "slug": "eye-want-to-rest",
-    "version": "1.2.2",
+    "version": "1.2.4",
     "orientation": "portrait",
     "icon": "./assets/app-logo.png",
     "splash": {
@@ -37,7 +37,7 @@
       }
     },
     "android": {
-      "versionCode": 21,
+      "versionCode": 23,
       "icon": "./assets/app-logo.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/app-logo.png",
@@ -57,7 +57,9 @@
         "expo-notifications",
         {
           "sounds": [
-            "assets/sounds/cowbell.wav"
+            "assets/sounds/cowbell.wav",
+            "assets/sounds/eye-open.wav",
+            "assets/sounds/droplet-sound.wav"
           ]
         }
       ],
