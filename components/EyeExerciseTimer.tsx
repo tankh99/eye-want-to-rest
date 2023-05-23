@@ -4,9 +4,9 @@ import tw from "twrnc"
 import { calculateTick, formatDurationToString, formatSecondsToDuration } from "../util/time"
 import { cancelAllNotifications, scheduleNotification } from "../util/notifications"
 import * as Notifications from 'expo-notifications'
-import { getExercisePreference, saveExercisePreference } from "../util/sqlite"
 import { Exercise, exercises } from "../constants/exercises"
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from "react-native-reanimated"
+import { getExercisePref, setExercisePref } from "../util/prefs"
 
 const {width, height} = Dimensions.get("screen")
 const ITEM_WIDTH = 75
@@ -131,15 +131,14 @@ export default function EyeExerciseTimer(props: P) {
     }, [isOpen])
 
     const getPreferences = async () => {
-        getExercisePreference(exercise.id)
-        .then((pref: any) => {
-            console.log("pref:",pref)
-            if (!pref) {
+        getExercisePref(exercise.id)
+        .then(index => {
+            if (index == -1) {
                 setDefaultExerciseDurationIndex(exercise.defaultDurationIndex)
-                return;
+            } else {
+                setDefaultExerciseDurationIndex(index)
             }
-            setDefaultExerciseDurationIndex(pref.defaultIndex);
-        }).catch((err) => {
+        }).catch(err => {
             console.error(err)
         })
     }
@@ -196,7 +195,7 @@ export default function EyeExerciseTimer(props: P) {
         const duration = formatSecondsToDuration(timeInSeconds)
         setModalTitle(formatDurationToString(duration));
         // console.log("Index and time in seconds:", index, timeInSeconds)
-        saveExercisePreference(exercise.id, index);
+        setExercisePref(exercise.id, index);
 
     }
 
