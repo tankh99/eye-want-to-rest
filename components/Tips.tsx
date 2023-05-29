@@ -8,13 +8,19 @@ export default function Tips() {
     const tips = [
         "Palm your eyes after every eye exercise",
         "Follow the 20-20-20 rule",
-        "Eat more green leafy vegetables, salmon or tuna, eggs, nuts, and oranges",
-        "Cover your eyes with your palms if your eyes feel dry",
+        "Green leafy vegetables, salmon or tuna, eggs, nuts, and oranges are good for your eyes",
+        "If your eyes feel dry, it might mean that you've been straining your eyes too much. Blink more often",
+        "Dry eye syndrome stems from poor blinking habits or staring at computer screens for long periods of time",
+        "Blinking regularly helps to stimulate tear production",
+        "Drinking lots of water keeps you awake",
         "Visit the local optometrist annually",
-        "Avoid looking at bright colours to prevent eye strain",
-        "Keep your head an arm's length from the screen",
+        "Ensure proper lighting in wherever you work",
+        "Avoid rubbing your eyes too hard. It can damage your eyes and even cause infections",
+        "Lower the brightness of yoru screen to reduce yee strain",
         "Always keep an arm's length away from the screen",
-        "Allow yourself to both sit upright and slouch"
+        "You don't always have to immediately stop work when the timer runs out. Keep on going until you feel restless or tired",
+        'You can use the timer as a deep work timer. Stop work once either timer is over, or when you feel like it',
+        "If your eyes feel tired, even if the timer is still running, take a break and rest them. Feel free to let the timer continue running",
     ]
 
     const [tip, setTip] = useState("")
