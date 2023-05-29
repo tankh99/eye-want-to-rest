@@ -64,7 +64,7 @@ export default function ExerciseScreen({route, navigation}: any) {
         <>
         <LinearGradient
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
-            style={tw`flex-1 absolute top-0 w-full h-full`}/>
+            style={tw`flex-1 absolute top-0 w-full h-full text-base`}/>
         
             
             <SafeAreaView style={tw`flex-1 mt-8`} >
@@ -93,28 +93,28 @@ export default function ExerciseScreen({route, navigation}: any) {
                             <Image key={index} source={(image)} resizeMode="contain" style={{height: 300, aspectRatio: 1}}/>
                         ))} */}
                         {/* <Text style={tw("text-center text-white pb-2 leading-8")}>{exercise.description.trim()}</Text> */}
-                        <View style={tw`flex-col mb-4`}>
+                        <View style={tw`flex-col mb-4 px-4`}>
                         {exercise.steps && exercise.steps.map((step: string, index: number) => (
                             <View key={index} style={tw`flex-row flex-wrap`}>
                                 {/* <Text style={tw("flex flex-wrap text-left text-white")}>{index + 1}. </Text> */}
-                                <Text style={tw`flex flex-wrap w-full text-left text-white pb-2`}>
+                                <Text style={tw`flex flex-wrap w-full text-left text-base text-white pb-2`}>
                                     {step}
                                 </Text>
                             </View>
                         ))}
-                        
-                        </View>
-
 
                         <TouchableOpacity
                             style={tw`mb-6 self-start`}
                             onPress={async () => {
                                 openBrowser(exercise.reference)
                             }}>
-                            <Text style={tw`text-white opacity-70 underline`}>
+                            <Text style={tw`text-white text-sm opacity-70 underline`}>
                                 Reference
                             </Text>
                         </TouchableOpacity>
+                        
+                        </View>
+
                         {/* <TouchableOpacity
                             style={tw`text-white opacity-70`}
                             onPress={() => {
