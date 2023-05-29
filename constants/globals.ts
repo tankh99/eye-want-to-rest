@@ -6,6 +6,7 @@ import { TestIds } from "react-native-google-mobile-ads";
 const IOS_BANNER_ID="ca-app-pub-4743735900113393/8504467556"
 const ANDROID_BANNER_ID="ca-app-pub-4743735900113393/9885344286"
 export const SESSION_DURATION_KEY = "@default-session-duration"
+export const ONBOARDED_KEY = "@ewtr-onboarded"
 
 
 // export const adUnitId = IOS_BANNER_ID

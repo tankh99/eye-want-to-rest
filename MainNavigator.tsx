@@ -9,10 +9,15 @@ import BestiaryScreen from './screens/BestiaryScreen'
 import TestScreen from './screens/TestScreen'
 import { LinearGradient } from 'expo-linear-gradient'
 import SettingsScreen from './screens/SettingsScreen'
+import OnboardingScreen from './screens/OnboardingScreen'
 
 const Stack: any = createNativeStackNavigator()
 
-export default function MainNavigator() {
+interface P {
+    isFirstTime: boolean
+}
+
+export default function MainNavigator({isFirstTime}: P) {
     return (
         <>
         <Stack.Navigator screenOptions={{
@@ -25,6 +30,10 @@ export default function MainNavigator() {
             )
         }}>
             
+            {isFirstTime 
+            ? <Stack.Screen name="Onboarding" component={OnboardingScreen}/>
+            : ""
+            }
             <Stack.Screen name="Main" component={MainScreen} options={{}}/>
             <Stack.Screen name="Exercises" component={ExerciseScreen}/>
             <Stack.Screen name="Stats" component={StatsScreen}/>

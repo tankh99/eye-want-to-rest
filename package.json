@@ -70,7 +70,8 @@
     "redux": "^4.2.1",
     "sentry-expo": "~6.0.0",
     "twrnc": "^3.5.0",
-    "expo-keep-awake": "~11.0.1"
+    "expo-keep-awake": "~11.0.1",
+    "react-native-pager-view": "6.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",

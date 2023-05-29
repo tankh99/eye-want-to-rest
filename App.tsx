@@ -1,7 +1,7 @@
 import { AppState, StyleSheet } from 'react-native';
 import tw from 'twrnc';
 import * as Notifications from 'expo-notifications';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,6 +11,8 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 import mobileAds from 'react-native-google-mobile-ads';
 import { useKeepAwake } from 'expo-keep-awake';
+import { ONBOARDED_KEY } from './constants/globals';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Sentry.init({
 //   dsn: "https://4dbc82d3aff846c2a4f48a2bd8dd0d94@o1229881.ingest.sentry.io/6376215",
@@ -39,10 +41,20 @@ export default function App() {
   useKeepAwake()
 
   useEffect(() => {
-    
+    onboardUser()
     setupDefaults()
     askForPermissions()
   }, [])
+
+
+  const [isFirstTime, setIsFirstTime] = useState(true)
+  const onboardUser = async () => {
+    // (await AsyncStorage.getItem(ONBOARDED_KEY))
+    const userFirstTime = (await AsyncStorage.getItem(ONBOARDED_KEY)) == null
+    setIsFirstTime(userFirstTime)
+
+  }
+
 
   const askForPermissions = async () => {
     const settings = await Notifications.getPermissionsAsync()
@@ -109,7 +121,7 @@ export default function App() {
             style={tw`flex-1 absolute top-0 w-full h-full`}/>
               
             <NavigationContainer>
-              <MainNavigator/>
+              <MainNavigator isFirstTime={isFirstTime} />
           </NavigationContainer>
       </SafeAreaProvider>
     </Provider>
