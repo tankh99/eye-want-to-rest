@@ -69,16 +69,13 @@ export default function ExerciseScreen({route, navigation}: any) {
             
             <SafeAreaView style={tw`flex-1 `} >
             {/* <Text style={tw("text-white")} >Duration: {value}</Text> */}
-            <View style={tw``}>
+            <View style={tw`mb-4`}>
                 <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
             </View>
-                <View style={tw`flex items-center justify-between flex-row px-4 mt-4`}>
-                    
-                    <Navbar navigation={navigation}>
-                        <Text style={tw`text-white text-center text-4xl flex justify-center mx-4`}>{exercise.name}</Text>
-                        <Text style={tw`text-center text-white opacity-70`}>Approx. duration: {exerciseDefaultDuration < 60 ? `${exerciseDefaultDuration} seconds` : `${exerciseDefaultDuration/60} ${exerciseDefaultDuration/60 > 1 ? "minutes": "minute"}`} </Text>
-                    </Navbar>
-                </View>
+                <Navbar navigation={navigation}>
+                    <Text style={tw`text-white text-center text-4xl flex justify-center mx-4`}>{exercise.name}</Text>
+                    <Text style={tw`text-center text-white opacity-70`}>Approx. duration: {exerciseDefaultDuration < 60 ? `${exerciseDefaultDuration} seconds` : `${exerciseDefaultDuration/60} ${exerciseDefaultDuration/60 > 1 ? "minutes": "minute"}`} </Text>
+                </Navbar>
                 <ScrollView horizontal={false}
                     style={tw`mt-8`}
                     contentContainerStyle={[tw`items-center justify-center px-4`, {maxWidth: screenWidth}]}>

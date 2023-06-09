@@ -33,7 +33,7 @@ export default function StatsScreen({navigation}: any) {
                 style={tw`flex-1 absolute top-0 w-full h-full`}/>
             <SafeAreaView>
                 <Navbar navigation={navigation}>
-                    <Text style={tw`text-white text-center text-4xl my-8 flex justify-center`}>Progress</Text>
+                    <Text style={tw`text-white text-center text-4xl my-8 flex justify-center`}>Statistics</Text>
                 </Navbar>
                 
                 <ProgressCard title="Today's Screen Time" duration={history.todayDuration} sessions={history.todaySessions}/>

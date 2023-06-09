@@ -7,6 +7,7 @@ import { convertSecondsToLowestDenom } from '../util/utils'
 import { getDefaultIconSize } from '../constants/globals'
 import { Ionicons } from '@expo/vector-icons'
 import tw from 'twrnc'
+import Navbar from '../components/Navbar'
 
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get("window")
 
@@ -29,17 +30,9 @@ export default function BestiaryScreen({navigation}: any) {
             colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
             style={tw`flex-1 absolute top-0 w-full h-full`}/>
         <SafeAreaView>
-            <View style={tw`flex items-center justify-between flex-row px-4`}>
-                <TouchableOpacity 
-                    style={tw``} 
-                    onPress={() => {
-                        navigation.goBack()
-                    }}>
-                    <Ionicons name="arrow-back" size={getDefaultIconSize()} color="white"  />
-                </TouchableOpacity>
-                <Text style={tw`text-white text-center text-2xl py-8 flex justify-center`}>Exercises</Text>
-                <Ionicons name="arrow-back" size={getDefaultIconSize()} style={tw``} color="transparent"  />
-            </View>
+                <Navbar navigation={navigation}>
+                    <Text style={tw`text-white text-center text-4xl my-8 flex justify-center`}>Exercises</Text>
+                </Navbar>
             <ScrollView style={tw`mb-24`} contentContainerStyle={[tw`flex flex-wrap flex-row`]} >
                     {exercises.map((exercise: Exercise, index: number) => {
                         const {time, denom} = convertSecondsToLowestDenom(exercise.durationRange[exercise.defaultDurationIndex])
