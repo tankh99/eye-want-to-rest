@@ -45,7 +45,10 @@ export default function OnboardingScreen() {
   }
   return (
     // <SafeAreaView style={{flex:1}}>
+    <BackgroundGradient>
       <ViewPager ref={viewPager} style={{flex: 1}}>
+
+      
         {IMAGE_PATHS.map((image, index) => {
           const buttonHeight = 40;
           const marginTop = height/2 - buttonHeight/2
@@ -53,26 +56,23 @@ export default function OnboardingScreen() {
             // Onboarindg last words
             const tipStyle = tw`text-white text-base mb-4`
             return (
-                <BackgroundGradient key={index}>
-                  <View style={tw`flex-1 justify-center px-8`}>
-                      <Text style={tw`text-white text-3xl text-center mb-4`}>Some last tips</Text>
-                      <Text style={tipStyle}>You don't always have to immediately stop work when the timer runs out. Keep on going until you feel restless or tired</Text>
-                      <Text style={tipStyle}>You can use the timer as a deep work timer. Stop work once either timer is over, or when you feel like it</Text>
-                      <Text style={tipStyle}>If your eyes feel tired, even if the timer is still running, take a break and rest them. Feel free to let the timer continue running</Text>
-                      <MyButton 
-                        style={`w-full border border-white`}
-                        onPress={finishOnboarding}>
-                        <Text style={tw`text-base text-center text-white`}>
-                          Okay, let's go!
-                        </Text>  
-                      </MyButton>
-                  </View>
-                </BackgroundGradient>
+                <View key={index} style={tw`flex-1 justify-center px-8`}>
+                    <Text style={tw`text-white text-3xl text-center mb-4`}>Some last tips</Text>
+                    <Text style={tipStyle}>You don't always have to immediately stop work when the timer runs out. Keep on going until you feel restless or tired</Text>
+                    <Text style={tipStyle}>You can use the timer as a deep work timer. Stop work once either timer is over, or when you feel like it</Text>
+                    <Text style={tipStyle}>If your eyes feel tired, even if the timer is still running, take a break and rest them. Feel free to let the timer continue running</Text>
+                    <MyButton 
+                      style={`w-full border border-white`}
+                      onPress={finishOnboarding}>
+                      <Text style={tw`text-base text-center text-white`}>
+                        Okay, let's go!
+                      </Text>  
+                    </MyButton>
+                </View>
             )
           }
           return (
             <View key={index}>
-              {/* Prev button */}
               {index != 0 ?
               <TouchableOpacity 
                 onPress={() => viewPager.current.setPage(index - 1)}
@@ -94,16 +94,25 @@ export default function OnboardingScreen() {
                 }]}>
                 <Text>Next</Text>
               </TouchableOpacity>
-              
 
               <Image source={image} style={{height: "100%", width: "100%", zIndex: -1}} />
-              <Text style={{height: 20, color: "black"}}>FUCK</Text>
-              
-              
             </View>
           )
         })}
+
+        
       </ViewPager>
+      </BackgroundGradient>
     // </SafeAreaView>
   )
 }
+
+const onboardingContent = [
+  {
+    title: "Onboarding is easy",
+    content: `Take control of your own eye heatlh. 
+      Give your eyes the rest they deserve. 
+      Rest your eyes every 20 minutes.
+    `
+  }
+]

@@ -30,10 +30,11 @@ export default function MainNavigator({isFirstTime}: P) {
             )
         }}>
             
-            {isFirstTime 
+            {/* <Stack.Screen name="Onboarding" component={OnboardingScreen}/> */}
+            {/* {isFirstTime 
             ? <Stack.Screen name="Onboarding" component={OnboardingScreen}/>
             : <React.Fragment></React.Fragment>
-            }
+            } */}
             <Stack.Screen name="Main" component={MainScreen} options={{}}/>
             <Stack.Screen name="Exercises" component={ExerciseScreen}/>
             <Stack.Screen name="Stats" component={StatsScreen}/>

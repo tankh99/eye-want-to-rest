@@ -67,12 +67,12 @@ export default function ExerciseScreen({route, navigation}: any) {
             style={tw`flex-1 absolute top-0 w-full h-full text-base`}/>
         
             
-            <SafeAreaView style={tw`flex-1 mt-8`} >
+            <SafeAreaView style={tw`flex-1 `} >
             {/* <Text style={tw("text-white")} >Duration: {value}</Text> */}
-            <View style={tw`mt-4`}>
+            <View style={tw``}>
                 <BannerAd unitId={adUnitId} size={BannerAdSize.FLUID}/>
             </View>
-                <View style={tw`flex items-center justify-between flex-row px-4`}>
+                <View style={tw`flex items-center justify-between flex-row px-4 mt-4`}>
                     
                     <Navbar navigation={navigation}>
                         <Text style={tw`text-white text-center text-4xl flex justify-center mx-4`}>{exercise.name}</Text>
