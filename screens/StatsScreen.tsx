@@ -11,6 +11,7 @@ import { add, intervalToDuration, isThisWeek, isYesterday } from 'date-fns'
 import { Ionicons } from '@expo/vector-icons';
 import { getDefaultIconSize} from '../constants/globals'
 import Navbar from '../components/Navbar'
+import BackgroundGradient from '../components/BackgroundGradient'
 
 export default function StatsScreen({navigation}: any) {
 
@@ -28,10 +29,11 @@ export default function StatsScreen({navigation}: any) {
 
     return (
         <>
-            <LinearGradient
+            {/* <LinearGradient
                 colors={['rgba(2,0,45,1)', 'rgba(85,1,84,1)']}
                 style={tw`flex-1 absolute top-0 w-full h-full`}/>
-            <SafeAreaView>
+            <SafeAreaView> */}
+            <BackgroundGradient>
                 <Navbar navigation={navigation}>
                     <Text style={tw`text-white text-center text-4xl my-8 flex justify-center`}>Statistics</Text>
                 </Navbar>
@@ -51,7 +53,7 @@ export default function StatsScreen({navigation}: any) {
                 }) :
                     <Text style={tw`text-white`}>No History</Text>
                 } */}
-            </SafeAreaView>
+            </BackgroundGradient>
         </>
     )
 }

@@ -1,4 +1,4 @@
-import { AppState, StyleSheet } from 'react-native';
+import { AppState, StyleSheet, View } from 'react-native';
 import tw from 'twrnc';
 import * as Notifications from 'expo-notifications';
 import React, { useEffect, useRef, useState } from 'react';
@@ -9,9 +9,9 @@ import MainNavigator from './MainNavigator';
 import { Audio } from 'expo-av';
 import { Provider } from 'react-redux';
 import store from './store/store';
-import mobileAds from 'react-native-google-mobile-ads';
+import mobileAds, { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 import { useKeepAwake } from 'expo-keep-awake';
-import { ONBOARDED_KEY } from './constants/globals';
+import { adUnitId, ONBOARDED_KEY } from './constants/globals';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Sentry.init({

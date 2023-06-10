@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { View, Text, TouchableOpacity, Button } from 'react-native'
+import { View, Text, TouchableOpacity, Button, Alert } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import tw from 'twrnc'
 import { cancelAllNotifications, scheduleNotification } from '../util/notifications'
@@ -34,18 +34,32 @@ export default function MainScreen({navigation, route}: any) {
     // All functions from different components come together here
     const toggleEye = () => {
         const tempEyeOpen = !eyeOpen; // a bit confusing, but it's because we want to inverse inverse the boolean. This makes somewhat more sense
-        setEyeOpen(!eyeOpen)
+        
         if(!tempEyeOpen) {
-            playCloseEyeSound()
-            cancelAllNotifications()
+            Alert.alert("Ending Session", "Are you sure you want to stop the session early?",
+            [
+                {
+                    text: "Cancel"
+                }, 
+                {
+                    text: "Confirm",
+                    onPress: () => {
+                        playCloseEyeSound()
+                        setEyeOpen(!eyeOpen)
+                        setShowStartExercise(false);
+                        cancelAllNotifications()
+                    }
+                }
+            ])
         } else {
+            setEyeOpen(!eyeOpen)
+            setShowStartExercise(false);
             try{
                 playOpenEyeSound()
             } catch (ex) {
                 console.error("error", ex)
             }
         }
-        setShowStartExercise(false);
 
     }
     
@@ -58,9 +72,6 @@ export default function MainScreen({navigation, route}: any) {
     return (
         <BackgroundGradient>
         {/* {eyeOpen && */}
-            <BannerAd unitId={adUnitId} 
-                requestOptions={{requestNonPersonalizedAdsOnly: true}}
-                size={BannerAdSize.FLUID}/>
             {/* } */}
             <View style={[tw`flex-1 flex items-center justify-between`]}>
             
@@ -118,6 +129,7 @@ export default function MainScreen({navigation, route}: any) {
                 
             <StatusBar style="light" />
             </View>
+
         </BackgroundGradient>
     )
 }

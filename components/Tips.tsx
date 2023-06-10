@@ -16,7 +16,7 @@ export default function Tips() {
         "Visit the local optometrist annually",
         "Ensure proper lighting in wherever you work",
         "Avoid rubbing your eyes too hard. It can damage your eyes and even cause infections",
-        "Lower the brightness of yoru screen to reduce yee strain",
+        "Lower the brightness of yoru screen to reduce eye strain",
         "Always keep an arm's length away from the screen",
         "You don't always have to immediately stop work when the timer runs out. Keep on going until you feel restless or tired",
         'You can use the timer as a deep work timer. Stop work once either timer is over, or when you feel like it',
