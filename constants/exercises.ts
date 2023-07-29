@@ -10,7 +10,7 @@ export interface Exercise {
     defaultDurationIndex: number,
     durationRange: number[], // the range of all possible exercise durations
     frequency: number,
-    reference: string,
+    reference: string|undefined,
     credit?: string
 }
 
@@ -76,12 +76,12 @@ export const exercises: Exercise[] = [
     },
     {
         id: "3",
-        name: "Massage your Eyes",
+        name: "Eyelid Massage",
         description: `
             Best for people with dry eyes
         `,
-        images: [require(`${ASSET_PATH}/massage-eyes.jpg`)],
-        credit: "https://www.wikihow.com/Exercise-Your-Eyes",
+        images: [require(`${ASSET_PATH}/eyelid-massage.png`)],
+        credit: "https://youtu.be/bGJqucoHmjs",
         steps: [
             "Close your eyes and push down the top eyelid lightly using a finger. Push downward from the left of your eyelid to the right of the eyelid",
             "Repeat for the bottom eyelid. Look upwards and massage from the bottom-up.",
@@ -118,7 +118,7 @@ export const exercises: Exercise[] = [
         `,
         images: [require(`${ASSET_PATH}/figure-eight.png`)],
         steps: [
-            "Trace an imaginary giant figure eight on an open surface. It should be about 3 metres in front of you",
+            "Trace an imaginary giant figure eight with your eyes. This figure eight decently far away (approx 3 metres)",
             "Trace the figure eight with your eyes and focus at objects that are at the edge of your vision. Do not move your head as you do so",
             "Trace 10 times, then switch directions",
         ],
@@ -145,7 +145,7 @@ export const exercises: Exercise[] = [
         defaultDurationIndex: 0,
         durationRange: [20, 30, 45],
         frequency: 4,
-        reference: "https://youtu.be/mqXR8O2VJLo"
+        reference: "https://youtu.be/mqXR8O2VJLo?t=11"
 
     }, 
     {
@@ -160,7 +160,36 @@ export const exercises: Exercise[] = [
         defaultDurationIndex: 0,
         durationRange: [20, 30, 45],
         frequency: 4,
-        reference: "https://www.youtube.com/watch?v=GtTEoLTz1JI"
+        reference: "https://youtu.be/GtTEoLTz1JI?t=73"
+    }, 
+    {
+        id: "7",
+        name: "Figure Eight Message",
+        description: "Relax your eyes",
+        images: [require(`${ASSET_PATH}/figure-eight-massage.jpg`)],
+        steps: [
+            "Use two fingers and make a figure eight around your eye sockets. Make 6 figure eights",
+            "Gently rub your upper and lower eyelids with, with extremely low force, to stimulate your eyes",
+            "Palm your eyes for 30 seconds"
+        ],
+        defaultDurationIndex: 1,
+        durationRange: [60, 120, 120],
+        frequency: 3,
+        reference: "https://youtu.be/IZr22jXakeo?t=40"
+    },
+    {
+        id: "8",
+        name: "Cardinal Eye Tracking",
+        description: "Neck + Eye Exercise. Just like how models do it",
+        images: [require(`${ASSET_PATH}/cardinal-head-movement.jpg`)],
+        steps: [
+            "Focus on an object decently far away (~3m)",
+            "Move your head up, down, left and right while maintaining focus of that object. Repeat 2 times",
+        ],
+        defaultDurationIndex: 1,
+        durationRange: [30, 45, 60],
+        frequency: 4,
+        reference: undefined
     }
 ]
 

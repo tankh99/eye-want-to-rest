@@ -91,24 +91,26 @@ export default function ExerciseScreen({route, navigation}: any) {
                         ))} */}
                         {/* <Text style={tw("text-center text-white pb-2 leading-8")}>{exercise.description.trim()}</Text> */}
                         <View style={tw`flex-col mb-4 px-4`}>
+                            <Text style={tw`font-bold text-white text-lg mb-2`}>Steps</Text>
                         {exercise.steps && exercise.steps.map((step: string, index: number) => (
                             <View key={index} style={tw`flex-row flex-wrap`}>
-                                {/* <Text style={tw("flex flex-wrap text-left text-white")}>{index + 1}. </Text> */}
                                 <Text style={tw`flex flex-wrap w-full text-left text-base text-white pb-2`}>
-                                    {step}
+                                    {index + 1}. {step}
                                 </Text>
                             </View>
                         ))}
 
-                        <TouchableOpacity
+                        {exercise.reference && 
+                            <TouchableOpacity
                             style={tw`mb-6 self-start`}
                             onPress={async () => {
                                 openBrowser(exercise.reference)
                             }}>
-                            <Text style={tw`text-white text-sm opacity-70 underline`}>
-                                Reference
-                            </Text>
-                        </TouchableOpacity>
+                                <Text style={tw`text-white text-sm opacity-70 underline`}>
+                                    Reference
+                                </Text>
+                            </TouchableOpacity>
+                        }
                         
                         </View>
 
