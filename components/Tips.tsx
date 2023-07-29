@@ -21,6 +21,7 @@ export default function Tips() {
         "You don't always have to immediately stop work when the timer runs out. Keep on going until you feel restless or tired",
         'You can use the timer as a deep work timer. Stop work once either timer is over, or when you feel like it',
         "If your eyes feel tired, even if the timer is still running, take a break and rest them. Feel free to let the timer continue running",
+        "It can be very easy to lean into your phone, but always keep your phone at an arm's length!",
     ]
 
     const [tip, setTip] = useState("")
