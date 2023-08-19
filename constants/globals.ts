@@ -23,12 +23,12 @@ export const DEFAULT_SESSION_DURATION: Duration = {
 }
 
 export function getDefaultIconSize(){
-    // if (getDeviceType() == Device.DeviceType.TABLET){
-    //     return 36
-    // } else {
-    //     return 28
-    // }
-    return 28
+    if (getDeviceType() == Device.DeviceType.TABLET){
+        return 36
+    } else {
+        return 28
+    }
+    // return 28
 }
 
 

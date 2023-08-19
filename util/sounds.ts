@@ -16,7 +16,7 @@ export async function playCloseEyeSound(){
 
 export async function playTimerDoneSound(){
     const { sound: bellSound } = await Audio.Sound.createAsync(
-        require("../assets/sounds/cowbell.wav")
+        require("../assets/sounds/ding-sound.wav")
     )
     bellSound.playAsync()
 }
