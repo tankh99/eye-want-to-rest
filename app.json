@@ -60,7 +60,10 @@
             "assets/sounds/cowbell.wav",
             "assets/sounds/eye-open.wav",
             "assets/sounds/droplet-sound.wav",
-            "assets/sounds/ding-sound.wav"
+            "assets/sounds/ding-sound.wav",
+            "assets/sounds/ding-sound-soft.wav",
+            "assets/sounds/ding-sound-loud.wav",
+            "assets/sounds/alarm-ring.wav"
           ]
         }
       ],

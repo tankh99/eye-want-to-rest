@@ -13,7 +13,7 @@ import { credits } from '../constants/exercises'
 import MyButton from '../components/MyButton'
 import Navbar from '../components/Navbar'
 import RadioGroup from 'react-native-radio-buttons-group'
-import { LOUDNESS, playTimerDoneSound } from '../util/sounds'
+import { SOUNDS, playTimerDoneSound } from '../util/sounds'
 
 
 
@@ -23,7 +23,7 @@ export default function SettingsScreen({navigation}: any) {
   const sessionDuration = useAppSelector(state => state.session.sessionDuration)
   const [sessionDurationInput, setSessionDurationInput] = useState(sessionDuration)
   // TODO: Replace with value from prefs
-  const [selectedLoudnessId, setSelectedLoudnessId] = useState(LOUDNESS.SOFT.toString())
+  const [selectedSoundId, setSelectedSoundId] = useState(SOUNDS.BELL.toString())
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function SettingsScreen({navigation}: any) {
       try {
         const result = await getNotificationLoudnessPref()
         if (!result) return
-        setSelectedLoudnessId(result)
+        setSelectedSoundId(result)
       } catch (ex) {
         console.error(ex)
       }
@@ -83,29 +83,26 @@ export default function SettingsScreen({navigation}: any) {
   }
   const radioButtons= useMemo(() => [
     {
-      id: LOUDNESS.SOFT.toString(),
-      label: "Soft",
-      value: "soft",
+      id: SOUNDS.BELL.toString(),
+      label: "Bell",
       ...radioButtonStyle
     }, 
     {
-      id: LOUDNESS.NORMAL.toString(),
-      label: "Normal",
-      value: "normal",
+      id: SOUNDS.COWBELL.toString(),
+      label: "Cowbell",
       ...radioButtonStyle
     }, 
     {
-      id: LOUDNESS.LOUD.toString(),
-      label: "Loud",
-      value: "loud",
+      id: SOUNDS.ALARM.toString(),
+      label: "Alarm",
       ...radioButtonStyle
     },
   ], [])
 
 
 
-  const updateNotificationLoudness = (id: string) => {
-    setSelectedLoudnessId(id)
+  const updateNotificationSound = (id: string) => {
+    setSelectedSoundId(id)
     setNotificationLoudnessPref(id)
     playTimerDoneSound(id)
   }
@@ -145,8 +142,8 @@ export default function SettingsScreen({navigation}: any) {
           layout='row'
           containerStyle={tw`mx-auto mt-4`}
           radioButtons={radioButtons}
-          onPress={(id) => updateNotificationLoudness(id)}
-          selectedId={selectedLoudnessId}/>
+          onPress={(id) => updateNotificationSound(id)}
+          selectedId={selectedSoundId}/>
       </View>
 
 

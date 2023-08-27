@@ -14,30 +14,30 @@ export async function playCloseEyeSound(){
     eyeCloseSound.playAsync()
 }
 
-export enum LOUDNESS {
-    SOFT = 'soft',
-    NORMAL = 'normal',
-    LOUD = 'loud'
+export enum SOUNDS {
+    BELL = 'bell',
+    COWBELL = 'cowbell',
+    ALARM = 'loud'
   }
 
-export async function playTimerDoneSound(loudnessId: string){
+export async function playTimerDoneSound(soundId: string){
 
     
-    if (loudnessId == LOUDNESS.SOFT){
-        const audio = require(`../assets/sounds/ding-sound-soft.wav`)
-        const { sound: bellSound } = await Audio.Sound.createAsync(
-            audio
-        )
-        bellSound.playAsync()
-    } else if (loudnessId == LOUDNESS.NORMAL){
-
+    if (soundId == SOUNDS.BELL){
         const audio = require(`../assets/sounds/ding-sound.wav`)
         const { sound: bellSound } = await Audio.Sound.createAsync(
             audio
         )
         bellSound.playAsync()
+    } else if (soundId == SOUNDS.COWBELL){
+
+        const audio = require(`../assets/sounds/cowbell.wav`)
+        const { sound: bellSound } = await Audio.Sound.createAsync(
+            audio
+        )
+        bellSound.playAsync()
     } else {
-        const audio = require(`../assets/sounds/ding-sound-loud.wav`)
+        const audio = require(`../assets/sounds/alarm-ring-short.wav`)
         const { sound: bellSound } = await Audio.Sound.createAsync(
             audio
         )
