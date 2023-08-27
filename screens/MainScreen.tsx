@@ -33,7 +33,8 @@ export default function MainScreen({navigation, route}: any) {
 
     // All functions from different components come together here
     const toggleEye = () => {
-        const tempEyeOpen = !eyeOpen; // a bit confusing, but it's because we want to inverse inverse the boolean. This makes somewhat more sense
+
+        const tempEyeOpen = !eyeOpen; // a bit confusing, but it's because we want to inverse inverse the boolean. 
         
         if(!tempEyeOpen) {
             Alert.alert("Ending Session", "Are you sure you want to stop the session early?",

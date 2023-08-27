@@ -14,9 +14,33 @@ export async function playCloseEyeSound(){
     eyeCloseSound.playAsync()
 }
 
-export async function playTimerDoneSound(){
-    const { sound: bellSound } = await Audio.Sound.createAsync(
-        require("../assets/sounds/ding-sound.wav")
-    )
-    bellSound.playAsync()
+export enum LOUDNESS {
+    SOFT = 'soft',
+    NORMAL = 'normal',
+    LOUD = 'loud'
+  }
+
+export async function playTimerDoneSound(loudnessId: string){
+
+    
+    if (loudnessId == LOUDNESS.SOFT){
+        const audio = require(`../assets/sounds/ding-sound-soft.wav`)
+        const { sound: bellSound } = await Audio.Sound.createAsync(
+            audio
+        )
+        bellSound.playAsync()
+    } else if (loudnessId == LOUDNESS.NORMAL){
+
+        const audio = require(`../assets/sounds/ding-sound.wav`)
+        const { sound: bellSound } = await Audio.Sound.createAsync(
+            audio
+        )
+        bellSound.playAsync()
+    } else {
+        const audio = require(`../assets/sounds/ding-sound-loud.wav`)
+        const { sound: bellSound } = await Audio.Sound.createAsync(
+            audio
+        )
+        bellSound.playAsync()
+    }
 }

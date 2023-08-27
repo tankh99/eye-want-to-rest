@@ -39,3 +39,19 @@ export async function getExercisePref(id: string): Promise<number> {
 export async function setExercisePref(id: string, index: number) {
   AsyncStorage.setItem(getExerciseKey(id), JSON.stringify(index))
 }
+
+const notificationLoudnessKey = `@notification-loudness`
+
+export async function setNotificationLoudnessPref(id: string) {
+  AsyncStorage.setItem(notificationLoudnessKey, id)
+}
+
+export async function getNotificationLoudnessPref() {
+  try {
+    const result = await AsyncStorage.getItem(notificationLoudnessKey)
+    return result
+  } catch (ex) {
+    console.error(ex)
+  }
+  
+}
