@@ -1,13 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import React, { LegacyRef, useRef } from 'react'
-import { View, Text, Image, Button, useWindowDimensions, TouchableOpacity } from 'react-native'
+import React, { useRef } from 'react'
+import { View, Text, Image, useWindowDimensions, TouchableOpacity } from 'react-native'
 import { ONBOARDED_KEY } from '../constants/globals'
 import ViewPager from 'react-native-pager-view'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import dick from "../assets/onboarding/settings-screen.png"
 import MyButton from '../components/MyButton'
 import tw from 'twrnc'
-import { StackActions, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import BackgroundGradient from '../components/BackgroundGradient'
 
 const ONBOARDING_ROOT = "../assets/onboarding"

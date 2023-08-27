@@ -1,15 +1,10 @@
 
-import {View, Text, Button, TouchableOpacity} from 'react-native'
+import { View, Text } from 'react-native'
 import tw from 'twrnc'
-import {LinearGradient} from 'expo-linear-gradient'
 import { useEffect, useState } from 'react'
-import { DEFAULT_DB_NAME, insertHistory, readHistory } from '../util/sqlite'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { isToday, format, differenceInDays } from 'date-fns/esm'
-import _ from "lodash"
-import { add, intervalToDuration, isThisWeek, isYesterday } from 'date-fns'
-import { Ionicons } from '@expo/vector-icons';
-import { getDefaultIconSize} from '../constants/globals'
+import { DEFAULT_DB_NAME, readHistory } from '../util/sqlite'
+import { isToday } from 'date-fns/esm'
+import { intervalToDuration, isThisWeek, isYesterday } from 'date-fns'
 import Navbar from '../components/Navbar'
 import BackgroundGradient from '../components/BackgroundGradient'
 

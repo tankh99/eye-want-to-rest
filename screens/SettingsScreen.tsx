@@ -12,8 +12,7 @@ import * as WebBrowser from 'expo-web-browser'
 import { credits } from '../constants/exercises'
 import MyButton from '../components/MyButton'
 import Navbar from '../components/Navbar'
-import RadioGroup from 'react-native-radio-buttons-group';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import RadioGroup from 'react-native-radio-buttons-group'
 import { LOUDNESS, playTimerDoneSound } from '../util/sounds'
 
 
